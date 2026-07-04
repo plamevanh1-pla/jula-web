@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord Vendeur Jula</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; margin: 0; padding: 20px; }
+        .nav { background-color: #1072ba; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-radius: 8px; }
+        .container { max-width: 600px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        h3 { color: #1072ba; margin-top: 0; }
+        label { font-weight: bold; font-size: 13px; color: #495057; display: block; margin-top: 15px; }
+        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
+        .btn-publish { background-color: #f57c00; color: white; border: none; padding: 14px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <h2>🏬 Espace Magasin Vendeur</h2>
+        <span>Connecté : <b><%= email %></b></span>
+    </div>
+
+    <div class="container">
+        <h3>🚀 Publier un nouvel article sur Jula</h3>
+        <form action="/publish-product" method="POST">
+            <input type="hidden" name="vendedor_id" value="<%= userId %>">
+
+            <label>Titre de l'article :</label>
+            <input type="text" name="title" required placeholder="Ex: iPhone 14 Pro Max 256Go">
+
+            <label>Description du produit :</label>
+            <textarea name="description" rows="4" required placeholder="Décrivez l'état, les accessoires fournis, la garantie..."></textarea>
+
+            <label>Prix de vente (en FCFA) :</label>
+            <input type="number" name="price" required placeholder="Ex: 450000">
+
+            <label>Lien URL de la Photo de l'article :</label>
+            <input type="url" name="image_url" required placeholder="Ex: https://site.com">
+
+            <label>Catégorie du rayon Jula :</label>
+            <select name="category">
+                <option value="Électronique">📱 Électronique & Téléphonie</option>
+                <option value="Mode">👗 Mode, Vêtements & Chaussures</option>
+                <option value="Informatique">💻 Ordinateurs & Accessoires</option>
+                <option value="Électroménager">📺 Électroménager & Maison</option>
+            </select>
+
+            <button type="submit" class="btn-publish">Ajouter et Propulser au Rayon Jula</button>
+        </form>
+    </div>
+</body>
+</html>
