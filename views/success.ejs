@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Réussie - Jula</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background-color: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 480px; width: 90%; }
+        h1 { color: #00a86b; font-size: 28px; margin-bottom: 15px; }
+        p { color: #495057; font-size: 15px; line-height: 22px; margin-bottom: 25px; }
+        .badge { padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 14px; display: inline-block; margin-bottom: 20px; color: white; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎉 Inscription Réussie, <%= name %> !</h1>
+        <% if (role === 'boutique') { %>
+            <div class="badge" style="background-color: #1072ba;">🏬 Commerçant Vendeur Jula</div>
+        <% } else if (role === 'livreur') { %>
+            <div class="badge" style="background-color: #212529;">🛵 Livreur Certifié Jula</div>
+        <% } else { %>
+            <div class="badge" style="background-color: #25D366;">🏪 Point Relais Partenaire Jula</div>
+        <% } %>
+        <p>Vos renseignements professionnels ont été enregistrés et validés avec succès par l'IA logistique de Jula pour votre pays d'activité !</p>
+        <p style="font-weight: bold; color: #f57c00;">Vous pouvez maintenant vous connecter en toute sécurité à votre outil de gestion.</p>
+    </div>
+</body>
+</html>
