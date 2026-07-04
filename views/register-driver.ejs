@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription Livreur Jula</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; padding: 20px; display: flex; justify-content: center; }
+        .form-card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 450px; width: 100%; }
+        h2 { color: #212529; margin-bottom: 20px; text-align: center; }
+        label { font-weight: bold; font-size: 13px; color: #495057; display: block; margin-top: 12px; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
+        .btn-submit { background-color: #f57c00; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 15px; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>🛵 Devenir Livreur Partenaire Jula</h2>
+        <form action="/submit-partner" method="POST">
+            <input type="hidden" name="business_type" value="livreur">
+            <label>Votre Nom Complet :</label>
+            <input type="text" name="full_name" required placeholder="Ex: Koffi Amédée">
+            <label>Type de véhicule logistique :</label>
+            <select name="shop_name">
+                <option value="Moto">🏍️ Moto / Scooter Rapide</option>
+                <option value="Voiture / Camionnette">🚗 Voiture / Camionnette de livraison</option>
+            </select>
+            <label>Numéro d'immatriculation / Plaque :</label>
+            <input type="text" name="vehicle_plate" required placeholder="Ex: 4892-CI-01">
+            <label>Adresse E-mail professionnelle :</label>
+            <input type="email" name="email" required placeholder="Ex: livreur@jula.com">
+            <label>Créer un Mot de passe secret :</label>
+            <input type="password" name="password" required placeholder="Minimum 6 caractères">
+            <label>Numéro de Téléphone (Appels & WhatsApp) :</label>
+            <input type="text" name="phone" required placeholder="Ex: +225 0500000000">
+            <label>Votre Pays d'activité :</label>
+            <select name="country">
+                <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
+                <option value="Sénégal">🇸🇳 Sénégal</option>
+                <option value="Togo">🇹🇬 Togo</option>
+                <option value="Bénin">🇧🇯 Bénin</option>
+            </select>
+            <button type="submit" class="btn-submit">Valider mon Enregistrement Logistique</button>
+        </form>
+    </div>
+</body>
+</html>
