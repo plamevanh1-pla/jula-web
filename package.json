@@ -1,0 +1,16 @@
+{
+  "name": "jula-web",
+  "version": "1.0.0",
+  "description": "Portail Partenaires Jula E-Commerce",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "ws": "^8.16.0"
+  }
+}
