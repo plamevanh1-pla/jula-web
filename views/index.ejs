@@ -1,58 +1,196 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail Partenaires Jula Afrique</title>
+    <title>Vendorhub Jula - Devenez Vendeur & Partenaire Logistique</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; margin: 0; padding: 40px 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 35px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 600px; width: 100%; }
-        h1 { color: #f57c00; margin: 0 0 5px 0; font-size: 36px; font-weight: bold; text-align: center; }
-        .subtitle { color: #7f8c8d; font-size: 15px; margin-bottom: 25px; font-weight: 500; text-align: center; text-transform: uppercase; letter-spacing: 1px; }
-        .about-box { background-color: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #f57c00; margin-bottom: 25px; text-align: left; }
-        .about-title { font-size: 16px; font-weight: bold; color: #212529; margin-bottom: 8px; }
-        .about-text { font-size: 13.5px; color: #495057; line-height: 20px; margin: 0; }
-        .cgu-box { background-color: #fff; border: 1px solid #e9ecef; padding: 15px; border-radius: 6px; height: 120px; overflow-y: scroll; text-align: left; margin-bottom: 30px; }
-        .cgu-title { font-size: 13px; font-weight: bold; color: #212529; margin-top: 0; margin-bottom: 5px; }
-        .cgu-text { font-size: 12px; color: #6c757d; line-height: 18px; margin: 0 0 10px 0; }
-        .btn-box { display: flex; flex-direction: column; gap: 15px; }
-        .btn { display: block; padding: 16px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; text-align: center; transition: transform 0.2s; }
-        .btn:hover { transform: scale(1.01); }
-        .btn-seller { background-color: #1072ba; color: #fff; }
-        .btn-driver { background-color: #212529; color: #fff; }
-        .footer { margin-top: 35px; font-size: 11px; color: #95a5a6; font-weight: bold; text-align: center; }
+        :root { --jula-orange: #f57c00; --jula-blue: #1072ba; --glovo-green: #25D366; --dark: #1a1d20; --light-bg: #f9fbfd; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--light-bg); margin: 0; padding: 0; color: #333; line-height: 1.6; }
+        .hero { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 80px 20px; text-align: center; position: relative; }
+        .hero-badge { background: var(--jula-orange); color: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px; }
+        .hero h1 { font-size: 46px; margin: 0 0 15px 0; font-weight: 800; }
+        .hero p { font-size: 19px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
+        .hero-btns { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .btn-primary { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
+        .btn-secondary { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; border: 2px solid white; transition: 0.2s; }
+        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; box-sizing: border-box; }
+        .section-title { text-align: center; margin-top: 40px; margin-bottom: 40px; }
+        .section-title h2 { font-size: 32px; color: var(--dark); margin: 0 0 10px 0; font-weight: 700; }
+        .section-title p { color: #666; font-size: 16px; margin: 0; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .step-card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); border-bottom: 4px solid #eaeaea; position: relative; }
+        .step-num { font-size: 48px; font-weight: 900; color: rgba(16,114,186,0.1); position: absolute; top: 15px; right: 25px; }
+        .step-card h3 { font-size: 20px; margin: 0 0 12px 0; color: var(--jula-blue); }
+        .step-card p { margin: 0; color: #555; font-size: 14.5px; }
+        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .portal-card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f0f0; }
+        .portal-card h3 { font-size: 24px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 12px; }
+        .salary { font-size: 26px; font-weight: 800; margin: 15px 0; color: var(--dark); }
+        .portal-card p { color: #666; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1; }
+        .btn-portal { display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; }
+        .pricing-section { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 60px; border: 1px solid #e2e8f0; overflow-x: auto; }
+        .pricing-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .pricing-table th { background-color: #f7fafc; color: #4a5568; padding: 15px; font-weight: bold; border-bottom: 2px solid #edf2f7; }
+        .pricing-table td { padding: 15px; border-bottom: 1px solid #edf2f7; font-size: 14.5px; }
+        .pricing-table tr:hover { background-color: #fcfdfd; }
+        .highlight-price { font-weight: bold; color: var(--jula-orange); }
+        .faq-section { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 5px 25px rgba(0,0,0,0.02); margin-bottom: 60px; border: 1px solid #e2e8f0; }
+        .faq-item { border-bottom: 1px solid #edf2f7; padding: 20px 0; }
+        .faq-item:last-child { border: none; }
+        .faq-q { font-weight: 700; font-size: 16px; color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .faq-a { color: #555; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px; }
+        .apk-banner { background: linear-gradient(135deg, var(--jula-orange), #e65100); color: white; border-radius: 16px; padding: 35px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; box-shadow: 0 8px 25px rgba(245,124,0,0.2); margin-bottom: 40px; }
+        .apk-text h3 { margin: 0 0 5px 0; font-size: 24px; font-weight: 800; }
+        .apk-text p { margin: 0; opacity: 0.9; font-size: 15px; }
+        .btn-apk { background-color: white; color: var(--jula-orange); padding: 15px 35px; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .login-section { text-align: center; margin-top: 30px; background: #fff; padding: 25px; border-radius: 12px; border: 1px dashed #ccc; margin-bottom: 40px; }
+        .btn-login { color: var(--jula-blue); font-weight: bold; text-decoration: none; font-size: 16px; }
+        .footer { text-align: center; padding-top: 40px; border-top: 1px solid #e2e8f0; font-size: 13px; color: #888; font-weight: 500; }
     </style>
 </head>
 <body>
+    <div class="hero">
+        <span class="hero-badge">Portail Officiel Jula Afrique de l'Ouest</span>
+        <h1>Devenez Partenaire Jula & Boostez vos Revenus</h1>
+        <p>Rejoignez l'écosystème commercial interconnecté leader en Côte d'Ivoire, Sénégal, Togo et Bénin. Vendez ou livrez en toute liberté.</p>
+        <div class="hero-btns">
+            <a href="#recrutement" class="btn-primary">Créer mon compte</a>
+            <a href="/login" class="btn-secondary">🔐 Connexion Espace Pro</a>
+        </div>
+    </div>
     <div class="container">
-        <h1>Jula</h1>
-        <p class="subtitle">Espace Bienvenue Partenaires</p>
-        <div class="about-box">
-            <div class="about-title">🌍 À propos du Réseau Jula</div>
-            <p class="about-text">
-                Jula est la première plateforme technologique de commerce interconnecté en Afrique de l'Ouest. Notre mission est de désenclaver les échanges transfrontaliers en reliant les vendeurs locaux, les livreurs indépendants et les points de relais sécurisés à travers quatre pays clés : la <b>Côte d'Ivoire</b>, le <b>Sénégal</b>, le <b>Togo</b> et le <b>Bénin</b>. Grâce à notre écosystème, boostez votre activité en zone CFA en toute sérénité.
-            </p>
+        <div class="section-title">
+            <h2>Comment ça fonctionne ?</h2>
+            <p>Trois étapes simples pour lancer votre activité indépendante sur Jula</p>
         </div>
-        <div class="cgu-box">
-            <h4 class="cgu-title">1. Engagement de Qualité Vendeur</h4>
-            <p class="cgu-text">En vous inscrivant sur Jula, vous vous engagez à proposer des articles authentiques, neufs ou certifiés conformes, et à honorer la préparation de vos colis sous 24 heures après achat client.</p>
-            <h4 class="cgu-title">2. Charte Logistique Livreur</h4>
-            <p class="cgu-text">Les transporteurs (motos et véhicules) s'engagent à respecter les délais de acheminement de 3 jours maximum vers les points relais officiels et à maintenir l'intégrité physique des marchandises zone CFA.</p>
-            <h4 class="cgu-title">3. Securisation Jula Pay</h4>
-            <p class="cgu-text">Toutes les transactions financières sont bloquées de façon sécurisée. Les gains vendeurs et les commissions livreurs sont débloqués instantanément dès que le colis est marqué reçu au Point Relais partenaire.</p>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h3>1. Inscription Gratuite</h3>
+                <p>Créez votre profil en ligne en quelques clics selon votre activité (Boutique, Coursier Moto ou Établissement Relais).</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h3>2. Configuration</h3>
+                <p>Accédez à votre espace privé sécurisé pour publier vos articles ou configurer vos trajets logistiques en zone CFA.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h3>3. Encaissez vos Gains</h3>
+                <p>Recevez vos paiements et commissions de façon automatisée et instantanée dès que les colis arrivent à destination.</p>
+            </div>
         </div>
-                
-                 <!-- Boutons d'accès aux formulaires et Espace Connexion -->
-        <div class="btn-box">
-            <a href="/register-seller" class="btn btn-seller">🏬 Rejoindre le réseau comme Vendeur</a>
-            <a href="/register-driver" class="btn btn-driver">🛵 Rejoindre le réseau comme Livreur (Moto/Auto)</a>
-            <a href="/register-station" class="btn" style="background-color: #25D366; color: #fff;">🏪 Rejoindre le réseau comme Point Relais Partenaire</a>
-            
-            <!-- 🔐 NOUVEAU : BOUTON DE CONNEXION POUR TOUS LES PARTENAIRES -->
-            <a href="/login" class="btn" style="background-color: #f57c00; color: #fff; margin-top: 15px; border: 2px solid #fff;">🔐 Déjà membre ? Se connecter à mon Espace</a>
+        <!-- 3. LES OFFRES DE RECRUTEMENT GLOVO/JUMIA STYLE -->
+        <div class="section-title" id="recrutement">
+            <h2>Choisissez votre profil Jula</h2>
+            <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
+        </div>
+        <div class="portal-grid">
+            <div class="portal-card" style="border-top: 6px solid var(--jula-blue);">
+                <h3>🏬 Boutique / Grossiste</h3>
+                <div class="salary">0 FCFA <span style="font-size:14px; color:#666; font-weight:normal;">de frais d'exposition</span></div>
+                <p>Exposez vos articles sur notre catalogue web. Vos produits deviennent instantanément visibles et commandables par des milliers de clients sur l'application mobile Jula.</p>
+                <a href="/register-seller" class="btn-portal" style="background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
+            </div>
+
+            <div class="portal-card" style="border-top: 6px solid var(--glovo-green);">
+                <h3>🛵 Coursier Livreur</h3>
+                <div class="salary">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#666; font-weight:normal;">/semaine</span></div>
+                <p>Soyez votre propre patron ! Moto et permis obligatoires. Recevez les notifications de livraison de colis CFA directement sur votre smartphone et maximisez vos gains logistiques.</p>
+                <a href="/register-driver" class="btn-portal" style="background-color: var(--glovo-green);">Devenir Coursier</a>
+            </div>
+
+            <div class="portal-card" style="border-top: 6px solid var(--jula-orange);">
+                <h3>🏪 Point Relais Agréé</h3>
+                <div class="salary">Commissions <span style="font-size:14px; color:#666; font-weight:normal;">/colis stocké</span></div>
+                <p>Rentabilisez votre espace de commerce physique (boutique, supérette). Devenez un point de dépôt officiel Jula pour la réception et la sécurisation des colis transfrontaliers de votre quartier.</p>
+                <a href="/register-station" class="btn-portal" style="background-color: var(--jula-orange);">Inscrire mon Point</a>
+            </div>
         </div>
 
-        <p class="footer">Portail IA Sécurisé v1.0 • Interconnexion Ouest-Africaine Jula 2026</p>
+        <!-- 4. GRILLE DES TARIFS LOGISTIQUES -->
+        <div class="section-title">
+            <h2>📊 Grille Tarifaire Jula Express (Fulfillment)</h2>
+            <p>Stockage, Emballage professionnel et Expédition clés en main depuis nos entrepôts centraux</p>
+        </div>
+        <div class="pricing-section">
+            <table class="pricing-table">
+                <thead>
+                    <tr>
+                        <th>Taille du Produit</th>
+                        <th>Exemples d'articles</th>
+                        <th>Stockage (Par mois / Unité)</th>
+                        <th>Emballage & Préparation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Petit produit</b></td>
+                        <td>Smartphones, Bijoux, Écouteurs, Maquillage</td>
+                        <td class="highlight-price">500 FCFA</td>
+                        <td>300 FCFA /colis expédié</td>
+                    </tr>
+                    <tr>
+                        <td><b>Moyen produit</b></td>
+                        <td>Ordinateurs portables, Micro-ondes, Mixeurs, Sacs de mode</td>
+                        <td class="highlight-price">1 500 FCFA</td>
+                        <td>400 FCFA /colis expédié</td>
+                    </tr>
+                    <tr>
+                        <td><b>Gros produit</b></td>
+                        <td>Téléviseurs, Réfrigérateurs, Ventilateurs sur pied</td>
+                        <td class="highlight-price">3 000 FCFA</td>
+                        <td>600 FCFA /colis expédié</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 5. FOIRE AUX QUESTIONS (FAQ) -->
+        <div class="section-title">
+            <h2>Questions Fréquentes</h2>
+            <p>Tout ce que vous devez savoir pour démarrer sereinement</p>
+        </div>
+        <div class="faq-section">
+            <div class="faq-item">
+                <div class="faq-q">❓ L'inscription sur Jula est-elle payante ?</div>
+                <p class="faq-a">Non, l'ouverture de compte et la publication classique des produits sur la plateforme sont totalement gratuites pour tous les partenaires.</p>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">❓ Comment s'effectue le retrait de mes gains en zone CFA ?</div>
+                <p class="faq-a">Vos fonds sont bloqués de manière sécurisée et débloqués automatiquement via Jula Pay instantanément dès que l'acheteur confirme la réception de la marchandise.</p>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">🍊 Qu'est-ce que le service "Jula Express" ?</div>
+                <p class="faq-a">C'est notre service de traitement logistique d'élite inspiré du modèle de Jumia. Vous déposez vos stocks à l'avance dans notre entrepôt central Jula. Dès qu'un client commande, nos équipes s'occupent de l'emballage professionnel et de l'expédition immédiate sous 2 heures, sans que vous n'ayez à vous déplacer !</p>
+            </div>
+            <div class="faq-item">
+                <div class="faq-q">❓ Dans quels pays le réseau Jula opère-t-il ?</div>
+                <p class="faq-a">Jula interconnecte quatre marchés clés d'Afrique de l'Ouest : la Côte d'Ivoire, le Sénégal, le Togo et le Bénin.</p>
+            </div>
+        </div>
+
+        <!-- 6. DOWNLOAD APK BANNER -->
+        <div class="apk-banner">
+            <div class="apk-text">
+                <h3>🛍️ Vous souhaitez simplement faire du shopping ?</h3>
+                <p>Téléchargez la toute dernière version de l'application mobile Jula Client Acheteur pour passer vos commandes en direct.</p>
+            </div>
+            <a href="https://expo.dev" class="btn-apk">📥 Télécharger l'APK</a>
+        </div>
+
+        <div class="login-section">
+            <span>Vous avez déjà un compte professionnel ? </span>
+            <a href="/login" class="btn-login">🔐 Connectez-vous à votre Espace</a>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Jula Logistique & Co. • Interconnexion Ouest-Africaine • Abidjan - Dakar - Lomé - Cotonou • v1.1.0</p>
+        </div>
+
     </div>
 </body>
 </html>
+
