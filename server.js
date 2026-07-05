@@ -3,9 +3,13 @@ const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 const ws = require('ws'); 
+const multer = require('multer'); // 📸 Appel du décodeur d'images Multer
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Configuration du coffre-fort d'images en mémoire tampon temporaire
+const upload = multer({ storage: multer.memoryStorage() });
 
 const supabase = createClient(
     process.env.SUPABASE_URL, 
@@ -21,14 +25,14 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 🌍 Routes d'affichage des formulaires et écrans
+// 🌍 Routes d'affichage des écrans
 app.get('/', (req, res) => { res.render('index'); });
 app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
-app.get('/login', (req, res) => { res.render('login'); }); // 🟢 Écran de connexion connecté !
+app.get('/login', (req, res) => { res.render('login'); });
 
-// 💾 1. Traitement des INSCRIPTIONS (Vendeurs, Livreurs, Points Relais)
+// 💾 Traitement des INSCRIPTIONS
 app.post('/submit-partner', async (req, res) => {
     const { email, password, full_name, phone, country, business_type, shop_name, vehicle_plate } = req.body;
     try {
@@ -59,7 +63,6 @@ app.post('/submit-partner', async (req, res) => {
         }
     } catch (err) { res.send(`❌ Erreur d'inscription : ${err.message}`); }
 });
-
 // 🔐 2. Traitement de la CONNEXION des vendeurs
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
@@ -68,11 +71,9 @@ app.post('/login-partner', async (req, res) => {
         if (error) throw error;
 
         if (data.user) {
-            // Vérification que c'est bien un profil boutique/vendeur
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
             
             if (profile && profile.role === 'boutique') {
-                // Redirection directe vers son tableau de bord avec ses accès 🟢
                 res.render('dashboard', { email: data.user.email, userId: data.user.id });
             } else {
                 res.send("❌ Accès refusé : Cet espace est réservé uniquement aux comptes vendeurs.");
@@ -81,28 +82,54 @@ app.post('/login-partner', async (req, res) => {
     } catch (err) { res.send(`❌ Erreur d'authentification : ${err.message}`); }
 });
 
-// 🚀 3. Traitement des PUBLICATIONS de nouveaux produits
-app.post('/publish-product', async (req, res) => {
-    const { title, description, price, image_url, category, vendedor_id } = req.body;
+// 🚀 3. Traitement des PUBLICATIONS avec Envoi de la Photo Directe
+// 🟢 upload.single('product_photo') intercepte l'image du smartphone
+app.post('/publish-product', upload.single('product_photo'), async (req, res) => {
+    const { title, description, price, category, vendedor_id } = req.body;
     try {
-        // Envoi direct de l'article dans la table des produits de Supabase 🟢
-        const { error } = await supabase.from('products').insert([
+        if (!req.file) throw new Error("Veuillez sélectionner ou prendre une photo.");
+
+        // Génération d'un nom de fichier unique pour éviter les doublons
+        const fileExt = req.file.originalname.split('.').pop();
+        const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+
+        // 📸 Envoi physique du fichier binaire vers ton Bucket Supabase Storage
+        const { data: storageData, error: storageError } = await supabase.storage
+            .from('product-images')
+            .upload(fileName, req.file.buffer, {
+                contentType: req.file.mimetype,
+                upsert: false
+            });
+
+        if (storageError) throw storageError;
+
+        // Récupération de l'adresse URL publique officielle de la photo stockée
+        const { data: publicUrlData } = supabase.storage
+            .from('product-images')
+            .getPublicUrl(fileName);
+
+        const photoUrlFinale = publicUrlData.publicUrl;
+
+        // 💾 Injection de l'article avec la VRAIE URL de sa photo dans la table products
+        const { error: insertError } = await supabase.from('products').insert([
             {
                 title,
                 description,
                 price: parseFloat(price),
-                image_url,
+                image_url: photoUrlFinale, // L'adresse de la photo prise par le vendeur
                 category,
-                vendedor_id, // L'identifiant unique du grossiste Jula
+                vendedor_id,
                 created_at: new Date()
             }
         ]);
 
-        if (error) throw error;
+        if (insertError) throw insertError;
 
-        res.send("🎉 Succès ! Votre produit est maintenant publié en direct et visible sur l'application mobile Jula de vos clients !");
+        res.send("🎉 Succès ! Votre produit et votre photo ont été publiés en direct ! L'article est visible sur le Tecno de vos clients !");
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
 
 app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
+
+
 
