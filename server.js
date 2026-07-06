@@ -1,17 +1,18 @@
 require('dotenv').config();
 const express = require('express');
-const { createClient } = require('@supabase/supabase-js');
 const cors = require('cors');
-app.use(cors()); // 🟢 Autorise le Tecno à déclencher les vrais paiements PayDunya
+const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 const ws = require('ws'); 
-const multer = require('multer'); // Décodeur d'images smartphone
-const fetch = require('node-fetch'); // 🟢 Réfère l'outil de paiement PayDunya
+const multer = require('multer');
+const fetch = require('node-fetch');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuration du stockage temporaire des fichiers photos
+// 🟢 Activation de CORS au bon endroit (APRES la création de app !)
+app.use(cors());
+
 const upload = multer({ storage: multer.memoryStorage() });
 
 const supabase = createClient(
@@ -58,7 +59,6 @@ app.post('/submit-partner', async (req, res) => {
             ]);
             if (profileError) throw profileError;
             
-            // 🚀 Redirection en direct selon le métier lors de l'inscription
             if (business_type === 'boutique') {
                 return res.render('dashboard', { email: email, userId: authData.user.id });
             } 
@@ -74,6 +74,7 @@ app.post('/submit-partner', async (req, res) => {
         }
     } catch (err) { res.send(`❌ Erreur d'inscription : ${err.message}`); }
 });
+
 // 🔐 2. Traitement de la CONNEXION universelle des Partenaires (Aiguillage intelligent)
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
@@ -82,14 +83,12 @@ app.post('/login-partner', async (req, res) => {
         if (error) throw error;
 
         if (data.user) {
-            // Lecture du vrai rôle enregistré dans la table des profils Supabase
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
             
             if (!profile) {
                 return res.send("❌ Erreur : Aucun profil associé à ce compte.");
             }
 
-            // 🚀 Aiguillage selon le métier détecté en base de données
             if (profile.role === 'boutique') {
                 return res.render('dashboard', { email: data.user.email, userId: data.user.id });
             } 
@@ -112,11 +111,9 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
     try {
         if (!req.file) throw new Error("Veuillez sélectionner ou prendre une photo.");
 
-        // Génération d'un nom de fichier unique pour éviter les doublons
         const fileExt = req.file.originalname.split('.').pop();
         const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
 
-        // 📸 Envoi physique du fichier binaire vers ton Bucket Supabase Storage
         const { data: storageData, error: storageError } = await supabase.storage
             .from('product-images')
             .upload(fileName, req.file.buffer, {
@@ -126,14 +123,12 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
 
         if (storageError) throw storageError;
 
-        // Récupération de l'adresse URL publique officielle de la photo stockée
         const { data: publicUrlData } = supabase.storage
             .from('product-images')
             .getPublicUrl(fileName);
 
         const photoUrlFinale = publicUrlData.publicUrl;
 
-        // 💾 Injection de l'article avec la VRAIE URL de sa photo dans la table products
         const { error: insertError } = await supabase.from('products').insert([
             {
                 title,
@@ -152,7 +147,8 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
 
- app.post('/create-payment', async (req, res) => {
+// 💳 4. TUNNEL DE PAIEMENT REEL PAYDUNYA MOBILE MONEY
+app.post('/create-payment', async (req, res) => {
     const { product_title, price } = req.body;
     try {
         const response = await fetch('https://paydunya.com', {
@@ -170,7 +166,6 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
                 },
                 store: { name: "Jula E-Commerce" },
                 actions: {
-                    // 🟢 CORRECTIF : Le client revient directement sur ton site Jula après le paiement !
                     cancel_url: "https://jula-web.onrender.com",
                     return_url: "https://jula-web.onrender.com"
                 }
