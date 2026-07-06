@@ -149,10 +149,38 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
 
-// 💳 4. TUNNEL DE PAIEMENT REEL PAYDUNYA MOBILE MONEY
-app.post('/create-payment', async (req, res) => {
-    const { product_title, price, buyer_email } = req.body;
+ app.post('/create-payment', async (req, res) => {
+    const { product_title, price } = req.body;
     try {
-        // Configuration de la requete PayDunya avec tes vraies cles de production
-        const response = await fetch('
+        const response = await fetch('https://paydunya.com', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'PAYDUNYA-MASTER-KEY': process.env.PAYDUNYA_MASTER_KEY,
+                'PAYDUNYA-PRIVATE-KEY': process.env.PAYDUNYA_PRIVATE_KEY,
+                'PAYDUNYA-TOKEN': process.env.PAYDUNYA_TOKEN
+            },
+            body: JSON.stringify({
+                invoice: {
+                    total_amount: parseFloat(price),
+                    description: `Achat de : ${product_title} sur Jula`
+                },
+                store: { name: "Jula E-Commerce" },
+                actions: {
+                    // 🟢 CORRECTIF : Le client revient directement sur ton site Jula après le paiement !
+                    cancel_url: "https://jula-web.onrender.com",
+                    return_url: "https://jula-web.onrender.com"
+                }
+            })
+        });
+
+        const data = await response.json();
+        if (data.response_code === "00") {
+            res.json({ payment_url: data.response_text });
+        } else {
+            res.status(400).json({ error: "Échec de l'initialisation du paiement PayDunya." });
+        }
+    } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
 app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
