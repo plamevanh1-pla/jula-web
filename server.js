@@ -4,6 +4,7 @@ const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 const ws = require('ws'); 
 const multer = require('multer'); // Décodeur d'images smartphone
+const fetch = require('node-fetch'); // 🟢 Réfère l'outil de paiement PayDunya
 
 const app = express();
 const PORT = process.env.PORT || 3000;
