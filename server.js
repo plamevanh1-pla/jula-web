@@ -3,12 +3,12 @@ const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 const ws = require('ws'); 
-const multer = require('multer'); // 📸 Appel du décodeur d'images Multer
+const multer = require('multer'); // Décodeur d'images smartphone
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuration du coffre-fort d'images en mémoire tampon temporaire
+// Configuration du stockage temporaire des fichiers photos
 const upload = multer({ storage: multer.memoryStorage() });
 
 const supabase = createClient(
@@ -25,29 +25,26 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 🌍 Routes d'affichage des écrans
+// 🌍 Routes d'affichage des formulaires
 app.get('/', (req, res) => { res.render('index'); });
 app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
 
-// 💾 Traitement des INSCRIPTIONS
- // 💾 Traitement des INSCRIPTIONS avec Redirection Automatique vers le Tableau de Bord !
+// 💾 1. Traitement des INSCRIPTIONS avec Redirection Graphique Immédiate
 app.post('/submit-partner', async (req, res) => {
     const { email, password, full_name, phone, country, business_type, shop_name, vehicle_plate } = req.body;
     try {
-        // 1. Création du compte de sécurité Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
         if (authError) throw authError;
 
         if (authData.user) {
-            // 2. Création du profil professionnel dans la base de données
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
                     email: email,
-                    role: business_type, // 'boutique', 'livreur' ou 'relais'
+                    role: business_type,
                     country: country,
                     full_name: full_name,
                     phone: phone,
@@ -58,24 +55,23 @@ app.post('/submit-partner', async (req, res) => {
             ]);
             if (profileError) throw profileError;
             
-            // 3. 🚀 REDIRECTION AUTOMATIQUE EN DIRECT SELON LE MÉTIER !
+            // 🚀 Redirection en direct selon le métier lors de l'inscription
             if (business_type === 'boutique') {
-                // Si c'est un vendeur, on l'envoie direct sur son outil de publication avec sa photo ! 🟢
                 return res.render('dashboard', { email: email, userId: authData.user.id });
             } 
             else if (business_type === 'livreur') {
-                // Si c'est un livreur, on l'enverra sur son futur tableau de bord coursier 🟢
-                return res.send(`🎉 Bienvenue ${full_name} ! Votre compte coursier livreur est créé avec succès. Connectez-vous sur l'application mobile Jula avec vos identifiants pour recevoir vos courses !`);
+                return res.render('dashboard-driver', { email: email, userId: authData.user.id });
+            } 
+            else if (business_type === 'relais') {
+                return res.render('dashboard-station', { email: email, userId: authData.user.id });
             } 
             else {
-                // Si c'est un point relais, on l'enverra sur son espace de dépôt 🟢
-                return res.send(`🎉 Bienvenue ${full_name} ! Votre Point Relais Jula a été enregistré avec succès. Notre équipe logistique va valider votre emplacement physique sous 24h.`);
+                return res.send("❌ Rôle inconnu.");
             }
         }
     } catch (err) { res.send(`❌ Erreur d'inscription : ${err.message}`); }
 });
-
-// 🔐 2. Traitement de la CONNEXION des vendeurs
+// 🔐 2. Traitement de la CONNEXION universelle des Partenaires (Aiguillage intelligent)
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -83,19 +79,31 @@ app.post('/login-partner', async (req, res) => {
         if (error) throw error;
 
         if (data.user) {
+            // Lecture du vrai rôle enregistré dans la table des profils Supabase
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
             
-            if (profile && profile.role === 'boutique') {
-                res.render('dashboard', { email: data.user.email, userId: data.user.id });
-            } else {
-                res.send("❌ Accès refusé : Cet espace est réservé uniquement aux comptes vendeurs.");
+            if (!profile) {
+                return res.send("❌ Erreur : Aucun profil associé à ce compte.");
+            }
+
+            // 🚀 Aiguillage selon le métier détecté en base de données
+            if (profile.role === 'boutique') {
+                return res.render('dashboard', { email: data.user.email, userId: data.user.id });
+            } 
+            else if (profile.role === 'livreur') {
+                return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
+            } 
+            else if (profile.role === 'relais') {
+                return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
+            } 
+            else {
+                return res.send("❌ Accès refusé : Les comptes clients doivent utiliser l'application mobile.");
             }
         }
     } catch (err) { res.send(`❌ Erreur d'authentification : ${err.message}`); }
 });
 
 // 🚀 3. Traitement des PUBLICATIONS avec Envoi de la Photo Directe
-// 🟢 upload.single('product_photo') intercepte l'image du smartphone
 app.post('/publish-product', upload.single('product_photo'), async (req, res) => {
     const { title, description, price, category, vendedor_id } = req.body;
     try {
@@ -128,7 +136,7 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
                 title,
                 description,
                 price: parseFloat(price),
-                image_url: photoUrlFinale, // L'adresse de la photo prise par le vendeur
+                image_url: photoUrlFinale,
                 category,
                 vendedor_id,
                 created_at: new Date()
@@ -142,6 +150,3 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
 });
 
 app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
-
-
-
