@@ -33,18 +33,21 @@ app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
 
 // 💾 Traitement des INSCRIPTIONS
+ // 💾 Traitement des INSCRIPTIONS avec Redirection Automatique vers le Tableau de Bord !
 app.post('/submit-partner', async (req, res) => {
     const { email, password, full_name, phone, country, business_type, shop_name, vehicle_plate } = req.body;
     try {
+        // 1. Création du compte de sécurité Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
         if (authError) throw authError;
 
         if (authData.user) {
+            // 2. Création du profil professionnel dans la base de données
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
                     email: email,
-                    role: business_type,
+                    role: business_type, // 'boutique', 'livreur' ou 'relais'
                     country: country,
                     full_name: full_name,
                     phone: phone,
@@ -55,14 +58,23 @@ app.post('/submit-partner', async (req, res) => {
             ]);
             if (profileError) throw profileError;
             
-            let roleTexte = "relais";
-            if (business_type === 'boutique') roleTexte = "boutique";
-            if (business_type === 'livreur') roleTexte = "livreur";
-
-            res.render('success', { name: full_name, role: roleTexte });
+            // 3. 🚀 REDIRECTION AUTOMATIQUE EN DIRECT SELON LE MÉTIER !
+            if (business_type === 'boutique') {
+                // Si c'est un vendeur, on l'envoie direct sur son outil de publication avec sa photo ! 🟢
+                return res.render('dashboard', { email: email, userId: authData.user.id });
+            } 
+            else if (business_type === 'livreur') {
+                // Si c'est un livreur, on l'enverra sur son futur tableau de bord coursier 🟢
+                return res.send(`🎉 Bienvenue ${full_name} ! Votre compte coursier livreur est créé avec succès. Connectez-vous sur l'application mobile Jula avec vos identifiants pour recevoir vos courses !`);
+            } 
+            else {
+                // Si c'est un point relais, on l'enverra sur son espace de dépôt 🟢
+                return res.send(`🎉 Bienvenue ${full_name} ! Votre Point Relais Jula a été enregistré avec succès. Notre équipe logistique va valider votre emplacement physique sous 24h.`);
+            }
         }
     } catch (err) { res.send(`❌ Erreur d'inscription : ${err.message}`); }
 });
+
 // 🔐 2. Traitement de la CONNEXION des vendeurs
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
