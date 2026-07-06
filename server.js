@@ -149,4 +149,10 @@ app.post('/publish-product', upload.single('product_photo'), async (req, res) =>
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
 
+// 💳 4. TUNNEL DE PAIEMENT REEL PAYDUNYA MOBILE MONEY
+app.post('/create-payment', async (req, res) => {
+    const { product_title, price, buyer_email } = req.body;
+    try {
+        // Configuration de la requete PayDunya avec tes vraies cles de production
+        const response = await fetch('
 app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
