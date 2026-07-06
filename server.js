@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
 const { createClient } = require('@supabase/supabase-js');
+const cors = require('cors');
+app.use(cors()); // 🟢 Autorise le Tecno à déclencher les vrais paiements PayDunya
 const path = require('path');
 const ws = require('ws'); 
 const multer = require('multer'); // Décodeur d'images smartphone
