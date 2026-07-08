@@ -1,44 +1,92 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription Point Relais Jula</title>
+    <title>Jula - Inscription Point Relais</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; padding: 20px; display: flex; justify-content: center; }
-        .form-card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 450px; width: 100%; }
-        h2 { color: #25D366; margin-bottom: 20px; text-align: center; }
-        label { font-weight: bold; font-size: 13px; color: #495057; display: block; margin-top: 12px; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
-        .btn-submit { background-color: #25D366; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 15px; }
+        :root { --jula-orange: #f57c00; --jula-blue: #1072ba; --dark: #111417; }
+        body { font-family: system-ui, sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
+        .form-container { max-width: 480px; background: white; margin: 30px auto; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-top: 5px solid #28a745; }
+        h2 { text-align: center; color: var(--dark); margin-bottom: 25px; font-weight: 800; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #dee2e6; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        input:focus, select:focus { border-color: #28a745; outline: none; }
+        input[type="file"] { padding: 8px; background: #f1f3f5; border: 2px dashed #ced4da; cursor: pointer; }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, #28a745, #1e7e34); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(40,167,69,0.2); transition: 0.2s; }
+        .btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(40,167,69,0.3); }
+        .info-file { font-size: 11px; color: #6c757d; margin-top: 4px; }
     </style>
 </head>
 <body>
-    <div class="form-card">
-        <h2>🏪 Devenir Point Relais Partenaire Jula</h2>
-        <form action="/submit-partner" method="POST">
+
+    <div class="form-container">
+        <h2>🏢 Devenir Point Relais Jula</h2>
+        
+        <!-- Moteur d'envoi d'images actif -->
+        <form action="/submit-partner" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="business_type" value="relais">
-            <label>Nom complet du Gérant :</label>
-            <input type="text" name="full_name" required placeholder="Ex: Amadou Diallo">
-            <label>Nom de l'Établissement / Boutique physique :</label>
-            <input type="text" name="shop_name" required placeholder="Ex: Établissement Diallo & Fils">
-            <label>Adresse physique exacte (Quartier, Ville) :</label>
-            <input type="text" name="vehicle_plate" required placeholder="Ex: Cocody Angré, en face de la pharmacie">
-            <label>Adresse E-mail de gestion :</label>
-            <input type="email" name="email" required placeholder="Ex: relais@jula.com">
-            <label>Créer un Mot de passe secret :</label>
-            <input type="password" name="password" required placeholder="Minimum 6 caractères">
-            <label>Numéro de Téléphone (WhatsApp du Point Relais) :</label>
-            <input type="text" name="phone" required placeholder="Ex: +225 0100000000">
-            <label>Votre Pays d'activité :</label>
-            <select name="country">
-                <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
-                <option value="Sénégal">🇸🇳 Sénégal</option>
-                <option value="Togo">🇹🇬 Togo</option>
-                <option value="Bénin">🇧🇯 Bénin</option>
-            </select>
-            <button type="submit" class="btn-submit">Enregistrer mon Point Relais Sécurisé</button>
+            
+            <div class="form-group">
+                <label>Nom complet du gérant</label>
+                <input type="text" name="full_name" placeholder="Ex: Amadou Diallo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Nom de l'Espace / Point d'Accueil</label>
+                <input type="text" name="shop_name" placeholder="Ex: Boutique Diallo Telecom" required>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de Téléphone (Mobile Money)</label>
+                <input type="tel" name="phone" placeholder="Ex: +225 0101..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Adresse Électronique (Email)</label>
+                <input type="email" name="email" placeholder="Ex: diallo@jula-relais.com" required>
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe secret</label>
+                <input type="password" name="password" placeholder="Minimum 6 caractères" required>
+            </div>
+
+            <div class="form-group">
+                <label>Pays de localisation</label>
+                <select name="country" required>
+                    <option value="Côte d'Ivoire">🇨🇮 Côte d'Ivoire</option>
+                    <option value="Sénégal">🇸🇳 Sénégal</option>
+                    <option value="Togo">🇹🇬 Togo</option>
+                    <option value="Bénin">🇧🇯 Bénin</option>
+                </select>
+            </div>
+
+            <!-- 📸 CNI RECTO -->
+            <div class="form-group">
+                <label>📄 Pièce d'identité nationale (RECTO)</label>
+                <input type="file" name="cni_recto" accept="image/*" required>
+                <div class="info-file">Photo nette de l'avant de votre carte nationale d'identité.</div>
+            </div>
+
+            <!-- 📸 CNI VERSO -->
+            <div class="form-group">
+                <label>📄 Pièce d'identité nationale (VERSO)</label>
+                <input type="file" name="cni_verso" accept="image/*" required>
+                <div class="info-file">Photo nette de l'arrière de votre carte nationale d'identité.</div>
+            </div>
+
+            <!-- 📸 PHOTO DE LA BOUTIQUE / LOCAL DE STOCKAGE -->
+            <div class="form-group">
+                <label>🏪 Photo du Local de Stockage</label>
+                <input type="file" name="photo_boutique" accept="image/*" required>
+                <div class="info-file">Prenez une photo de votre espace où les colis seront stockés en sécurité.</div>
+            </div>
+
+            <button type="submit" class="btn-submit">Valider mon inscription Point Relais</button>
         </form>
     </div>
+
 </body>
 </html>
