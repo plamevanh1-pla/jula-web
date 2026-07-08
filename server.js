@@ -10,18 +10,18 @@ const fetch = require('node-fetch');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 🟢 Activation de CORS au bon endroit (APRES la création de app !)
 app.use(cors());
 
-const upload = multer({ storage: multer.memoryStorage() });
+// 📸 CONFIGURATION MULTI-PHOTOS : Autorise jusqu'à 3 images par inscription
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } // Limite à 5 Mo par photo smartphone
+});
 
 const supabase = createClient(
     process.env.SUPABASE_URL, 
     process.env.SUPABASE_ANON_KEY,
-    {
-        auth: { persistSession: false },
-        realtime: { transport: ws }
-    }
+    { auth: { persistSession: false }, realtime: { transport: ws } }
 );
 
 app.use(express.urlencoded({ extended: true }));
@@ -29,21 +29,55 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 🌍 Routes d'affichage des formulaires
+// 🌍 Routes d'affichage des formulaires graphiques
 app.get('/', (req, res) => { res.render('index'); });
 app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
 
-// 💾 1. Traitement des INSCRIPTIONS avec Redirection Graphique Immédiate
-app.post('/submit-partner', async (req, res) => {
+// 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
+async function uploadToSupabase(file, folder) {
+    if (!file) return null;
+    const fileExt = file.originalname.split('.').pop();
+    const fileName = `${folder}/${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
+    
+    const { data, error } = await supabase.storage
+        .from('product-images') // Utilisation de ton bucket existant
+        .upload(fileName, file.buffer, { contentType: file.mimetype, upsert: false });
+        
+    if (error) throw error;
+    
+    const { data: publicUrlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
+    return publicUrlData.publicUrl;
+}
+// 💾 1. MOTEUR D'INSCRIPTION ULTRA-SÉCURISÉ (MULTI-PHOTOS)
+app.post('/submit-partner', upload.fields([
+    { name: 'cni_recto', maxCount: 1 },
+    { name: 'cni_verso', maxCount: 1 },
+    { name: 'photo_boutique', maxCount: 1 },
+    { name: 'photo_vehicule', maxCount: 1 }
+]), async (req, res) => {
     const { email, password, full_name, phone, country, business_type, shop_name, vehicle_plate } = req.body;
     try {
+        // Crée d'abord le compte dans l'authentification Supabase
         const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
         if (authError) throw authError;
 
         if (authData.user) {
+            // Extraction sécurisée des fichiers photo envoyés depuis le formulaire
+            const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'][0] : null;
+            const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'][0] : null;
+            const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'][0] : null;
+            const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'][0] : null;
+
+            // Propulsion des fichiers vers ton Bucket Supabase Storage
+            const urlCniRecto = await uploadToSupabase(cniRectoFile, 'cni');
+            const urlCniVerso = await uploadToSupabase(cniVersoFile, 'cni');
+            const urlBoutique = await uploadToSupabase(shopFile, 'boutiques');
+            const urlVehicule = await uploadToSupabase(vehicleFile, 'vehicules');
+
+            // Insertion complète du profil vérifié avec TOUTES ses pièces justificatives
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
@@ -54,28 +88,27 @@ app.post('/submit-partner', async (req, res) => {
                     phone: phone,
                     shop_name: shop_name || null,
                     vehicle_plate: vehicle_plate || null,
-                    is_verified: true
+                    is_verified: false, // 🛑 Attente de validation manuelle par Jacky
+                    cni_recto_url: urlCniRecto,
+                    cni_verso_url: urlCniVerso,
+                    photo_boutique_url: urlBoutique,
+                    photo_vehicule_url: urlVehicule,
+                    created_at: new Date()
                 }
             ]);
             if (profileError) throw profileError;
             
-            if (business_type === 'boutique') {
-                return res.render('dashboard', { email: email, userId: authData.user.id });
-            } 
-            else if (business_type === 'livreur') {
-                return res.render('dashboard-driver', { email: email, userId: authData.user.id });
-            } 
-            else if (business_type === 'relais') {
-                return res.render('dashboard-station', { email: email, userId: authData.user.id });
-            } 
-            else {
-                return res.send("❌ Rôle inconnu.");
-            }
+            // Aiguillage visuel selon le métier vers l'espace de travail
+            if (business_type === 'boutique') return res.render('dashboard', { email, userId: authData.user.id });
+            if (business_type === 'livreur') return res.render('dashboard-driver', { email, userId: authData.user.id });
+            if (business_type === 'relais') return res.render('dashboard-station', { email, userId: authData.user.id });
+            
+            return res.send("❌ Rôle inconnu.");
         }
-    } catch (err) { res.send(`❌ Erreur d'inscription : ${err.message}`); }
+    } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-// 🔐 2. Traitement de la CONNEXION universelle des Partenaires (Aiguillage intelligent)
+// 🔐 2. CONNEXION DES PARTENAIRES
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -84,70 +117,37 @@ app.post('/login-partner', async (req, res) => {
 
         if (data.user) {
             const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
-            
-            if (!profile) {
-                return res.send("❌ Erreur : Aucun profil associé à ce compte.");
-            }
+            if (!profile) return res.send("❌ Erreur : Aucun profil associé à ce compte.");
 
-            if (profile.role === 'boutique') {
-                return res.render('dashboard', { email: data.user.email, userId: data.user.id });
-            } 
-            else if (profile.role === 'livreur') {
-                return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
-            } 
-            else if (profile.role === 'relais') {
-                return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
-            } 
-            else {
-                return res.send("❌ Accès refusé : Les comptes clients doivent utiliser l'application mobile.");
-            }
+            if (profile.role === 'boutique') return res.render('dashboard', { email: data.user.email, userId: data.user.id });
+            if (profile.role === 'livreur') return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
+            if (profile.role === 'relais') return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
+            
+            return res.send("❌ Accès refusé : Les clients doivent utiliser l'application mobile.");
         }
     } catch (err) { res.send(`❌ Erreur d'authentification : ${err.message}`); }
 });
 
-// 🚀 3. Traitement des PUBLICATIONS avec Envoi de la Photo Directe
+// 🚀 3. PUBLICATION DE PRODUITS DEPUIS LA BOUTIQUE WEB
 app.post('/publish-product', upload.single('product_photo'), async (req, res) => {
     const { title, description, price, category, vendedor_id } = req.body;
     try {
         if (!req.file) throw new Error("Veuillez sélectionner ou prendre une photo.");
-
-        const fileExt = req.file.originalname.split('.').pop();
-        const fileName = `${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
-
-        const { data: storageData, error: storageError } = await supabase.storage
-            .from('product-images')
-            .upload(fileName, req.file.buffer, {
-                contentType: req.file.mimetype,
-                upsert: false
-            });
-
-        if (storageError) throw storageError;
-
-        const { data: publicUrlData } = supabase.storage
-            .from('product-images')
-            .getPublicUrl(fileName);
-
-        const photoUrlFinale = publicUrlData.publicUrl;
+        const photoUrlFinale = await uploadToSupabase(req.file, 'products');
 
         const { error: insertError } = await supabase.from('products').insert([
             {
-                title,
-                description,
-                price: parseFloat(price),
-                image_url: photoUrlFinale,
-                category,
-                vendedor_id,
-                created_at: new Date()
+                title, description, price: parseFloat(price),
+                image_url: photoUrlFinale, category, vendedor_id, created_at: new Date()
             }
         ]);
-
         if (insertError) throw insertError;
 
-        res.send("🎉 Succès ! Votre produit et votre photo ont été publiés en direct ! L'article est visible sur le Tecno de vos clients !");
+        res.send("🎉 Succès ! Produit publié en direct !");
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
 
-// 💳 4. TUNNEL DE PAIEMENT REEL PAYDUNYA MOBILE MONEY
+// 💳 4. TUNNEL PAYDUNYA MOBILE MONEY
 app.post('/create-payment', async (req, res) => {
     const { product_title, price } = req.body;
     try {
@@ -160,24 +160,14 @@ app.post('/create-payment', async (req, res) => {
                 'PAYDUNYA-TOKEN': process.env.PAYDUNYA_TOKEN
             },
             body: JSON.stringify({
-                invoice: {
-                    total_amount: parseFloat(price),
-                    description: `Achat de : ${product_title} sur Jula`
-                },
+                invoice: { total_amount: parseFloat(price), description: `Achat : ${product_title}` },
                 store: { name: "Jula E-Commerce" },
-                actions: {
-                    cancel_url: "https://jula-web.onrender.com",
-                    return_url: "https://jula-web.onrender.com"
-                }
+                actions: { cancel_url: "https://jula-web.onrender.com", return_url: "https://jula-web.onrender.com" }
             })
         });
-
         const data = await response.json();
-        if (data.response_code === "00") {
-            res.json({ payment_url: data.response_text });
-        } else {
-            res.status(400).json({ error: "Échec de l'initialisation du paiement PayDunya." });
-        }
+        if (data.response_code === "00") res.json({ payment_url: data.response_text });
+        else res.status(400).json({ error: "Échec PayDunya." });
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
