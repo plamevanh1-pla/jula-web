@@ -128,24 +128,31 @@ app.post('/login-partner', async (req, res) => {
     } catch (err) { res.send(`❌ Erreur d'authentification : ${err.message}`); }
 });
 
-// 🚀 3. PUBLICATION DE PRODUITS DEPUIS LA BOUTIQUE WEB
+ // 🚀 PUBLICATION DE PRODUITS DEPUIS LA BOUTIQUE WEB AVEC GESTION DES STOCKS
 app.post('/publish-product', upload.single('product_photo'), async (req, res) => {
-    const { title, description, price, category, vendedor_id } = req.body;
+    const { title, description, price, category, vendedor_id, stock_quantity } = req.body;
     try {
         if (!req.file) throw new Error("Veuillez sélectionner ou prendre une photo.");
         const photoUrlFinale = await uploadToSupabase(req.file, 'products');
 
         const { error: insertError } = await supabase.from('products').insert([
             {
-                title, description, price: parseFloat(price),
-                image_url: photoUrlFinale, category, vendedor_id, created_at: new Date()
+                title, 
+                description, 
+                price: parseFloat(price),
+                image_url: photoUrlFinale, 
+                category, 
+                vendedor_id, 
+                stock_quantity: parseInt(stock_quantity) || 10, // Récupère le stock ou met 10 par défaut
+                created_at: new Date()
             }
         ]);
         if (insertError) throw insertError;
 
-        res.send("🎉 Succès ! Produit publié en direct !");
+        res.send("🎉 Succès ! Produit publié en direct avec ses stocks !");
     } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
 });
+
 
 // 💳 4. TUNNEL PAYDUNYA MOBILE MONEY
 app.post('/create-payment', async (req, res) => {
