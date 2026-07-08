@@ -43,12 +43,12 @@ async function uploadToSupabase(file, folder) {
     const fileName = `${folder}/${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
     
     const { data, error } = await supabase.storage
-        .from('product-images') // Utilisation de ton bucket existant
+        .from('product-image') // Utilisation de ton bucket existant
         .upload(fileName, file.buffer, { contentType: file.mimetype, upsert: false });
         
     if (error) throw error;
     
-    const { data: publicUrlData } = supabase.storage.from('product-images').getPublicUrl(fileName);
+    const { data: publicUrlData } = supabase.storage.from('product-image').getPublicUrl(fileName);
     return publicUrlData.publicUrl;
 }
 // 💾 1. MOTEUR D'INSCRIPTION ULTRA-SÉCURISÉ (MULTI-PHOTOS)
