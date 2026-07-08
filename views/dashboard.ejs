@@ -34,6 +34,13 @@
 
             <label>Description du produit :</label>
             <textarea name="description" rows="4" required placeholder="Décrivez l'état, les accessoires fournis, la garantie..."></textarea>
+       
+            <!-- 📊 NOUVELLE CASE AJOUTÉE : GESTION DES STOCKS EN TEMPS RÉEL -->
+        <div class="form-group" style="margin-bottom: 15px;">
+        <label style="display:block; font-weight:600; margin-bottom:5px;">📦 Quantité en Stock disponible :</label>
+       <input type="number" name="stock_quantity" value="10" min="1" required style="width:100%; padding:10px; border:2px solid #dee2e6; border-radius:8px;">
+      <small style="color:#6c757d; font-size:11px;">Indiquez le nombre exact d'articles que vous possédez en magasin.</small                                                                                                                                                                                                                                                                                                                  
+   </div>
 
             <label>Prix de vente (en FCFA) :</label>
             <input type="number" name="price" required placeholder="Ex: 450000">
