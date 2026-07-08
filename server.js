@@ -170,5 +170,41 @@ app.post('/create-payment', async (req, res) => {
         else res.status(400).json({ error: "Échec PayDunya." });
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
+// 🕵️ ROUTE DE CONTRÔLE SÉCRÈTE DE JACKY - AFFICHAGE DES CNI ET PHOTOS
+app.get('/admin-control-jula-secret', async (req, res) => {
+    try {
+        // Récupère tous les profils enregistrés dans l'ordre du plus récent au plus ancien
+        const { data: profiles, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Envoie les données à ton interface graphique ejs
+        res.render('admin-control', { profiles: profiles || [] });
+    } catch (err) {
+        res.status(500).send(`❌ Erreur du centre de contrôle : ${err.message}`);
+    }
+});
+
+// ✅ ACTION DE VALIDATION DEPUIS LE PANNEAU DE CONTRÔLE
+app.post('/verify-partner', async (req, res) => {
+    const { id } = req.body;
+    try {
+        // Passe l'état de "is_verified" à TRUE dans ton Supabase
+        const { error } = await supabase
+            .from('profiles')
+            .update({ is_verified: true })
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Recharge la page secrète pour voir le badge vert s'allumer
+        res.redirect('/admin-control-jula-secret');
+    } catch (err) {
+        res.status(500).send(`❌ Erreur lors de la validation du partenaire : ${err.message}`);
+    }
+});
 
 app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
