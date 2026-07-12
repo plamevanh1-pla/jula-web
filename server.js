@@ -35,25 +35,45 @@ app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
-// 🏪 ROUTE DU TABLEAU DE BORD DES COMMANDES POUR LES VENDEURS JULA
+ // 🏪 TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     try {
-        // Va chercher toutes les commandes liées à ce vendeur spécifique
-        const { data: orders, error } = await supabase
+        // 1. Récupération de toutes les commandes du vendeur
+        const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select('*')
             .eq('vendedor_id', vendedor_id)
             .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (ordersError) throw ordersError;
 
-        // Renvoie l'affichage vers la page HTML/EJS des vendeurs
-        res.render('vendedor_orders', { orders, vendedor_id });
+        // 2. CALCUL DU CHIFFRE D'AFFAIRES cumulé (Rapports de performance)
+        // Additionne le prix uniquement si la commande est validée ou en cours
+        let totalEarnings = 0;
+        let pendingOrdersCount = 0;
+        
+        orders.forEach(order => {
+            if (order.status === 'Livré' || order.status === 'En cours de livraison') {
+                totalEarnings += Number(order.total_price);
+            }
+            if (order.status === 'En attente de préparation') {
+                pendingOrdersCount++;
+            }
+        });
+
+        // Renvoie toutes ces statistiques à ta page visuelle EJS
+        res.render('vendedor_orders', { 
+            orders, 
+            vendedor_id, 
+            totalEarnings, 
+            pendingOrdersCount 
+        });
     } catch (err) {
-        res.status(500).send(`❌ Erreur lors du chargement des commandes : ${err.message}`);
+        res.status(500).send(`❌ Erreur rapports financiers : ${err.message}`);
     }
 });
+
 
 // 🔄 ROUTE POUR METTRE À JOUR LE STATUT D'UNE COMMANDE (EX: "EN COURS DE LIVRAISON")
 app.post('/vendedor/update-order-status', async (req, res) => {
