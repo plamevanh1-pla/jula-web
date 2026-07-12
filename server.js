@@ -18,11 +18,15 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } // Limite à 5 Mo par photo smartphone
 });
 
-const supabase = createClient(
-    process.env.SUPABASE_URL, 
-    process.env.SUPABASE_ANON_KEY,
-    { auth: { persistSession: false }, realtime: { transport: ws } }
-);
+ // 📡 INITIALISATION UNIVERSELLE AVEC CLÉ DYNAMIQUE POUR LE PC ET RENDER
+const urlSupabase = process.env.SUPABASE_URL;
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+const supabase = createClient(urlSupabase, cleSupabase, { 
+    auth: { persistSession: false }, 
+    realtime: { transport: ws } 
+});
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
