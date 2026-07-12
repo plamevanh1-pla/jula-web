@@ -35,6 +35,42 @@ app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
+// 🏪 ROUTE DU TABLEAU DE BORD DES COMMANDES POUR LES VENDEURS JULA
+app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
+    const { vendedor_id } = req.params;
+    try {
+        // Va chercher toutes les commandes liées à ce vendeur spécifique
+        const { data: orders, error } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('vendedor_id', vendedor_id)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Renvoie l'affichage vers la page HTML/EJS des vendeurs
+        res.render('vendedor_orders', { orders, vendedor_id });
+    } catch (err) {
+        res.status(500).send(`❌ Erreur lors du chargement des commandes : ${err.message}`);
+    }
+});
+
+// 🔄 ROUTE POUR METTRE À JOUR LE STATUT D'UNE COMMANDE (EX: "EN COURS DE LIVRAISON")
+app.post('/vendedor/update-order-status', async (req, res) => {
+    const { order_id, new_status, vendedor_id } = req.body;
+    try {
+        const { error } = await supabase
+            .from('orders')
+            .update({ status: new_status })
+            .eq('id', order_id);
+
+        if (error) throw error;
+        // Redirige instantanément pour rafraîchir la page du vendeur
+        res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
+    } catch (err) {
+        res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
+    }
+});
 
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
@@ -194,7 +230,7 @@ app.get('/admin-control-jula-secret', async (req, res) => {
         res.status(500).send(`❌ Erreur du centre de contrôle : ${err.message}`);
     }
 });
-
+ 
 // ✅ ACTION DE VALIDATION DEPUIS LE PANNEAU DE CONTRÔLE
 app.post('/verify-partner', async (req, res) => {
     const { id } = req.body;
