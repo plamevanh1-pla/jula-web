@@ -21,6 +21,15 @@
         <h2>🏬 Espace Magasin Vendeur</h2>
         <span>Connecté : <b><%= email %></b></span>
     </div>
+    <!-- 📦 BOUTON D'ACCÈS AU TIROIR DES COMMANDES JULA -->
+<div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+    <h3 style="margin: 0 0 10px 0; color: #111417;">📦 Vos Ventes Jula en Direct</h3>
+    <p style="margin: 0 0 15px 0; color: #666; font-size: 14px;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses de vos clients.</p>
+    
+    <a href="/vendedor/dashboard-orders/<%= user.id %>" style="display: inline-block; background: #f57c00; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">
+        🛒 Ouvrir mon Carnet de Commandes →
+    </a>
+</div>
 
     <div class="container">
         <h3>🚀 Publier un nouvel article sur Jula</h3>
