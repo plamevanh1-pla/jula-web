@@ -23,10 +23,23 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🏪 Tableau de bord des Commandes Vendeur</h1>
-            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 13px;">Identifiant Grossiste : <%= vendedor_id %></p>
+                 <div class="header">
+            <h1>🏪 Tableau de bord & Analyses Commerciales</h1>
+            <p style="margin: 5px 0 15px 0; color: #aaa; font-size: 13px;">Identifiant Grossiste : <%= vendedor_id %></p>
+            
+            <!-- 📊 COMPTEURS DE PERFORMANCE FINANCIÈRE EN DIRECT -->
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">💰 Chiffre d'Affaires Encaissé</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #28a745; margin-top: 5px;"><%= totalEarnings %> FCFA</div>
+                </div>
+                <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">⏳ Colis à Préparer</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #ffc107; margin-top: 5px;"><%= pendingOrdersCount %> colis</div>
+                </div>
+            </div>
         </div>
+
 
         <% if (orders.length === 0) { %>
             <div class="no-orders">🎉 Aucune commande reçue pour le moment. Votre boutique est prête à encaisser !</div>
