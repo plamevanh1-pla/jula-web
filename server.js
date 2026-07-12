@@ -5,96 +5,41 @@ const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 const ws = require('ws'); 
 const multer = require('multer');
-const fetch = require('node-fetch');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-
-// 📸 CONFIGURATION MULTI-PHOTOS : Autorise jusqu'à 3 images par inscription
-const upload = multer({ 
-    storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 } // Limite à 5 Mo par photo smartphone
-});
-
- // 📡 INITIALISATION UNIVERSELLE AVEC CLÉ DYNAMIQUE POUR LE PC ET RENDER
-const urlSupabase = process.env.SUPABASE_URL;
-const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
-
-const supabase = createClient(urlSupabase, cleSupabase, { 
-    auth: { persistSession: false }, 
-    realtime: { transport: ws } 
-});
-
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 🌍 Routes d'affichage des formulaires graphiques
+// 📸 CONFIGURATION MULTI-PHOTOS
+const upload = multer({ 
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 5 * 1024 * 1024 } 
+});
+
+// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC PROTECTION CONTRE LES CRASHES
+const urlSupabase = process.env.SUPABASE_URL;
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+const supabase = createClient(urlSupabase, cleSupabase, { 
+    auth: { 
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+    }, 
+    realtime: { transport: ws } 
+});
+
+// 🌍 Routes d'affichage des formulaires graphiques Jula
 app.get('/', (req, res) => { res.render('index'); });
 app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
- // 🏪 TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
-app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
-    const { vendedor_id } = req.params;
-    try {
-        // 1. Récupération de toutes les commandes du vendeur
-        const { data: orders, error: ordersError } = await supabase
-            .from('orders')
-            .select('*')
-            .eq('vendedor_id', vendedor_id)
-            .order('created_at', { ascending: false });
-
-        if (ordersError) throw ordersError;
-
-        // 2. CALCUL DU CHIFFRE D'AFFAIRES cumulé (Rapports de performance)
-        // Additionne le prix uniquement si la commande est validée ou en cours
-        let totalEarnings = 0;
-        let pendingOrdersCount = 0;
-        
-        orders.forEach(order => {
-            if (order.status === 'Livré' || order.status === 'En cours de livraison') {
-                totalEarnings += Number(order.total_price);
-            }
-            if (order.status === 'En attente de préparation') {
-                pendingOrdersCount++;
-            }
-        });
-
-        // Renvoie toutes ces statistiques à ta page visuelle EJS
-        res.render('vendedor_orders', { 
-            orders, 
-            vendedor_id, 
-            totalEarnings, 
-            pendingOrdersCount 
-        });
-    } catch (err) {
-        res.status(500).send(`❌ Erreur rapports financiers : ${err.message}`);
-    }
-});
-
-
-// 🔄 ROUTE POUR METTRE À JOUR LE STATUT D'UNE COMMANDE (EX: "EN COURS DE LIVRAISON")
-app.post('/vendedor/update-order-status', async (req, res) => {
-    const { order_id, new_status, vendedor_id } = req.body;
-    try {
-        const { error } = await supabase
-            .from('orders')
-            .update({ status: new_status })
-            .eq('id', order_id);
-
-        if (error) throw error;
-        // Redirige instantanément pour rafraîchir la page du vendeur
-        res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
-    } catch (err) {
-        res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
-    }
-});
 
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
@@ -103,7 +48,7 @@ async function uploadToSupabase(file, folder) {
     const fileName = `${folder}/${Date.now()}-${Math.floor(Math.random() * 1000)}.${fileExt}`;
     
     const { data, error } = await supabase.storage
-        .from('product-image') // Utilisation de ton bucket existant
+        .from('product-image') 
         .upload(fileName, file.buffer, { contentType: file.mimetype, upsert: false });
         
     if (error) throw error;
@@ -120,24 +65,20 @@ app.post('/submit-partner', upload.fields([
 ]), async (req, res) => {
     const { email, password, full_name, phone, country, business_type, shop_name, vehicle_plate } = req.body;
     try {
-        // Crée d'abord le compte dans l'authentification Supabase
         const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
         if (authError) throw authError;
 
         if (authData.user) {
-            // Extraction sécurisée des fichiers photo envoyés depuis le formulaire
             const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'][0] : null;
             const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'][0] : null;
             const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'][0] : null;
             const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'][0] : null;
 
-            // Propulsion des fichiers vers ton Bucket Supabase Storage
             const urlCniRecto = await uploadToSupabase(cniRectoFile, 'cni');
             const urlCniVerso = await uploadToSupabase(cniVersoFile, 'cni');
             const urlBoutique = await uploadToSupabase(shopFile, 'boutiques');
             const urlVehicule = await uploadToSupabase(vehicleFile, 'vehicules');
 
-            // Insertion complète du profil vérifié avec TOUTES ses pièces justificatives
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
@@ -148,7 +89,7 @@ app.post('/submit-partner', upload.fields([
                     phone: phone,
                     shop_name: shop_name || null,
                     vehicle_plate: vehicle_plate || null,
-                    is_verified: false, // 🛑 Attente de validation manuelle par Jacky
+                    is_verified: false,
                     cni_recto_url: urlCniRecto,
                     cni_verso_url: urlCniVerso,
                     photo_boutique_url: urlBoutique,
@@ -158,7 +99,6 @@ app.post('/submit-partner', upload.fields([
             ]);
             if (profileError) throw profileError;
             
-            // Aiguillage visuel selon le métier vers l'espace de travail
             if (business_type === 'boutique') return res.render('dashboard', { email, userId: authData.user.id });
             if (business_type === 'livreur') return res.render('dashboard-driver', { email, userId: authData.user.id });
             if (business_type === 'relais') return res.render('dashboard-station', { email, userId: authData.user.id });
@@ -168,7 +108,7 @@ app.post('/submit-partner', upload.fields([
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-// 🔐 2. CONNEXION DES PARTENAIRES
+// 🔐 2. CONNEXION DES PARTENAIRES SANS CRASH (REFAITE PROPRE)
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -176,102 +116,74 @@ app.post('/login-partner', async (req, res) => {
         if (error) throw error;
 
         if (data.user) {
-            const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).single();
-            if (!profile) return res.send("❌ Erreur : Aucun profil associé à ce compte.");
+            const { data: profile, error: profError } = await supabase.from('profiles').select('role, id').eq('id', data.user.id).single();
+            if (profError || !profile) return res.send("❌ Erreur : Aucun profil associé à ce compte.");
 
             if (profile.role === 'boutique') return res.render('dashboard', { email: data.user.email, userId: data.user.id });
             if (profile.role === 'livreur') return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
             if (profile.role === 'relais') return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
             
-            return res.send("❌ Accès refusé : Les clients doivent utiliser l'application mobile.");
+            return res.send("❌ Rôle non reconnu.");
         }
-    } catch (err) { res.send(`❌ Erreur d'authentification : ${err.message}`); }
+    } catch (err) {
+        res.status(500).send(`❌ Erreur d'authentification : ${err.message}`);
+    }
 });
 
- // 🚀 PUBLICATION DE PRODUITS DEPUIS LA BOUTIQUE WEB AVEC GESTION DES STOCKS
-app.post('/publish-product', upload.single('product_photo'), async (req, res) => {
-    const { title, description, price, category, vendedor_id, stock_quantity } = req.body;
+// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
+    const { vendedor_id } = req.params;
     try {
-        if (!req.file) throw new Error("Veuillez sélectionner ou prendre une photo.");
-        const photoUrlFinale = await uploadToSupabase(req.file, 'products');
-
-        const { error: insertError } = await supabase.from('products').insert([
-            {
-                title, 
-                description, 
-                price: parseFloat(price),
-                image_url: photoUrlFinale, 
-                category, 
-                vendedor_id, 
-                stock_quantity: parseInt(stock_quantity) || 10, // Récupère le stock ou met 10 par défaut
-                created_at: new Date()
-            }
-        ]);
-        if (insertError) throw insertError;
-
-        res.send("🎉 Succès ! Produit publié en direct avec ses stocks !");
-    } catch (err) { res.send(`❌ Erreur lors de la publication : ${err.message}`); }
-});
-
-
-// 💳 4. TUNNEL PAYDUNYA MOBILE MONEY
-app.post('/create-payment', async (req, res) => {
-    const { product_title, price } = req.body;
-    try {
-        const response = await fetch('https://paydunya.com', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'PAYDUNYA-MASTER-KEY': process.env.PAYDUNYA_MASTER_KEY,
-                'PAYDUNYA-PRIVATE-KEY': process.env.PAYDUNYA_PRIVATE_KEY,
-                'PAYDUNYA-TOKEN': process.env.PAYDUNYA_TOKEN
-            },
-            body: JSON.stringify({
-                invoice: { total_amount: parseFloat(price), description: `Achat : ${product_title}` },
-                store: { name: "Jula E-Commerce" },
-                actions: { cancel_url: "https://jula-web.onrender.com", return_url: "https://jula-web.onrender.com" }
-            })
-        });
-        const data = await response.json();
-        if (data.response_code === "00") res.json({ payment_url: data.response_text });
-        else res.status(400).json({ error: "Échec PayDunya." });
-    } catch (err) { res.status(500).json({ error: err.message }); }
-});
-// 🕵️ ROUTE DE CONTRÔLE SÉCRÈTE DE JACKY - AFFICHAGE DES CNI ET PHOTOS
-app.get('/admin-control-jula-secret', async (req, res) => {
-    try {
-        // Récupère tous les profils enregistrés dans l'ordre du plus récent au plus ancien
-        const { data: profiles, error } = await supabase
-            .from('profiles')
+        const { data: orders, error: ordersError } = await supabase
+            .from('orders')
             .select('*')
+            .eq('vendedor_id', vendedor_id)
             .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (ordersError) throw ordersError;
 
-        // Envoie les données à ton interface graphique ejs
-        res.render('admin-control', { profiles: profiles || [] });
+        let totalEarnings = 0;
+        let pendingOrdersCount = 0;
+        
+        if (orders) {
+            orders.forEach(order => {
+                if (order.status === 'Livré' || order.status === 'En cours de livraison') {
+                    totalEarnings += Number(order.total_price);
+                }
+                if (order.status === 'En attente de préparation') {
+                    pendingOrdersCount++;
+                }
+            });
+        }
+
+        res.render('vendedor_orders', { 
+            orders: orders || [], 
+            vendedor_id, 
+            totalEarnings, 
+            pendingOrdersCount 
+        });
     } catch (err) {
-        res.status(500).send(`❌ Erreur du centre de contrôle : ${err.message}`);
+        res.status(500).send(`❌ Erreur rapports financiers : ${err.message}`);
     }
 });
- 
-// ✅ ACTION DE VALIDATION DEPUIS LE PANNEAU DE CONTRÔLE
-app.post('/verify-partner', async (req, res) => {
-    const { id } = req.body;
+
+// 🔄 4. ACTION MISE À JOUR DU STATUT DES LIVRAISONS
+app.post('/vendedor/update-order-status', async (req, res) => {
+    const { order_id, new_status, vendedor_id } = req.body;
     try {
-        // Passe l'état de "is_verified" à TRUE dans ton Supabase
         const { error } = await supabase
-            .from('profiles')
-            .update({ is_verified: true })
-            .eq('id', id);
+            .from('orders')
+            .update({ status: new_status })
+            .eq('id', order_id);
 
         if (error) throw error;
-
-        // Recharge la page secrète pour voir le badge vert s'allumer
-        res.redirect('/admin-control-jula-secret');
+        res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
     } catch (err) {
-        res.status(500).send(`❌ Erreur lors de la validation du partenaire : ${err.message}`);
+        res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
 
-app.listen(PORT, () => { console.log(`🚀 Serveur Jula actif sur le port ${PORT}`); });
+// 🔌 5. ALLUMAGE DU SERVEUR COMPATIBLE RENDER CLOUD
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`);
+});
