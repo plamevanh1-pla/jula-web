@@ -108,25 +108,39 @@ app.post('/submit-partner', upload.fields([
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-// 🔐 2. CONNEXION DES PARTENAIRES SANS CRASH (REFAITE PROPRE)
+ // 🔐 2. CONNEXION DES PARTENAIRES SANS CRASH (REFAITE ET BLINDÉE CONTRE L'ERREUR 500)
 app.post('/login-partner', async (req, res) => {
     const { email, password } = req.body;
     try {
+        // Interroge directement l'authentification Supabase
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
+        if (error) {
+            return res.send(`❌ Échec de connexion : ${error.message}`);
+        }
 
         if (data.user) {
-            const { data: profile, error: profError } = await supabase.from('profiles').select('role, id').eq('id', data.user.id).single();
-            if (profError || !profile) return res.send("❌ Erreur : Aucun profil associé à ce compte.");
+            // Va chercher le rôle exact (boutique, livreur, relais) dans la table profiles
+            const { data: profile, error: profError } = await supabase
+                .from('profiles')
+                .select('role, id')
+                .eq('id', data.user.id)
+                .single();
 
-            if (profile.role === 'boutique') return res.render('dashboard', { email: data.user.email, userId: data.user.id });
+            if (profError || !profile) {
+                return res.send("❌ Aucun profil Jula valide n'est associé à ce compte.");
+            }
+
+            // Aiguillage instantané vers le carnet de commandes en direct
+            if (profile.role === 'boutique') {
+                return res.redirect(`/vendedor/dashboard-orders/${data.user.id}`);
+            }
             if (profile.role === 'livreur') return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
             if (profile.role === 'relais') return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
             
             return res.send("❌ Rôle non reconnu.");
         }
     } catch (err) {
-        res.status(500).send(`❌ Erreur d'authentification : ${err.message}`);
+        res.status(500).send(`Internal Server Error : ${err.message}`);
     }
 });
 
