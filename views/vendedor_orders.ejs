@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
 </head>
 <body>
     <div class="container">
-                 <div class="header">
+        <div class="header">
             <h1>🏪 Tableau de bord & Analyses Commerciales</h1>
             <p style="margin: 5px 0 15px 0; color: #aaa; font-size: 13px;">Identifiant Grossiste : <%= vendedor_id %></p>
             
@@ -39,11 +39,8 @@
                 </div>
             </div>
         </div>
-
-
         <% if (orders.length === 0) { %>
             <div class="no-orders">🎉 Aucune commande reçue pour le moment. Votre boutique est prête à encaisser !</div>
-        ) { %>
         <% } else { %>
             <% orders.forEach(order => { %>
                 <div class="order-card <%= order.status === 'Livré' ? 'delivered' : '' %>">
