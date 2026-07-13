@@ -40,21 +40,19 @@ app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
- // 📥 PORTAIL DE PUBLICATION DES PRODUITS JULA - VERSION SÉCURISÉE SANS CRASH
+
+// 📥 PORTAIL DE PUBLICATION DES PRODUITS JULA - VERSION SÉCURISÉE SANS CRASH
 app.get('/vendedor/dashboard', (req, res) => {
     try {
-        // Force l'affichage en fournissant des variables par défaut pour éviter tout plantage EJS
         res.render('dashboard', { 
             email: 'grossiste@jula.com', 
             userId: 'vendeur_jula_demo',
             user: { id: 'vendeur_jula_demo', email: 'grossiste@jula.com' } 
         });
     } catch (err) {
-        // En cas de problème, renvoie un message propre plutôt qu'un crash 500
         res.status(500).send(`Erreur d'affichage du formulaire : ${err.message}`);
     }
 });
-
 
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
@@ -115,19 +113,18 @@ app.post('/submit-partner', upload.fields([
             if (profileError) throw profileError;
             
             if (business_type === 'boutique') return res.render('dashboard', { email, userId: authData.user.id });
-            if (business_type === 'livreur') return res.render('dashboard-driver', { email, userId: authData.user.id });
-            if (business_type === 'relais') return res.render('dashboard-station', { email, userId: authData.user.id });
+            if (business_type === 'livreur') return res.render('dashboard-driver', { email, userId: authData.user.id, user: { id: authData.user.id, email } });
+            if (business_type === 'relais') return res.render('dashboard-station', { email, userId: authData.user.id, user: { id: authData.user.id, email } });
             
             return res.send("❌ Rôle inconnu.");
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-   // 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (VERSION SÉCURISÉE TOTAL)
+// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (VERSION SÉCURISÉE TOTAL)
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
-        // Le serveur récupère le profil complet dans Supabase
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('*')
@@ -138,16 +135,13 @@ app.post('/login-partner', async (req, res) => {
             return res.send(`❌ Aucun compte trouvé avec l'adresse ${email}. Créez-le d'abord via les formulaires du site !`);
         }
 
-        // Nettoyage de sécurité : on force la valeur en minuscules pour éviter les conflits de frappe
         const userRole = profile.role ? profile.role.toLowerCase().trim() : '';
 
-        // 🔀 AIGUILLAGE AUTOMATIQUE SÉCURISÉ AVEC DOUBLES PARAMÈTRES ANTI-CRASH
         if (userRole === 'boutique' || userRole === 'vendedor') {
             return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
         }
         
         if (userRole === 'livreur' || userRole === 'driver') {
-            // On fournit à la fois email, userId et l'objet user complet pour nourrir toutes les versions d'EJS
             return res.render('dashboard-driver', { 
                 email: profile.email, 
                 userId: profile.id,
@@ -156,7 +150,6 @@ app.post('/login-partner', async (req, res) => {
         }
         
         if (userRole === 'relais' || userRole === 'station') {
-            // On fournit également toutes les variables de sécurité pour le point relais
             return res.render('dashboard-station', { 
                 email: profile.email, 
                 userId: profile.id,
@@ -164,7 +157,6 @@ app.post('/login-partner', async (req, res) => {
             });
         }
         
-        // Sécurité finale : Si le rôle n'est pas reconnu, on ouvre l'espace boutique par défaut au lieu de crasher !
         return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
 
     } catch (err) {
@@ -172,21 +164,16 @@ app.post('/login-partner', async (req, res) => {
     }
 });
 
-
-
- // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA (CORRIGÉ ET BLINDÉ)
+// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     try {
-        // Interroge Supabase en ciblant précisément la colonne vendeur_id existante
         const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select('*')
-            .eq('vendedor_id', vendedor_id); // Aligné sur ta table Supabase officielle
+            .eq('vendedor_id', vendedor_id);
 
         if (ordersError) {
-            // Sécurité : Si Supabase rechigne, on simule un tableau vide pour ne pas faire crasher le site
-            console.error("Erreur Supabase Orders:", ordersError.message);
             return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
         }
 
@@ -204,7 +191,6 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
             });
         }
 
-        // Renvoie proprement l'affichage à ton fichier HTML/EJS des grossistes
         res.render('vendedor_orders', { 
             orders: orders || [], 
             vendedor_id, 
@@ -212,12 +198,11 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
             pendingOrdersCount 
         });
     } catch (err) {
-        // Renvoie un message clair au lieu d'une page blanche d'erreur 500
         res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
     }
 });
 
-// 🔄 4. ACTION MISE À JOUR DU STATUT DES LIVRAISONS
+// 🔄 4. MISE À JOUR DU STATUT DES PANIER ET EXPÉDITIONS
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
     try {
@@ -232,33 +217,28 @@ app.post('/vendedor/update-order-status', async (req, res) => {
         res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
-  // 🚀 5. MOTEUR DE PROPULSION DE PRODUIT UNIVERSEL (ANTI-CRASH ERREUR 500)
-// .any() permet d'accepter n'importe quel nom de champ photo envoyé par ton fichier EJS !
+
+// 🚀 5. MOTEUR DE PROPULSION DE PRODUIT UNIVERSEL (ANTI-CRASH ERREUR 500)
 app.post('/publish-product', upload.any(), async (req, res) => {
     try {
         const { title, description, price, stock, category } = req.body;
-        
-        // Image de haute qualité par défaut si aucune photo n'est sélectionnée
         let finalImageUrl = 'https://unsplash.com'; 
 
-        // Extraction magique du fichier, peu importe son nom dans ton HTML (photo, image, etc.)
         if (req.files && req.files.length > 0) {
             try {
                 const targetFile = req.files[0];
                 const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
-                console.error("Problème d'upload d'image, utilisation par défaut.");
+                console.error("Problème d'upload d'image");
             }
         }
 
-                 // Insertion chirurgicale et adaptative ajustée sur ton Supabase réel
         const { error: productError } = await supabase.from('products').insert([
             {
                 title: title || 'Nouvel Article Jula',
                 description: description || '',
                 price: parseFloat(price) || 0,
-                // 📦 Nettoyage : On utilise uniquement stock_quantity qui est la colonne officielle mobile
                 stock_quantity: parseInt(stock) || 1, 
                 category: category || 'General',
                 image_url: finalImageUrl,
@@ -267,10 +247,8 @@ app.post('/publish-product', upload.any(), async (req, res) => {
             }
         ]);
 
-
         if (productError) throw productError;
 
-        // Magnifique écran Jumia-Style en cas de réussite
         res.send(`
             <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f6f9; min-height: 100vh;">
                 <div style="background: white; max-width: 500px; margin: 40px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #28a745;">
@@ -281,18 +259,11 @@ app.post('/publish-product', upload.any(), async (req, res) => {
             </div>
         `);
     } catch (err) {
-        // Renvoie l'erreur de manière propre dans une boîte grise pour comprendre ce qui cloche
-        res.status(200).send(`
-            <div style="font-family: Arial; padding: 30px; text-align: center;">
-                <h3 style="color: #d9534f;">⚙️ Diagnostic Technique de la Base de Données Jula</h3>
-                <p style="background: #f8f9fa; padding: 15px; border-radius: 6px; display: inline-block; text-align: left; font-family: monospace;">${err.message}</p>
-                <br><a href="/vendedor/dashboard" style="color: #f57c00; font-weight: bold; text-decoration: none;">← Réessayer</a>
-            </div>
-        `);
+        res.status(500).send(`❌ Échec de la propulsion : ${err.message}`);
     }
 });
 
-// 🔌 5. ALLUMAGE DU SERVEUR COMPATIBLE RENDER CLOUD
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`);
+// 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER
+app.listen(PORT, '0.0.0.0', () => { 
+    console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
