@@ -217,6 +217,46 @@ app.post('/vendedor/update-order-status', async (req, res) => {
         res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
+// 🚀 5. MOTEUR DE PROPULSION DE PRODUIT (FORMULAIRE GROSSISTE -> SUPABASE)
+// Cette route utilise "upload.single('photo')" pour capturer la photo de l'article
+app.post('/publish-product', upload.single('photo'), async (req, res) => {
+    const { title, description, price, stock, category } = req.body;
+    try {
+        let finalImageUrl = 'https://unsplash.com'; // Photo par défaut si vide
+
+        // Si le vendeur a chargé une photo, on la propulse dans ton bucket Supabase Storage
+        if (req.file) {
+            finalImageUrl = await uploadToSupabase(req.file, 'produits');
+        }
+
+        // Insertion chirurgicale du nouvel article dans ta table 'products'
+        const { error: productError } = await supabase.from('products').insert([
+            {
+                title: title,
+                description: description,
+                price: parseFloat(price) || 0,
+                stock_quantity: parseInt(stock) || 0, // Aligné sur ta jauge de stock mobile
+                category: category || 'General',
+                image_url: finalImageUrl,
+                vendedor_id: req.body.userId || 'vendeur_jula_demo', // Associe l'article au grossiste connecté
+                created_at: new Date()
+            }
+        ]);
+
+        if (productError) throw productError;
+
+        // Message de succès royal ! Le produit est envoyé !
+        res.send(`
+            <div style="font-family: Arial; text-align: center; padding: 50px;">
+                <h2 style="color: #28a745;">🎉 Article propulsé avec succès sur le Rayon Jula !</h2>
+                <p>Prenez votre smartphone Tecno, rafraîchissez l'application et admirez le résultat en direct !</p>
+                <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px;">← Retourner au Magasin</a>
+            </div>
+        `);
+    } catch (err) {
+        res.status(500).send(`❌ Échec de la propulsion du produit : ${err.message}`);
+    }
+});
 
 // 🔌 5. ALLUMAGE DU SERVEUR COMPATIBLE RENDER CLOUD
 app.listen(PORT, '0.0.0.0', () => {
