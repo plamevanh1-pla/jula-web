@@ -217,44 +217,52 @@ app.post('/vendedor/update-order-status', async (req, res) => {
         res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
-// 🚀 5. MOTEUR DE PROPULSION DE PRODUIT (FORMULAIRE GROSSISTE -> SUPABASE)
-// Cette route utilise "upload.single('photo')" pour capturer la photo de l'article
+ // 🚀 5. MOTEUR DE PROPULSION DE PRODUIT (VERSION SÉCURISÉE ET ALIGNÉE SUR TON BUCKET)
 app.post('/publish-product', upload.single('photo'), async (req, res) => {
     const { title, description, price, stock, category } = req.body;
     try {
-        let finalImageUrl = 'https://unsplash.com'; // Photo par défaut si vide
+        // Photo par défaut de haute qualité si le vendeur n'en met pas
+        let finalImageUrl = 'https://unsplash.com'; 
 
-        // Si le vendeur a chargé une photo, on la propulse dans ton bucket Supabase Storage
+        // Si une photo est fournie, on utilise ton robot uploadToSupabase existant
         if (req.file) {
-            finalImageUrl = await uploadToSupabase(req.file, 'produits');
+            try {
+                // Utilise précisément ta fonction d'origine sans changer les dossiers
+                const uploadedUrl = await uploadToSupabase(req.file, 'produits');
+                if (uploadedUrl) finalImageUrl = uploadedUrl;
+            } catch (storageErr) {
+                console.error("Erreur de stockage, utilisation photo par défaut:", storageErr.message);
+            }
         }
 
-        // Insertion chirurgicale du nouvel article dans ta table 'products'
+        // Insertion chirurgicale dans ta table 'products'
         const { error: productError } = await supabase.from('products').insert([
             {
-                title: title,
-                description: description,
+                title: title || 'Article Jula',
+                description: description || '',
                 price: parseFloat(price) || 0,
-                stock_quantity: parseInt(stock) || 0, // Aligné sur ta jauge de stock mobile
+                stock_quantity: parseInt(stock) || 0, // Aligné sur ton bloor anti-rupture
                 category: category || 'General',
                 image_url: finalImageUrl,
-                vendedor_id: req.body.userId || 'vendeur_jula_demo', // Associe l'article au grossiste connecté
+                vendedor_id: req.body.userId || 'vendeur_jula_demo',
                 created_at: new Date()
             }
         ]);
 
         if (productError) throw productError;
 
-        // Message de succès royal ! Le produit est envoyé !
+        // Écran de succès Jumia-Style
         res.send(`
-            <div style="font-family: Arial; text-align: center; padding: 50px;">
-                <h2 style="color: #28a745;">🎉 Article propulsé avec succès sur le Rayon Jula !</h2>
-                <p>Prenez votre smartphone Tecno, rafraîchissez l'application et admirez le résultat en direct !</p>
-                <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 20px;">← Retourner au Magasin</a>
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f6f9; height: 100vh;">
+                <div style="background: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #28a745;">
+                    <h2 style="color: #28a745; margin-bottom: 10px;">🎉 Article propulsé avec succès !</h2>
+                    <p style="color: #666; font-size: 14px;">Votre produit est maintenant disponible sur les smartphones Tecno de vos clients.</p>
+                    <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">← Retourner au Magasin</a>
+                </div>
             </div>
         `);
     } catch (err) {
-        res.status(500).send(`❌ Échec de la propulsion du produit : ${err.message}`);
+        res.status(500).send(`❌ Échec de la propulsion : ${err.message}. Vérifiez que la table 'products' possède bien la colonne 'stock_quantity'.`);
     }
 });
 
