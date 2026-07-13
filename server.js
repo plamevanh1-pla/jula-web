@@ -40,9 +40,19 @@ app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
-// 📥 OUVERTURE DIRECTE DU FORMULAIRE DE PUBLICATION DES PRODUITS JULA
+ // 📥 PORTAIL DE PUBLICATION DES PRODUITS JULA - VERSION SÉCURISÉE SANS CRASH
 app.get('/vendedor/dashboard', (req, res) => {
-    res.render('dashboard', { email: 'vendeur@jula.com', userId: 'demo' });
+    try {
+        // Force l'affichage en fournissant des variables par défaut pour éviter tout plantage EJS
+        res.render('dashboard', { 
+            email: 'grossiste@jula.com', 
+            userId: 'vendeur_jula_demo',
+            user: { id: 'vendeur_jula_demo', email: 'grossiste@jula.com' } 
+        });
+    } catch (err) {
+        // En cas de problème, renvoie un message propre plutôt qu'un crash 500
+        res.status(500).send(`Erreur d'affichage du formulaire : ${err.message}`);
+    }
 });
 
 
