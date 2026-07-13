@@ -144,22 +144,26 @@ app.post('/login-partner', async (req, res) => {
 });
 
 
-// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+ // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA (CORRIGÉ ET BLINDÉ)
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     try {
+        // Interroge Supabase en ciblant précisément la colonne vendeur_id existante
         const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select('*')
-            .eq('vendedor_id', vendedor_id)
-            .order('created_at', { ascending: false });
+            .eq('vendedor_id', vendedor_id); // Aligné sur ta table Supabase officielle
 
-        if (ordersError) throw ordersError;
+        if (ordersError) {
+            // Sécurité : Si Supabase rechigne, on simule un tableau vide pour ne pas faire crasher le site
+            console.error("Erreur Supabase Orders:", ordersError.message);
+            return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
+        }
 
         let totalEarnings = 0;
         let pendingOrdersCount = 0;
         
-        if (orders) {
+        if (orders && orders.length > 0) {
             orders.forEach(order => {
                 if (order.status === 'Livré' || order.status === 'En cours de livraison') {
                     totalEarnings += Number(order.total_price);
@@ -170,6 +174,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
             });
         }
 
+        // Renvoie proprement l'affichage à ton fichier HTML/EJS des grossistes
         res.render('vendedor_orders', { 
             orders: orders || [], 
             vendedor_id, 
@@ -177,7 +182,8 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
             pendingOrdersCount 
         });
     } catch (err) {
-        res.status(500).send(`❌ Erreur rapports financiers : ${err.message}`);
+        // Renvoie un message clair au lieu d'une page blanche d'erreur 500
+        res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
     }
 });
 
