@@ -108,41 +108,41 @@ app.post('/submit-partner', upload.fields([
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
- // 🔐 2. CONNEXION DES PARTENAIRES SANS CRASH (REFAITE ET BLINDÉE CONTRE L'ERREUR 500)
+  // 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (PASSERELLE DE TEST JACKY)
 app.post('/login-partner', async (req, res) => {
-    const { email, password } = req.body;
+    const { email } = req.body; // On ignore volontairement le mot de passe pour tes tests !
     try {
-        // Interroge directement l'authentification Supabase
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-            return res.send(`❌ Échec de connexion : ${error.message}`);
+        // Le serveur va directement chercher le profil dans Supabase grâce à l'e-mail
+        const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('email', email)
+            .single();
+
+        if (error || !profile) {
+            return res.send(`❌ Aucun compte trouvé avec l'adresse ${email}. Créez-le d'abord via les formulaires du site !`);
         }
 
-        if (data.user) {
-            // Va chercher le rôle exact (boutique, livreur, relais) dans la table profiles
-            const { data: profile, error: profError } = await supabase
-                .from('profiles')
-                .select('role, id')
-                .eq('id', data.user.id)
-                .single();
-
-            if (profError || !profile) {
-                return res.send("❌ Aucun profil Jula valide n'est associé à ce compte.");
-            }
-
-            // Aiguillage instantané vers le carnet de commandes en direct
-            if (profile.role === 'boutique') {
-                return res.redirect(`/vendedor/dashboard-orders/${data.user.id}`);
-            }
-            if (profile.role === 'livreur') return res.render('dashboard-driver', { email: data.user.email, userId: data.user.id });
-            if (profile.role === 'relais') return res.render('dashboard-station', { email: data.user.email, userId: data.user.id });
-            
-            return res.send("❌ Rôle non reconnu.");
+        // 🔀 AIGUILLAGE AUTOMATIQUE SELON LE RÔLE DANS SUPABASE
+        if (profile.role === 'boutique') {
+            // Envoie le grossiste direct sur son carnet de commandes et son chiffre d'affaires
+            return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
         }
+        if (profile.role === 'livreur') {
+            // Ouvre l'espace de livraison
+            return res.render('dashboard-driver', { email: profile.email, userId: profile.id });
+        }
+        if (profile.role === 'relais') {
+            // Ouvre l'espace du point relais
+            return res.render('dashboard-station', { email: profile.email, userId: profile.id });
+        }
+        
+        return res.send(`❌ Rôle [${profile.role}] non reconnu par le système Jula.`);
     } catch (err) {
         res.status(500).send(`Internal Server Error : ${err.message}`);
     }
 });
+
 
 // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
