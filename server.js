@@ -40,6 +40,11 @@ app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
+// 📥 OUVERTURE DIRECTE DU FORMULAIRE DE PUBLICATION DES PRODUITS JULA
+app.get('/vendedor/dashboard', (req, res) => {
+    res.render('dashboard', { email: 'vendeur@jula.com', userId: 'demo' });
+});
+
 
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
