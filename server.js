@@ -237,21 +237,21 @@ app.post('/publish-product', upload.any(), async (req, res) => {
             }
         }
 
-        // Insertion chirurgicale et adaptative dans Supabase
+                 // Insertion chirurgicale et adaptative ajustée sur ton Supabase réel
         const { error: productError } = await supabase.from('products').insert([
             {
                 title: title || 'Nouvel Article Jula',
                 description: description || '',
                 price: parseFloat(price) || 0,
-                // On met à la fois stock_quantity et stock pour s'aligner sur le nom exact de ta colonne !
-                stock_quantity: parseInt(stock) || 1,
-                stock: parseInt(stock) || 1,
+                // 📦 Nettoyage : On utilise uniquement stock_quantity qui est la colonne officielle mobile
+                stock_quantity: parseInt(stock) || 1, 
                 category: category || 'General',
                 image_url: finalImageUrl,
                 vendedor_id: req.body.userId || 'vendeur_jula_demo',
                 created_at: new Date()
             }
         ]);
+
 
         if (productError) throw productError;
 
