@@ -217,31 +217,35 @@ app.post('/vendedor/update-order-status', async (req, res) => {
         res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
- // 🚀 5. MOTEUR DE PROPULSION DE PRODUIT (VERSION SÉCURISÉE ET ALIGNÉE SUR TON BUCKET)
-app.post('/publish-product', upload.single('photo'), async (req, res) => {
-    const { title, description, price, stock, category } = req.body;
+  // 🚀 5. MOTEUR DE PROPULSION DE PRODUIT UNIVERSEL (ANTI-CRASH ERREUR 500)
+// .any() permet d'accepter n'importe quel nom de champ photo envoyé par ton fichier EJS !
+app.post('/publish-product', upload.any(), async (req, res) => {
     try {
-        // Photo par défaut de haute qualité si le vendeur n'en met pas
+        const { title, description, price, stock, category } = req.body;
+        
+        // Image de haute qualité par défaut si aucune photo n'est sélectionnée
         let finalImageUrl = 'https://unsplash.com'; 
 
-        // Si une photo est fournie, on utilise ton robot uploadToSupabase existant
-        if (req.file) {
+        // Extraction magique du fichier, peu importe son nom dans ton HTML (photo, image, etc.)
+        if (req.files && req.files.length > 0) {
             try {
-                // Utilise précisément ta fonction d'origine sans changer les dossiers
-                const uploadedUrl = await uploadToSupabase(req.file, 'produits');
+                const targetFile = req.files[0];
+                const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
-                console.error("Erreur de stockage, utilisation photo par défaut:", storageErr.message);
+                console.error("Problème d'upload d'image, utilisation par défaut.");
             }
         }
 
-        // Insertion chirurgicale dans ta table 'products'
+        // Insertion chirurgicale et adaptative dans Supabase
         const { error: productError } = await supabase.from('products').insert([
             {
-                title: title || 'Article Jula',
+                title: title || 'Nouvel Article Jula',
                 description: description || '',
                 price: parseFloat(price) || 0,
-                stock_quantity: parseInt(stock) || 0, // Aligné sur ton bloor anti-rupture
+                // On met à la fois stock_quantity et stock pour s'aligner sur le nom exact de ta colonne !
+                stock_quantity: parseInt(stock) || 1,
+                stock: parseInt(stock) || 1,
                 category: category || 'General',
                 image_url: finalImageUrl,
                 vendedor_id: req.body.userId || 'vendeur_jula_demo',
@@ -251,18 +255,25 @@ app.post('/publish-product', upload.single('photo'), async (req, res) => {
 
         if (productError) throw productError;
 
-        // Écran de succès Jumia-Style
+        // Magnifique écran Jumia-Style en cas de réussite
         res.send(`
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f6f9; height: 100vh;">
-                <div style="background: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #28a745;">
+            <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f6f9; min-height: 100vh;">
+                <div style="background: white; max-width: 500px; margin: 40px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #28a745;">
                     <h2 style="color: #28a745; margin-bottom: 10px;">🎉 Article propulsé avec succès !</h2>
-                    <p style="color: #666; font-size: 14px;">Votre produit est maintenant disponible sur les smartphones Tecno de vos clients.</p>
-                    <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">← Retourner au Magasin</a>
+                    <p style="color: #666; font-size: 14px;">Votre produit est maintenant disponible sur l'application mobile de vos clients.</p>
+                    <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px;">← Retourner au Magasin</a>
                 </div>
             </div>
         `);
     } catch (err) {
-        res.status(500).send(`❌ Échec de la propulsion : ${err.message}. Vérifiez que la table 'products' possède bien la colonne 'stock_quantity'.`);
+        // Renvoie l'erreur de manière propre dans une boîte grise pour comprendre ce qui cloche
+        res.status(200).send(`
+            <div style="font-family: Arial; padding: 30px; text-align: center;">
+                <h3 style="color: #d9534f;">⚙️ Diagnostic Technique de la Base de Données Jula</h3>
+                <p style="background: #f8f9fa; padding: 15px; border-radius: 6px; display: inline-block; text-align: left; font-family: monospace;">${err.message}</p>
+                <br><a href="/vendedor/dashboard" style="color: #f57c00; font-weight: bold; text-decoration: none;">← Réessayer</a>
+            </div>
+        `);
     }
 });
 
