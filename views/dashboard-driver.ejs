@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Livreur - Jula</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #111417; margin: 0; padding: 20px; color: white; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: #1e2227; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-left: 5px solid #f57c00; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h1 { margin: 0; font-size: 22px; color: #f57c00; }
+        .card { background: #1e2227; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #1072ba; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #1072ba; text-transform: uppercase; }
+        .info-line { font-size: 14px; margin: 6px 0; color: #ccc; }
+        .btn-action { display: block; width: 100%; text-align: center; background: #dc3545; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; margin-top: 15px; font-size: 14px; }
+        .no-orders { text-align: center; padding: 30px; color: #aaa; font-style: italic; background: #1e2227; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏍️ Espace Coursier & Livreur Jula</h1>
+            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 13px;">Livreur Connecté : <%= email %></p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📊 Vos Statistiques de Course</div>
+            <div class="info-line">📦 Colis livrés ce mois : <strong>0</strong></div>
+            <div class="info-line">💰 Gains cumulés Jula : <strong>0 FCFA</strong></div>
+            <div class="info-line">⭐ Note de satisfaction : <strong>5.0 / 5</strong></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🗺️ Feuille de Route en Direct</div>
+            <div class="no-orders">⏳ Aucune livraison ne vous est assignée pour le moment. Restez connecté sur la route Jula !</div>
+        </div>
+
+        <a href="/login" class="btn-action">Déconnexion de la Flotte</a>
+    </div>
+</body>
+</html>
