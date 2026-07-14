@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Point Relais - Jula</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; }
+        .header { background: #111417; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-bottom: 4px solid #1072ba; }
+        h1 { margin: 0; font-size: 22px; color: #fff; }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #f57c00; text-transform: uppercase; }
+        .info-line { font-size: 14px; margin: 6px 0; color: #555; }
+        .btn-action { display: block; width: 100%; text-align: center; background: #1072ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; margin-top: 15px; font-size: 14px; }
+        .no-orders { text-align: center; padding: 30px; color: #7f8c8d; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Espace Gestionnaire Point Relais Jula</h1>
+            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 13px;">Magasin connecté : <%= email %></p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📦 Inventaire du Dépôt Jula</div>
+            <div class="info-line">📥 Colis reçus des grossistes : <strong>0 colis</strong></div>
+            <div class="info-line">📤 Colis récupérés par les clients : <strong>0 colis</strong></div>
+            <div class="info-line">⏳ Colis en attente de retrait : <strong>0 colis</strong></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📲 Scanner un Colis Jula</div>
+            <div class="no-orders">Aucun colis n'est actuellement en transit vers votre point relais. Votre espace de stockage est disponible !</div>
+        </div>
+
+        <a href="/login" class="btn-action" style="background: #212529;">Déconnexion du Guichet</a>
+    </div>
+</body>
+</html>
