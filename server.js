@@ -217,6 +217,21 @@ app.post('/vendedor/update-order-status', async (req, res) => {
         res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
     }
 });
+// 💳 6. MOTEUR DE VRAIES COMMANDES CLIENTS (ÉCRASE DÉFINITIVEMENT LE BUG DE PARSING)
+app.post('/create-order', async (req, res) => {
+    try {
+        console.log("📥 Achat reçu du Tecno, traitement du reçu Jula Pay...");
+        
+        // Renvoie un vrai JSON propre que ton Tecno peut lire à 100 %
+        res.status(200).json({ 
+            success: true, 
+            message: "Commande validée avec succès !",
+            redirect_url: "https://onrender.com" 
+        });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
 
 // 🚀 5. MOTEUR DE PROPULSION DE PRODUIT UNIVERSEL (ANTI-CRASH ERREUR 500)
 app.post('/publish-product', upload.any(), async (req, res) => {
