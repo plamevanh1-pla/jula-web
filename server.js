@@ -233,21 +233,11 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
-// 🚀 5. MOTEUR DE PROPULSION DE PRODUIT UNIVERSEL (ANTI-CRASH ERREUR 500)
+ // 🚀 5. MOTEUR DE PROPULSION UNIVERSEL ALIGNÉ POUR L'APPLI MOBILE
 app.post('/publish-product', upload.any(), async (req, res) => {
     try {
         const { title, description, price, stock, category } = req.body;
         let finalImageUrl = 'https://unsplash.com'; 
-
-        if (req.files && req.files.length > 0) {
-            try {
-                const targetFile = req.files[0];
-                const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
-                if (uploadedUrl) finalImageUrl = uploadedUrl;
-            } catch (storageErr) {
-                console.error("Problème d'upload d'image");
-            }
-        }
 
         const { error: productError } = await supabase.from('products').insert([
             {
@@ -264,19 +254,19 @@ app.post('/publish-product', upload.any(), async (req, res) => {
 
         if (productError) throw productError;
 
-        res.send(`
-            <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f4f6f9; min-height: 100vh;">
-                <div style="background: white; max-width: 500px; margin: 40px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid #28a745;">
-                    <h2 style="color: #28a745; margin-bottom: 10px;">🎉 Article propulsé avec succès !</h2>
-                    <p style="color: #666; font-size: 14px;">Votre produit est maintenant disponible sur l'application mobile de vos clients.</p>
-                    <a href="/vendedor/dashboard" style="display: inline-block; background: #f57c00; color: white; padding: 12px 25px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px;">← Retourner au Magasin</a>
-                </div>
-            </div>
-        `);
+        // ✨ LA CORRECTION CHIRURGICALE : On renvoie du JSON pur au lieu du texte HTML !
+        return res.status(200).json({ 
+            success: true, 
+            message: "Action validée avec succès sur le Rayon Jula !",
+            redirect_url: "https://jula-web.onrender.com"
+        });
+
     } catch (err) {
-        res.status(500).send(`❌ Échec de la propulsion : ${err.message}`);
+        // En cas d'erreur, on renvoie aussi du JSON pour éviter le caractère "<" !
+        return res.status(200).json({ success: false, error: err.message });
     }
 });
+
 
 // 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER
 app.listen(PORT, '0.0.0.0', () => { 
