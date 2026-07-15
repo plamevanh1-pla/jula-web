@@ -21,9 +21,22 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC PROTECTION CONTRE LES CRASHES
+ // 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC CORDONS DOUBLE-FRÉQUENCE (INSCRIPTION PROD SANS CRASH)
 const urlSupabase = process.env.SUPABASE_URL;
-const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+
+// On sépare la clé publique (pour s'inscrire) et la clé secrète (pour le contrôle)
+const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+const cleServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic;
+
+// Ce client utilise la clé publique standard, obligatoire pour accepter les signUp() des vrais utilisateurs !
+const supabase = createClient(urlSupabase, cleAnonPublic, { 
+    auth: { 
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+    }, 
+    realtime: { transport: ws } 
+});
 
 const supabase = createClient(urlSupabase, cleSupabase, { 
     auth: { 
