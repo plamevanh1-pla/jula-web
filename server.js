@@ -1,4 +1,4 @@
- require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -21,24 +21,11 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
- // 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC CORDONS DOUBLE-FRÉQUENCE (INSCRIPTION PROD SANS CRASH)
+// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC CORDONS DOUBLE-FRÉQUENCE
 const urlSupabase = process.env.SUPABASE_URL;
-
-// On sépare la clé publique (pour s'inscrire) et la clé secrète (pour le contrôle)
 const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
-const cleServiceRole = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic;
 
-// Ce client utilise la clé publique standard, obligatoire pour accepter les signUp() des vrais utilisateurs !
 const supabase = createClient(urlSupabase, cleAnonPublic, { 
-    auth: { 
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-    }, 
-    realtime: { transport: ws } 
-});
-
-const supabase = createClient(urlSupabase, cleSupabase, { 
     auth: { 
         persistSession: false,
         autoRefreshToken: false,
@@ -60,7 +47,6 @@ app.get('/politique-confidentialite', (req, res) => { res.render('politique-conf
 // 📥 PORTAIL DE PUBLICATION DES PRODUITS JULA - INTERFACE PRODUCTION 100% DYNAMIQUE
 app.get('/vendedor/dashboard', (req, res) => {
     try {
-        // Extraction dynamique de l'identifiant pour éviter les faux e-mails de test
         const userEmail = req.query.email || 'vendeur@jula.com';
         const userId = req.query.userId || '';
         
@@ -103,10 +89,10 @@ app.post('/submit-partner', upload.fields([
         if (authError) throw authError;
 
         if (authData.user) {
-            const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'][0] : null;
-            const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'][0] : null;
-            const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'][0] : null;
-            const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'][0] : null;
+            const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'] : null;
+            const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'] : null;
+            const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'] : null;
+            const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'] : null;
 
             const urlCniRecto = await uploadToSupabase(cniRectoFile, 'cni');
             const urlCniVerso = await uploadToSupabase(cniVersoFile, 'cni');
@@ -141,8 +127,7 @@ app.post('/submit-partner', upload.fields([
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
-
- // 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (VERSION PRODUCTION FINALE UEMOA)
+// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -222,6 +207,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
         res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
     }
 });
+
 // 🔄 4. MISE À JOUR DU STATUT DES PANIER ET EXPÉDITIONS
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
@@ -238,7 +224,7 @@ app.post('/vendedor/update-order-status', async (req, res) => {
     }
 });
 
-// 🚀 5. MOTEUR DE PUBLICATION ET PROMOTION (ZONES UEMOA : CI, SN, BJ, TG)
+// 🚀 5. MOTEUR DE PUBLICATION ET PROMOTION
 app.post('/publish-product', upload.any(), async (req, res) => {
     try {
         const { title, description, price, promo_price, stock, category, userId } = req.body;
@@ -246,7 +232,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
 
         if (req.files && req.files.length > 0) {
             try {
-                const targetFile = req.files[0];
+                const targetFile = req.files;
                 const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
@@ -254,24 +240,22 @@ app.post('/publish-product', upload.any(), async (req, res) => {
             }
         }
 
-        // Insertion 100% dynamique sans aucune variable forcée à la main
         const { error: productError } = await supabase.from('products').insert([
             {
                 title: title || 'Nouvel Article Jula',
                 description: description || '',
-                price: parseFloat(price) || 0, // Prix normal barré
-                promo_price: promo_price ? parseFloat(promo_price) : null, // Prix réduit avec remise !
-                stock_quantity: parseInt(stock) || 1, // Gestion stricte de la diminution du stock
+                price: parseFloat(price) || 0,
+                promo_price: promo_price ? parseFloat(promo_price) : null,
+                stock_quantity: parseInt(stock) || 1, 
                 category: category || 'General',
                 image_url: finalImageUrl,
-                vendedor_id: userId, // L'ID réel du grossiste connecté sur le site web
+                vendedor_id: userId,
                 created_at: new Date()
             }
         ]);
 
         if (productError) throw productError;
 
-        // Réponse au format JSON pur pour que l'appli mobile et le site lisent sans bug de parsing !
         return res.status(200).json({ 
             success: true, 
             message: "Action validée avec succès sur le Rayon Jula !",
@@ -283,41 +267,32 @@ app.post('/publish-product', upload.any(), async (req, res) => {
     }
 });
 
-// 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT (BOUTON DE SUPPRESSION POUR LES VRAIS VENDEURS)
+// 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT
 app.post('/delete-product/:id', async (req, res) => {
     const { id } = req.params;
     const { vendedor_id } = req.body; 
     try {
-        console.log(`🗑️ Demande de suppression du produit ID: ${id}`);
-
         const { error } = await supabase
             .from('products')
             .delete()
             .eq('id', id);
 
         if (error) throw error;
-
         return res.redirect(`/vendedor/dashboard-orders/${vendedor_id || ''}`);
-
     } catch (err) {
-        console.error("❌ Échec de la suppression :", err.message);
         res.status(500).send(`❌ Impossible de supprimer l'article : ${err.message}`);
     }
 });
 
-// 💳 6. CONFIGURATION OFFICIELLE PAYDUNYA PRODUCTION (VRAIS BILLETS MOBILE MONEY)
+// 💳 6. CONFIGURATION OFFICIELLE PAYDUNYA PRODUCTION
 app.post('/create-order', async (req, res) => {
     const { vendedor_id, product_id, product_title, price, quantity, delivery_mode, buyer_email, buyer_address, buyer_phone } = req.body;
     try {
-        console.log(`📥 Initialisation d'un vrai paiement PayDunya Live pour le marchand : ${vendedor_id}`);
-
-        // Aiguillage des frais selon le mode de distribution choisi en direct à l'écran
         let fraisLivraison = 1500;
         if (delivery_mode === 'Express' || delivery_mode === '⚡ Express') fraisLivraison = 2500;
 
         const totalFacture = (parseFloat(price) * parseInt(quantity || 1)) + fraisLivraison;
 
-        // 🔗 Appel direct au serveur de production officiel de PayDunya en Côte d'Ivoire
         const response = await fetch("https://paydunya.com", {
             method: "POST",
             headers: {
@@ -347,7 +322,6 @@ app.post('/create-order', async (req, res) => {
         const data = await response.json();
 
         if (data.response_code === "00") {
-            // Insère également la commande en attente dans Supabase pour que le vendeur la voie sur son PC
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity) || 1,
                 total_price: totalFacture, price_fcfa: parseFloat(price), delivery_fee: fraisLivraison,
@@ -355,18 +329,12 @@ app.post('/create-order', async (req, res) => {
                 buyer_email, buyer_address, buyer_phone, created_at: new Date()
             }]);
 
-            return res.status(200).json({ 
-                success: true, 
-                redirect_url: data.response_text 
-            });
+            return res.status(200).json({ success: true, redirect_url: data.response_text });
         } else {
             throw new Error(data.response_text || "Erreur PayDunya");
         }
 
     } catch (err) {
-        console.error("Erreur PayDunya Live / Passerelle de Secours activée:", err.message);
-        
-        // SECURITE ANTI-CRASH : Si le compte PayDunya attend la validation des papiers, on force l'insertion pour ton test
         try {
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity || 1),
@@ -383,7 +351,7 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
-// ⚡ 7. FEUILLE DE ROUTE LOGISTIQUE DE PRODUCTION POUR LA FLOTTE JULA EXPRESS
+// ⚡ 7. FEUILLE DE ROUTE LOGISTIQUE
 app.get('/livreur/dashboard', async (req, res) => {
     try {
         const { data: activeOrders, error: ordersError } = await supabase
@@ -406,3 +374,4 @@ app.get('/livreur/dashboard', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => { 
     console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
+               
