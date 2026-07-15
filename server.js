@@ -206,44 +206,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
         res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
     }
 });
-// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
-app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
-    const { vendedor_id } = req.params;
-    try {
-        const { data: orders, error: ordersError } = await supabase
-            .from('orders')
-            .select('*')
-            .eq('vendedor_id', vendedor_id);
-
-        if (ordersError) {
-            return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
-        }
-
-        let totalEarnings = 0;
-        let pendingOrdersCount = 0;
-        
-        if (orders && orders.length > 0) {
-            orders.forEach(order => {
-                if (order.status === 'Livré' || order.status === 'En cours de livraison') {
-                    totalEarnings += Number(order.total_price);
-                }
-                if (order.status === 'En attente de préparation') {
-                    pendingOrdersCount++;
-                }
-            });
-        }
-
-        res.render('vendedor_orders', { 
-            orders: orders || [], 
-            vendedor_id, 
-            totalEarnings, 
-            pendingOrdersCount 
-        });
-    } catch (err) {
-        res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
-    }
-});
-
+ 
 // 🔄 4. MISE À JOUR DU STATUT DES PANIER ET EXPÉDITIONS
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
