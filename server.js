@@ -21,10 +21,18 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC CORDONS DOUBLE-FRÉQUENCE
+ // 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC TA VRAIE CLÉ SERVICE ROLE KEY
 const urlSupabase = process.env.SUPABASE_URL;
-const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY; // 🟢 Ta vraie clé de contrôle absolue !
 
+const supabase = createClient(urlSupabase, cleSupabase, { 
+    auth: { 
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+    }, 
+    realtime: { transport: ws } 
+});
 const supabase = createClient(urlSupabase, cleAnonPublic, { 
     auth: { 
         persistSession: false,
