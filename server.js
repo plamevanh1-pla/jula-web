@@ -47,12 +47,21 @@ app.get('/login', (req, res) => { res.render('login'); });
 // 🔒 ROUTE INTERNATIONALE POUR LA POLITIQUE DE CONFIDENTIALITÉ JULA
 app.get('/politique-confidentialite', (req, res) => { res.render('politique-confidentialite'); });
 
-// 📥 PORTAIL DE PUBLICATION DES PRODUITS JULA - INTERFACE PRODUCTION 100% DYNAMIQUE
-app.get('/vendedor/dashboard', (req, res) => {
+ // 📥 PORTAIL DE PUBLICATION JULA - EXTRACTION DYNAMIQUE DE L'UTILISATEUR SÉCURISÉ
+app.get('/vendedor/dashboard', async (req, res) => {
     try {
-        const userEmail = req.query.email || 'vendeur@jula.com';
-        const userId = req.query.userId || '';
+        // Le serveur regarde si Supabase possède une session active pour l'utilisateur
+        const { data: { session } } = await supabase.auth.getSession();
         
+        let userEmail = req.query.email || 'vendeur@jula.com';
+        let userId = req.query.userId || '';
+
+        // Si une vraie session existe, on écrase les valeurs de test par tes vraies coordonnées !
+        if (session && session.user) {
+            userEmail = session.user.email;
+            userId = session.user.id;
+        }
+
         res.render('dashboard', { 
             email: userEmail, 
             userId: userId,
@@ -270,19 +279,30 @@ app.post('/publish-product', upload.any(), async (req, res) => {
     }
 });
 
-// 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT
+ // 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT (VERSION BLINDÉE DE PRODUCTION)
 app.post('/delete-product/:id', async (req, res) => {
     const { id } = req.params;
     const { vendedor_id } = req.body; 
     try {
+        console.log(`🗑️ Destruction demandée pour le produit ID: ${id}`);
+
         const { error } = await supabase
             .from('products')
             .delete()
             .eq('id', id);
 
         if (error) throw error;
-        return res.redirect(`/vendedor/dashboard-orders/${vendedor_id || ''}`);
+        
+        console.log(`✅ Produit supprimé. Redirection vers le tableau de bord du vendeur.`);
+
+        // SÉCURITÉ DE SECOURS : Si le vendeur_id est vide, on redirige vers le dashboard général au lieu de crasher
+        if (!vendedor_id) {
+            return res.redirect('/vendedor/dashboard');
+        }
+
+        return res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
     } catch (err) {
+        console.error(`❌ Échec de la suppression : ${err.message}`);
         res.status(500).send(`❌ Impossible de supprimer l'article : ${err.message}`);
     }
 });
