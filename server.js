@@ -378,7 +378,7 @@ app.post('/create-order', async (req, res) => {
 
         return res.status(200).json({ 
             success: true, 
-            redirect_url: `https://jula-web.onrender.com{vendedor_id || ''}` 
+            redirect_url: `https://onrender.com{vendedor_id || ''}` 
         });
     }
 });
