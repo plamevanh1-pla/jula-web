@@ -311,7 +311,29 @@ app.post('/publish-product', upload.any(), async (req, res) => {
         return res.status(200).json({ success: false, error: err.message });
     }
 });
+// 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT (BOUTON DE SUPPRESSION POUR LES VRAIS VENDEURS)
+app.post('/delete-product/:id', async (req, res) => {
+    const { id } = req.params;
+    const { vendedor_id } = req.body; // Récupère l'ID du vendeur pour la redirection
+    try {
+        console.log(`🗑️ Demande de suppression du produit ID: ${id}`);
 
+        // Suppression directe de la ligne dans ta table Supabase
+        const { error } = await supabase
+            .from('products')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        // Redirection instantanée du grossiste vers son tableau de bord mis à jour
+        return res.redirect(`/vendedor/dashboard-orders/${vendedor_id || ''}`);
+
+    } catch (err) {
+        console.error("❌ Échec de la suppression :", err.message);
+        res.status(500).send(`❌ Impossible de supprimer l'article : ${err.message}`);
+    }
+});
 
 // 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER
 app.listen(PORT, '0.0.0.0', () => { 
