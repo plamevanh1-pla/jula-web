@@ -1,4 +1,4 @@
-require('dotenv').config();
+ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -21,19 +21,14 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
- // 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC TA VRAIE CLÉ SERVICE ROLE KEY
+// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC LES DEUX FRÉQUENCES COMPATIBLES
 const urlSupabase = process.env.SUPABASE_URL;
-const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY; // 🟢 Ta vraie clé de contrôle absolue !
+
+// On déclare les deux clés pour que Render ne cherche aucun mot dans le vide
+const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic; // Ta vraie clé maîtresse !
 
 const supabase = createClient(urlSupabase, cleSupabase, { 
-    auth: { 
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-    }, 
-    realtime: { transport: ws } 
-});
-const supabase = createClient(urlSupabase, cleAnonPublic, { 
     auth: { 
         persistSession: false,
         autoRefreshToken: false,
@@ -97,10 +92,10 @@ app.post('/submit-partner', upload.fields([
         if (authError) throw authError;
 
         if (authData.user) {
-            const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'] : null;
-            const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'] : null;
-            const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'] : null;
-            const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'] : null;
+            const cniRectoFile = req.files['cni_recto'] ? req.files['cni_recto'][0] : null;
+            const cniVersoFile = req.files['cni_verso'] ? req.files['cni_verso'][0] : null;
+            const shopFile = req.files['photo_boutique'] ? req.files['photo_boutique'][0] : null;
+            const vehicleFile = req.files['photo_vehicule'] ? req.files['photo_vehicule'][0] : null;
 
             const urlCniRecto = await uploadToSupabase(cniRectoFile, 'cni');
             const urlCniVerso = await uploadToSupabase(cniVersoFile, 'cni');
@@ -240,7 +235,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
 
         if (req.files && req.files.length > 0) {
             try {
-                const targetFile = req.files;
+                const targetFile = req.files[0];
                 const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
@@ -382,4 +377,3 @@ app.get('/livreur/dashboard', async (req, res) => {
 app.listen(PORT, '0.0.0.0', () => { 
     console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
-               
