@@ -121,7 +121,7 @@ app.post('/submit-partner', upload.fields([
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (VERSION SÉCURISÉE TOTAL)
+ // 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (VERSION PRODUCTION FINALE UEMOA)
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -137,6 +137,7 @@ app.post('/login-partner', async (req, res) => {
 
         const userRole = profile.role ? profile.role.toLowerCase().trim() : '';
 
+        // 🔀 AIGUILLAGE STRICT SELON LE VRAI PROFIL DE L'UTILISATEUR CONNECTÉ
         if (userRole === 'boutique' || userRole === 'vendedor') {
             return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
         }
@@ -164,6 +165,47 @@ app.post('/login-partner', async (req, res) => {
     }
 });
 
+// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA (VRAIS CHIFFRES DYNAMIQUES)
+app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
+    const { vendedor_id } = req.params;
+    try {
+        // Interrogation en direct de Supabase pour extraire les vraies commandes de ce grossiste spécifique
+        const { data: orders, error: ordersError } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('vendedor_id', vendedor_id);
+
+        if (ordersError) {
+            return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
+        }
+
+        let totalEarnings = 0;
+        let pendingOrdersCount = 0;
+        
+        if (orders && orders.length > 0) {
+            orders.forEach(order => {
+                // 💰 L'argent ne s'ajoute au Chiffre d'Affaires Encaissé QUE si le colis est livré ou validé sur la route !
+                if (order.status === 'Livré' || order.status === 'En cours de livraison') {
+                    totalEarnings += Number(order.total_price || order.price_fcfa || 0);
+                }
+                // Filtre dynamique des colis restants à emballer au magasin
+                if (order.status === 'En attente de préparation') {
+                    pendingOrdersCount++;
+                }
+            });
+        }
+
+        // On renvoie les vraies données récoltées à l'écran EJS du grossiste
+        res.render('vendedor_orders', { 
+            orders: orders || [], 
+            vendedor_id, 
+            totalEarnings, 
+            pendingOrdersCount 
+        });
+    } catch (err) {
+        res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
+    }
+});
 // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
