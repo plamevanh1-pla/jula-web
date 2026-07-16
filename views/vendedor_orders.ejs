@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -9,15 +9,18 @@
         .container { max-width: 1000px; margin: 0 auto; }
         .header { background: #111417; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-bottom: 4px solid #f57c00; }
         h1 { margin: 0; font-size: 24px; }
+        .nav-actions { margin-top: 15px; display: flex; gap: 10px; }
+        .btn-nav { display: inline-block; background: #1072ba; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(16,114,186,0.2); }
         .order-card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #1072ba; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .order-card.delivered { border-left-color: #28a745; }
         .meta-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
         .badge-delivery { background: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
         .product-title { font-size: 18px; font-weight: bold; color: #111417; margin: 5px 0; }
         .client-info { background: #f8f9fa; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 13px; line-height: 1.6; }
-        .status-form { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
+        .status-form { display: flex; gap: 10px; margin-top: 15px; align-items: center; flex-wrap: wrap; }
         select { padding: 8px; border-radius: 6px; border: 1px solid #ced4da; font-size: 13px; cursor: pointer; }
         .btn-update { background: #f57c00; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .btn-delete { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-left: auto; text-decoration: none; }
         .no-orders { text-align: center; padding: 40px; background: white; border-radius: 12px; color: #7f8c8d; font-style: italic; }
     </style>
 </head>
@@ -31,26 +34,35 @@
             <div style="display: flex; gap: 15px; margin-top: 15px;">
                 <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
                     <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">💰 Chiffre d'Affaires Encaissé</div>
-                    <div style="font-size: 20px; font-weight: bold; color: #28a745; margin-top: 5px;"><%= totalEarnings %> FCFA</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #28a745; margin-top: 5px;"><%= totalEarnings.toLocaleString('fr-FR') %> FCFA</div>
                 </div>
                 <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
                     <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">⏳ Colis à Préparer</div>
                     <div style="font-size: 20px; font-weight: bold; color: #ffc107; margin-top: 5px;"><%= pendingOrdersCount %> colis</div>
                 </div>
             </div>
+
+            <!-- 🔄 BOUTON DE NAVIGATION RETOUR VERS LA PUBLICATION -->
+            <div class="nav-actions">
+                <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav">
+                    ➕ Publier un Nouvel Article
+                </a>
+            </div>
         </div>
+
         <% if (orders.length === 0) { %>
-            <div class="no-orders">🎉 Aucune commande reçue pour le moment. Votre boutique est prête à encaisser !</div>
+            <div class="no-orders">🎉 Aucune commande reçue pour le moment. Votre boutique est prête à s'allumer sur l'application !</div>
         <% } else { %>
             <% orders.forEach(order => { %>
                 <div class="order-card <%= order.status === 'Livré' ? 'delivered' : '' %>">
                     <div class="meta-row">
-                        <span style="color: #1072ba;">ID : #<%= order.id.substring(0,8) %></span>
-                        <span class="badge-delivery">🛵 Mode : <%= order.delivery_type %></span>
+                        <span style="color: #1072ba;">ID COMPTE : #<%= order.id.substring(0,8) %></span>
+                        <!-- 🛵 CORRECTION DE LA VARIABLE DE SELECTION DE LIVRAISON SÉCURISÉE -->
+                        <span class="badge-delivery">🛵 Mode : <%= order.selected_delivery_mode || 'Standard' %></span>
                     </div>
                     
                     <div class="product-title">📦 Article : <%= order.product_title %></div>
-                    <div style="font-size: 16px; font-weight: bold; color: #f57c00; margin-bottom: 10px;"><%= order.total_price %> FCFA</div>
+                    <div style="font-size: 16px; font-weight: bold; color: #f57c00; margin-bottom: 10px;"><%= order.total_price.toLocaleString('fr-FR') %> FCFA</div>
                     
                     <div class="client-info">
                         <strong>👤 Infos Acheteur Jula :</strong><br>
@@ -59,18 +71,28 @@
                         📍 Adresse d'expédition : <%= order.buyer_address || 'Non renseignée' %>
                     </div>
 
-                    <!-- FORMULAIRE POUR CHANGER LE STATUT DE LA COMMANDE EN DIRECT -->
-                    <form action="/vendedor/update-order-status" method="POST" class="status-form">
-                        <input type="hidden" name="order_id" value="<%= order.id %>">
-                        <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
-                        <label style="font-size: 13px; font-weight: bold;">Statut de préparation :</label>
-                        <select name="new_status">
-                            <option value="En attente de préparation" <%= order.status === 'En attente de préparation' ? 'selected' : '' %>>⏳ En attente de préparation</option>
-                            <option value="En cours de livraison" <%= order.status === 'En cours de livraison' ? 'selected' : '' %>>🏍️ En cours de livraison</option>
-                            <option value="Livré" <%= order.status === 'Livré' ? 'selected' : '' %>>✅ Livré avec succès</option>
-                        </select>
-                        <button type="submit" class="btn-update">Mettre à jour</button>
-                    </form>
+                    <!-- ACTION EN GRILLE : CHANGEMENT DE STATUT ET SUPPRESSION JULA-STYLE -->
+                    <div style="display: flex; align-items: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                        <form action="/vendedor/update-order-status" method="POST" class="status-form" style="margin: 0; flex: 1;">
+                            <input type="hidden" name="order_id" value="<%= order.id %>">
+                            <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
+                            <label style="font-size: 13px; font-weight: bold;">Statut de préparation :</label>
+                            <select name="new_status">
+                                <option value="En attente de préparation" <%= order.status === 'En attente de préparation' ? 'selected' : '' %>>⏳ En attente de préparation</option>
+                                <option value="En cours de livraison" <%= order.status === 'En cours de livraison' ? 'selected' : '' %>>🏍️ En cours de livraison</option>
+                                <option value="Livré" <%= order.status === 'Livré' ? 'selected' : '' %>>✅ Livré avec succès</option>
+                            </select>
+                            <button type="submit" class="btn-update">Mettre à jour</button>
+                        </form>
+
+                        <!-- 🗑️ LE BOUTON ROUGE DE SUPPRESSION CONNECTÉ À TA TABLE PRODUCTS -->
+                        <form action="/delete-product/<%= order.product_id %>" method="POST" style="margin: 0;" onsubmit="return confirm('Voulez-vous vraiment détruire et retirer définitivement cet article du catalogue Jula ?');">
+                            <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
+                            <button type="submit" class="btn-delete">
+                                🗑️ Supprimer l'article
+                            </button>
+                        </form>
+                    </div>
                 </div>
             <% }) %>
         <% } %>
