@@ -139,7 +139,7 @@ app.post('/submit-partner', upload.fields([
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
-// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS
+// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (SÉCURISÉE CONTRE LES SLASHES VIDES)
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -154,38 +154,51 @@ app.post('/login-partner', async (req, res) => {
         }
 
         const userRole = profile.role ? profile.role.toLowerCase().trim() : '';
+        const profileId = profile.id;
+
+        // 🛡️ SÉCURITÉ DE SECOURS : Si l'ID dans Supabase est introuvable, on évite le slash vide
+        if (!profileId) {
+            return res.redirect('/vendedor/dashboard');
+        }
 
         if (userRole === 'boutique' || userRole === 'vendedor') {
-            return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
+            return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
         }
         
         if (userRole === 'livreur' || userRole === 'driver') {
             return res.render('dashboard-driver', { 
                 email: profile.email, 
-                userId: profile.id,
-                user: { id: profile.id, email: profile.email }
+                userId: profileId,
+                user: { id: profileId, email: profile.email }
             });
         }
         
         if (userRole === 'relais' || userRole === 'station') {
             return res.render('dashboard-station', { 
                 email: profile.email, 
-                userId: profile.id,
-                user: { id: profile.id, email: profile.email }
+                userId: profileId,
+                user: { id: profileId, email: profile.email }
             });
         }
         
-        return res.redirect(`/vendedor/dashboard-orders/${profile.id}`);
+        return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
 
     } catch (err) {
         res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
     }
 });
 
-// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+ // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA (VERSION SECURISÉE PRODUCTION)
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
+    
     try {
+        // 🛡️ SÉCURITÉ DE SECOURS : Si le paramètre arrive vide ou n'a pas la bonne longueur UUID, on évite le plantage
+        if (!vendedor_id || vendedor_id === 'undefined' || vendedor_id.trim() === '') {
+            console.log("⚠️ Identifiant de grossiste manquant dans l'URL. Redirection vers le login.");
+            return res.redirect('/login');
+        }
+
         const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select('*')
@@ -216,10 +229,10 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
             pendingOrdersCount 
         });
     } catch (err) {
-        res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
+        console.error("❌ Erreur critique sur le dashboard orders:", err.message);
+        res.redirect('/login');
     }
 });
-
 // 🔄 4. MISE À JOUR DU STATUT DES PANIER ET EXPÉDITIONS
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
