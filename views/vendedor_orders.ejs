@@ -42,12 +42,22 @@
                 </div>
             </div>
 
-            <!-- 🔄 BOUTON DE NAVIGATION RETOUR VERS LA PUBLICATION -->
-            <div class="nav-actions">
-                <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav">
-                    ➕ Publier un Nouvel Article
-                </a>
-            </div>
+             <!-- 🔄 BARRE DE NAVIGATION ET SÉCURITÉ VENDEUR INTERACTIVE -->
+<div class="nav-actions" style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+    <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav" style="display: inline-block; background: #1072ba; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px;">
+        ➕ Publier un Nouvel Article
+    </a>
+    
+    <!-- 🏠 BOUTON RETOUR ACCUEIL SITE GLOBAL -->
+    <a href="/" style="display: inline-block; background: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        🏠 Accueil Portail Jula
+    </a>
+
+    <!-- 🚪 BOUTON DECONNEXION SÉCURISÉE -->
+    <a href="/login" style="display: inline-block; background: #dc3545; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(220,53,69,0.2);" onclick="return confirm('Voulez-vous fermer votre session de grossiste Jula ?');">
+        🚪 Déconnexion du Magasin
+    </a>
+</div>
         </div>
 
         <% if (orders.length === 0) { %>
