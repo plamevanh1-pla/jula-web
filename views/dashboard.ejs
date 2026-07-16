@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +14,7 @@
         input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
         input[type="file"] { background: #f8f9fa; padding: 15px; border: 2px dashed #ccc; cursor: pointer; }
         .btn-publish { background-color: #f57c00; color: white; border: none; padding: 14px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 10px rgba(245,124,0,0.2); }
+        .form-group { margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -21,22 +22,24 @@
         <h2>🏬 Espace Magasin Vendeur</h2>
         <span>Connecté : <b><%= email %></b></span>
     </div>
-    <!-- 📦 BOUTON D'ACCÈS AU TIROIR DES COMMANDES JULA -->
-<div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <h3 style="margin: 0 0 10px 0; color: #111417;">📦 Vos Ventes Jula en Direct</h3>
-    <p style="margin: 0 0 15px 0; color: #666; font-size: 14px;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses de vos clients.</p>
-    
-    <a href="/vendedor/dashboard-orders/<%= user.id %>" style="display: inline-block; background: #f57c00; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">
-        🛒 Ouvrir mon Carnet de Commandes →
-    </a>
-</div>
+
+    <!-- 📦 BOUTON D'ACCÈS AU TIROIR DES COMMANDES JULA CORRIGÉ -->
+    <div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-top: 20px;">
+        <h3 style="margin: 0 0 10px 0; color: #111417;">📦 Vos Ventes Jula en Direct</h3>
+        <p style="margin: 0 0 15px 0; color: #666; font-size: 14px;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses de vos clients.</p>
+        
+        <!-- ✨ LA RECONNEXION SUR TU VARIABLE USERID -->
+        <a href="/vendedor/dashboard-orders/<%= userId %>" style="display: inline-block; background: #f57c00; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">
+            🛒 Ouvrir mon Carnet de Commandes →
+        </a>
+    </div>
 
     <div class="container">
         <h3>🚀 Publier un nouvel article sur Jula</h3>
         
-        <!-- 🟢 SÉCURITÉ : enctype="multipart/form-data" obligatoire pour envoyer des fichiers photos -->
         <form action="/publish-product" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="vendedor_id" value="<%= userId %>">
+            <!-- 🛡️ LA VARIABLE CORRIGÉE POUR REJOINDRE LE STOCK DE SÉCURITÉ SERVER.JS -->
+            <input type="hidden" name="userId" value="<%= userId %>">
 
             <label>Titre de l'article :</label>
             <input type="text" name="title" required placeholder="Ex: iPhone 14 Pro Max 256Go">
@@ -44,17 +47,24 @@
             <label>Description du produit :</label>
             <textarea name="description" rows="4" required placeholder="Décrivez l'état, les accessoires fournis, la garantie..."></textarea>
        
-            <!-- 📊 NOUVELLE CASE AJOUTÉE : GESTION DES STOCKS EN TEMPS RÉEL -->
-        <div class="form-group" style="margin-bottom: 15px;">
-        <label style="display:block; font-weight:600; margin-bottom:5px;">📦 Quantité en Stock disponible :</label>
-       <input type="number" name="stock_quantity" value="10" min="1" required style="width:100%; padding:10px; border:2px solid #dee2e6; border-radius:8px;">
-      <small style="color:#6c757d; font-size:11px;">Indiquez le nombre exact d'articles que vous possédez en magasin.</small                                                                                                                                                                                                                                                                                                                  
-   </div>
+            <!-- 📊 GESTION DES STOCKS EN TEMPS RÉEL FIXÉE -->
+            <div class="form-group">
+                <label>📦 Quantité en Stock disponible :</label>
+                <input type="number" name="stock" value="10" min="1" required style="border: 2px solid #dee2e6; border-radius: 8px;">
+                <small style="color:#6c757d; font-size:11px;">Indiquez le nombre exact d'articles que vous possédez en magasin.</small>
+            </div>
 
-            <label>Prix de vente (en FCFA) :</label>
+            <label>Prix de vente normal d'origine (en FCFA) :</label>
             <input type="number" name="price" required placeholder="Ex: 450000">
 
-            <!-- 📸 NOUVEAU : BOUTON PHOTO DIRECT DEPUIS LE TÉLÉPHONE -->
+            <!-- 📉 NOUVELLE CASE DE REMISE JUMIA-STYLE AJOUTÉE -->
+            <div class="form-group">
+                <label>🔥 Prix Promotionnel réduit (Optionnel - en FCFA) :</label>
+                <input type="number" name="promo_price" placeholder="Ex: 350000 (Laissez vide s'il n'y a pas de réduction)">
+                <small style="color:#6c757d; font-size:11px;">Si rempli, le prix d'origine sera barré et le pourcentage (-45%) s'affichera automatiquement sur le Tecno !</small>
+            </div>
+
+            <!-- 📸 CHOIX PHOTO DE PRODUCTION -->
             <label>📸 Prendre ou Choisir une photo de l'article :</label>
             <input type="file" name="product_photo" accept="image/*" required>
 
@@ -71,4 +81,3 @@
     </div>
 </body>
 </html>
-
