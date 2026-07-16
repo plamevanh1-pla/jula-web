@@ -79,5 +79,38 @@
             <button type="submit" class="btn-publish">Ajouter et Propulser au Rayon Jula</button>
         </form>
     </div>
+ <!-- 🔄 LOGIQUE UNIVERSELLE DE REDIRECTION AUTOMATIQUE JULA -->
+<script>
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Empêche le comportement standard pour éviter l'écran blanc
+            
+            const formData = new FormData(form);
+            const button = form.querySelector('button[type="submit"]');
+            if (button) button.innerText = "Propulsion en cours...";
+
+            try {
+                const response = await fetch('/publish-product', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.redirect_url) {
+                    // 🎉 BOUM ! Le navigateur bascule instantanément vers ton carnet de commandes !
+                    window.location.href = result.redirect_url;
+                } else {
+                    alert("❌ Erreur : " + (result.error || "Impossible de publier l'article."));
+                    if (button) button.innerText = "Ajouter et Propulser au Rayon Jula";
+                }
+            } catch (err) {
+                alert("📡 Erreur réseau avec le serveur Render.");
+                if (button) button.innerText = "Ajouter et Propulser au Rayon Jula";
+            }
+        });
+    }
+</script>
 </body>
 </html>
