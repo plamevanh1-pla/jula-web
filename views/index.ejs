@@ -1,53 +1,37 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendorhub Jula - Devenez Vendeur & Partenaire Logistique</title>
     <style>
-        :root { --jula-orange: #f57c00; --jula-blue: #1072ba; --glovo-green: #25D366; --dark: #1a1d20; --light-bg: #f9fbfd; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--light-bg); margin: 0; padding: 0; color: #333; line-height: 1.6; }
-        .hero { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 80px 20px; text-align: center; position: relative; }
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --glovo-green: #25D366; 
+            --dark: #1a1d20; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --light-bg: #111417; 
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--light-bg); margin: 0; padding: 0; color: #ecf0f1; line-height: 1.6; }
+        .hero { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 80px 20px; text-align: center; position: relative; border-bottom: 1px solid var(--border-color); }
         .hero-badge { background: var(--jula-orange); color: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px; }
         .hero h1 { font-size: 46px; margin: 0 0 15px 0; font-weight: 800; }
         .hero p { font-size: 19px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
         .hero-btns { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .btn-primary { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
         .btn-secondary { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; border: 2px solid white; transition: 0.2s; }
-        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); }
+        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); opacity: 0.9; }
         .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; box-sizing: border-box; }
         .section-title { text-align: center; margin-top: 40px; margin-bottom: 40px; }
-        .section-title h2 { font-size: 32px; color: var(--dark); margin: 0 0 10px 0; font-weight: 700; }
-        .section-title p { color: #666; font-size: 16px; margin: 0; }
+        .section-title h2 { font-size: 32px; color: #fff; margin: 0 0 10px 0; font-weight: 700; }
+        .section-title p { color: #95a5a6; font-size: 16px; margin: 0; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
-        .step-card { background: white; padding: 35px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.02); border-bottom: 4px solid #eaeaea; position: relative; }
+        .step-card { background: var(--card-bg); padding: 35px; border-radius: 12px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--border-color); position: relative; }
         .step-num { font-size: 48px; font-weight: 900; color: rgba(16,114,186,0.1); position: absolute; top: 15px; right: 25px; }
         .step-card h3 { font-size: 20px; margin: 0 0 12px 0; color: var(--jula-blue); }
-        .step-card p { margin: 0; color: #555; font-size: 14.5px; }
-        .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px; }
-        .portal-card { background: white; border-radius: 16px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #f0f0f0; }
-        .portal-card h3 { font-size: 24px; margin: 0 0 10px 0; display: flex; align-items: center; gap: 12px; }
-        .salary { font-size: 26px; font-weight: 800; margin: 15px 0; color: var(--dark); }
-        .portal-card p { color: #666; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1; }
-        .btn-portal { display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; }
-        .pricing-section { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 60px; border: 1px solid #e2e8f0; overflow-x: auto; }
-        .pricing-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .pricing-table th { background-color: #f7fafc; color: #4a5568; padding: 15px; font-weight: bold; border-bottom: 2px solid #edf2f7; }
-        .pricing-table td { padding: 15px; border-bottom: 1px solid #edf2f7; font-size: 14.5px; }
-        .pricing-table tr:hover { background-color: #fcfdfd; }
-        .highlight-price { font-weight: bold; color: var(--jula-orange); }
-        .faq-section { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 5px 25px rgba(0,0,0,0.02); margin-bottom: 60px; border: 1px solid #e2e8f0; }
-        .faq-item { border-bottom: 1px solid #edf2f7; padding: 20px 0; }
-        .faq-item:last-child { border: none; }
-        .faq-q { font-weight: 700; font-size: 16px; color: var(--dark); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .faq-a { color: #555; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px; }
-        .apk-banner { background: linear-gradient(135deg, var(--jula-orange), #e65100); color: white; border-radius: 16px; padding: 35px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; box-shadow: 0 8px 25px rgba(245,124,0,0.2); margin-bottom: 40px; }
-        .apk-text h3 { margin: 0 0 5px 0; font-size: 24px; font-weight: 800; }
-        .apk-text p { margin: 0; opacity: 0.9; font-size: 15px; }
-        .btn-apk { background-color: white; color: var(--jula-orange); padding: 15px 35px; border-radius: 50px; font-weight: 800; text-decoration: none; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .login-section { text-align: center; margin-top: 30px; background: #fff; padding: 25px; border-radius: 12px; border: 1px dashed #ccc; margin-bottom: 40px; }
-        .btn-login { color: var(--jula-blue); font-weight: bold; text-decoration: none; font-size: 16px; }
-        .footer { text-align: center; padding-top: 40px; border-top: 1px solid #e2e8f0; font-size: 13px; color: #888; font-weight: 500; }
+        .step-card p { margin: 0; color: #95a5a6; font-size: 14.5px; }
     </style>
 </head>
 <body>
@@ -82,31 +66,32 @@
                 <p>Recevez vos paiements et commissions de façon automatisée et instantanée dès que les colis arrivent à destination.</p>
             </div>
         </div>
-        <!-- 3. LES OFFRES DE RECRUTEMENT GLOVO/JUMIA STYLE -->
+         <!-- 🏪 3. LES OFFRES DE RECRUTEMENT GLOVO/JUMIA STYLE -->
         <div class="section-title" id="recrutement">
             <h2>Choisissez votre profil Jula</h2>
             <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
         </div>
-        <div class="portal-grid">
-            <div class="portal-card" style="border-top: 6px solid var(--jula-blue);">
-                <h3>🏬 Boutique / Grossiste</h3>
-                <div class="salary">0 FCFA <span style="font-size:14px; color:#666; font-weight:normal;">de frais d'exposition</span></div>
-                <p>Exposez vos articles sur notre catalogue web. Vos produits deviennent instantanément visibles et commandables par des milliers de clients sur l'application mobile Jula.</p>
-                <a href="/register-seller" class="btn-portal" style="background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
+        
+        <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px;">
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between;">
+                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🏬 Boutique / Grossiste</h3>
+                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">0 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">de frais d'exposition</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Exposez vos articles sur notre catalogue web. Vos produits deviennent instantanément visibles et commandables par des milliers de clients sur l'application mobile Jula.</p>
+                <a href="/register-seller" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
             </div>
 
-            <div class="portal-card" style="border-top: 6px solid var(--glovo-green);">
-                <h3>🛵 Coursier Livreur</h3>
-                <div class="salary">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#666; font-weight:normal;">/semaine</span></div>
-                <p>Soyez votre propre patron ! Moto et permis obligatoires. Recevez les notifications de livraison de colis CFA directement sur votre smartphone et maximisez vos gains logistiques.</p>
-                <a href="/register-driver" class="btn-portal" style="background-color: var(--glovo-green);">Devenir Coursier</a>
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--glovo-green); display: flex; flex-direction: column; justify-content: space-between;">
+                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🛵 Coursier Livreur</h3>
+                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/semaine</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Soyez votre propre patron ! Moto et permis obligatoires. Recevez les notifications de livraison de colis CFA directement sur votre smartphone et maximisez vos gains logistiques.</p>
+                <a href="/register-driver" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--glovo-green);">Devenir Coursier</a>
             </div>
 
-            <div class="portal-card" style="border-top: 6px solid var(--jula-orange);">
-                <h3>🏪 Point Relais Agréé</h3>
-                <div class="salary">Commissions <span style="font-size:14px; color:#666; font-weight:normal;">/colis stocké</span></div>
-                <p>Rentabilisez votre espace de commerce physique (boutique, supérette). Devenez un point de dépôt officiel Jula pour la réception et la sécurisation des colis transfrontaliers de votre quartier.</p>
-                <a href="/register-station" class="btn-portal" style="background-color: var(--jula-orange);">Inscrire mon Point</a>
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between;">
+                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🏪 Point Relais Agréé</h3>
+                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">Commissions <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/colis stocké</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique (boutique, supérette). Devenez un point de dépôt officiel Jula pour la réception et la sécurisation des colis transfrontaliers de votre quartier.</p>
+                <a href="/register-station" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--jula-orange);">Inscrire mon Point</a>
             </div>
         </div>
 
@@ -164,7 +149,7 @@
             </div>
             <div class="faq-item">
                 <div class="faq-q">🍊 Qu'est-ce que le service "Jula Express" ?</div>
-                <p class="faq-a">C'est notre service de traitement logistique d'élite . Vous déposez vos stocks à l'avance dans notre entrepôt central Jula. Dès qu'un client commande, nos équipes s'occupent de l'emballage professionnel et de l'expédition immédiate sous 2 heures, sans que vous n'ayez à vous déplacer !</p>
+                <p class="faq-a">C'est notre service de traitement logistique d'élite. Vous déposez vos stocks à l'avance dans notre entrepôt central Jula. Dès qu'un client commande, nos équipes s'occupent de l'emballage professionnel et de l'expédition immédiate sous 2 heures, sans que vous n'ayez à vous déplacer !</p>
             </div>
             <div class="faq-item">
                 <div class="faq-q">❓ Dans quels pays le réseau Jula opère-t-il ?</div>
@@ -172,26 +157,28 @@
             </div>
         </div>
 
-             <!-- 🚀 ANNONCE PROPRE POUR LE PLAY STORE -->
-<div style="margin: 20px auto; max-width: 900px; padding: 15px; background: #e9ecef; border-radius: 10px; text-align: center; border-left: 5px solid #f57c00;">
-    <p style="margin: 0; font-weight: bold; color: #495057; font-size: 14px;">
-        📱 L'application officielle Jula arrive très bientôt en téléchargement sécurisé sur le Google Play Store ! [jula-web]
-    </p>
-</div>
-
-
-
-
-        <div class="login-section">
-            <span>Vous avez déjà un compte professionnel ? </span>
-            <a href="/login" class="btn-login">🔐 Connectez-vous à votre Espace</a>
+        <!-- 🚀 ANNONCE PROPRE POUR LE PLAY STORE -->
+        <div style="margin: 20px auto; max-width: 900px; padding: 20px; background: rgba(255, 255, 255, 0.02); border-radius: 12px; text-align: center; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange);">
+            <p style="margin: 0; font-weight: bold; color: #fff; font-size: 14.5px; letter-spacing: 0.3px;">
+                📱 L'application officielle Jula arrive très bientôt en téléchargement sécurisé sur le Google Play Store !
+            </p>
         </div>
 
+        <div class="login-section">
+            <span style="color: #95a5a6;">Vous avez déjà un compte professionnel ? </span>
+            <a href="/login" class="btn-login" style="color: var(--jula-blue); font-weight: bold; text-decoration: none; font-size: 16px;">🔐 Connectez-vous à votre Espace</a>
+        </div>
+
+        <!-- 🔒 FOOTER SÉCURISÉ AVEC POLITIQUE DE CONFIDENTIALITÉ -->
         <div class="footer">
             <p>© 2026 Jula Logistique & Co. • Interconnexion Ouest-Africaine • Abidjan - Dakar - Lomé - Cotonou • v1.1.0</p>
+            <p style="margin-top: 10px;">
+                <a href="/politique-confidentialite" style="color: var(--jula-orange); text-decoration: none; font-weight: bold;">🔒 Politique de Confidentialité Jula Network</a>
+            </p>
         </div>
 
     </div>
 </body>
 </html>
 
+      
