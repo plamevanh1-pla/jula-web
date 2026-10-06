@@ -15,18 +15,16 @@ app.use(express.json());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// 📸 CONFIGURATION MULTI-PHOTOS
+// 📸 CONFIGURATION MULTI-PHOTOS (Mémoire tampon sécurisée à 5 Mo)
 const upload = multer({ 
     storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC LES DEUX FRÉQUENCES COMPATIBLES
+// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC LES DEUX CLÉS DE SÉCURITÉ
 const urlSupabase = process.env.SUPABASE_URL;
-
-// On déclare les deux clés pour que Render ne cherche aucun mot dans le vide
 const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
-const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic; // Ta vraie clé maîtresse !
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic; // Ta clé maîtresse d'infrastructure
 
 const supabase = createClient(urlSupabase, cleSupabase, { 
     auth: { 
@@ -37,7 +35,7 @@ const supabase = createClient(urlSupabase, cleSupabase, {
     realtime: { transport: ws } 
 });
 
-// 🌍 Routes d'affichage des formulaires graphiques Jula
+// 🌍 Routes d'affichage des formulaires graphiques de l'écosystème Jula
 app.get('/', (req, res) => { res.render('index'); });
 app.get('/register-seller', (req, res) => { res.render('register-seller'); });
 app.get('/register-driver', (req, res) => { res.render('register-driver'); });
@@ -47,16 +45,14 @@ app.get('/login', (req, res) => { res.render('login'); });
 // 🔒 ROUTE INTERNATIONALE POUR LA POLITIQUE DE CONFIDENTIALITÉ JULA
 app.get('/politique-confidentialite', (req, res) => { res.render('politique-confidentialite'); });
 
- // 📥 PORTAIL DE PUBLICATION JULA - EXTRACTION DYNAMIQUE DE L'UTILISATEUR SÉCURISÉ
+// 📥 PORTAIL DE PUBLICATION JULA - EXTRACTION DYNAMIQUE DE L'UTILISATEUR SÉCURISÉ
 app.get('/vendedor/dashboard', async (req, res) => {
     try {
-        // Le serveur regarde si Supabase possède une session active pour l'utilisateur
         const { data: { session } } = await supabase.auth.getSession();
         
         let userEmail = req.query.email || 'vendeur@jula.com';
         let userId = req.query.userId || '';
 
-        // Si une vraie session existe, on écrase les valeurs de test par tes vraies coordonnées !
         if (session && session.user) {
             userEmail = session.user.email;
             userId = session.user.id;
@@ -87,8 +83,7 @@ async function uploadToSupabase(file, folder) {
     const { data: publicUrlData } = supabase.storage.from('product-image').getPublicUrl(fileName);
     return publicUrlData.publicUrl;
 }
-
-// 💾 1. MOTEUR D'INSCRIPTION ULTRA-SÉCURISÉ (MULTI-PHOTOS)
+// 💾 1. MOTEUR D'INSCRIPTION INTERCONNECTÉ (MULTI-PHOTOS)
 app.post('/submit-partner', upload.fields([
     { name: 'cni_recto', maxCount: 1 },
     { name: 'cni_verso', maxCount: 1 },
@@ -111,6 +106,7 @@ app.post('/submit-partner', upload.fields([
             const urlBoutique = await uploadToSupabase(shopFile, 'boutiques');
             const urlVehicule = await uploadToSupabase(vehicleFile, 'vehicules');
 
+            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
@@ -126,7 +122,7 @@ app.post('/submit-partner', upload.fields([
                     cni_verso_url: urlCniVerso,
                     photo_boutique_url: urlBoutique,
                     photo_vehicule_url: urlVehicule,
-                    created_at: new Date()
+                    created_at: new Date().toISOString()
                 }
             ]);
             if (profileError) throw profileError;
@@ -139,7 +135,8 @@ app.post('/submit-partner', upload.fields([
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
-// 🔐 2. CONNEXION UNIVERSELLE BOUTIQUE / LIVREUR / RELAIS (SÉCURISÉE CONTRE LES SLASHES VIDES)
+
+// 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES (SÉCURISÉE CONTRE LES SLASHES VIDES)
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -156,7 +153,6 @@ app.post('/login-partner', async (req, res) => {
         const userRole = profile.role ? profile.role.toLowerCase().trim() : '';
         const profileId = profile.id;
 
-        // 🛡️ SÉCURITÉ DE SECOURS : Si l'ID dans Supabase est introuvable, on évite le slash vide
         if (!profileId) {
             return res.redirect('/vendedor/dashboard');
         }
@@ -180,20 +176,16 @@ app.post('/login-partner', async (req, res) => {
                 user: { id: profileId, email: profile.email }
             });
         }
-        
-        return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
-
     } catch (err) {
         res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
     }
 });
 
- // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA (VERSION SECURISÉE PRODUCTION)
+// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     
     try {
-        // 🛡️ SÉCURITÉ DE SECOURS : Si le paramètre arrive vide ou n'a pas la bonne longueur UUID, on évite le plantage
         if (!vendedor_id || vendedor_id === 'undefined' || vendedor_id.trim() === '') {
             console.log("⚠️ Identifiant de grossiste manquant dans l'URL. Redirection vers le login.");
             return res.redirect('/login');
@@ -233,7 +225,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
         res.redirect('/login');
     }
 });
-// 🔄 4. MISE À JOUR DU STATUT DES PANIER ET EXPÉDITIONS
+// 🔄 4. MISE À JULA DU STATUT DES LIVRAISONS ET PANIER
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
     try {
@@ -249,7 +241,7 @@ app.post('/vendedor/update-order-status', async (req, res) => {
     }
 });
 
-// 🚀 5. MOTEUR DE PUBLICATION ET PROMOTION
+// 🚀 5. MOTEUR DE PUBLICATION ET PROMOTION DE SMARTPHONES
 app.post('/publish-product', upload.any(), async (req, res) => {
     try {
         const { title, description, price, promo_price, stock, category, userId } = req.body;
@@ -265,6 +257,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
             }
         }
 
+        // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
         const { error: productError } = await supabase.from('products').insert([
             {
                 title: title || 'Nouvel Article Jula',
@@ -275,7 +268,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
                 category: category || 'General',
                 image_url: finalImageUrl,
                 vendedor_id: userId,
-                created_at: new Date()
+                created_at: new Date().toISOString()
             }
         ]);
 
@@ -292,7 +285,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
     }
 });
 
- // 🗑️ 5B. ROUTE DE DESTRUCTION DE PRODUIT (VERSION BLINDÉE DE PRODUCTION)
+// 🗑️ 5B. INTERFACE DE SUPPRESSION DE STOCK
 app.post('/delete-product/:id', async (req, res) => {
     const { id } = req.params;
     const { vendedor_id } = req.body; 
@@ -308,7 +301,6 @@ app.post('/delete-product/:id', async (req, res) => {
         
         console.log(`✅ Produit supprimé. Redirection vers le tableau de bord du vendeur.`);
 
-        // SÉCURITÉ DE SECOURS : Si le vendeur_id est vide, on redirige vers le dashboard général au lieu de crasher
         if (!vendedor_id) {
             return res.redirect('/vendedor/dashboard');
         }
@@ -320,7 +312,7 @@ app.post('/delete-product/:id', async (req, res) => {
     }
 });
 
-// 💳 6. CONFIGURATION OFFICIELLE PAYDUNYA PRODUCTION
+// 💳 6. CONFIGURATION OFFICIELLE DU PASSAGE EN CAISSE PAYDUNYA ZONES CFA
 app.post('/create-order', async (req, res) => {
     const { vendedor_id, product_id, product_title, price, quantity, delivery_mode, buyer_email, buyer_address, buyer_phone } = req.body;
     try {
@@ -349,8 +341,8 @@ app.post('/create-order', async (req, res) => {
                     phone: buyer_phone || "0700000000"
                 },
                 actions: {
-                    cancel_url: `https://onrender.com{vendedor_id}`,
-                    return_url: `https://onrender.com{vendedor_id}`
+                    cancel_url: `https://onrender.com${vendedor_id}`,
+                    return_url: `https://onrender.com${vendedor_id}`
                 }
             })
         });
@@ -358,11 +350,12 @@ app.post('/create-order', async (req, res) => {
         const data = await response.json();
 
         if (data.response_code === "00") {
+            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity) || 1,
                 total_price: totalFacture, price_fcfa: parseFloat(price), delivery_fee: fraisLivraison,
                 selected_delivery_mode: delivery_mode, status: 'En attente de préparation',
-                buyer_email, buyer_address, buyer_phone, created_at: new Date()
+                buyer_email, buyer_address, buyer_phone, created_at: new Date().toISOString()
             }]);
 
             return res.status(200).json({ success: true, redirect_url: data.response_text });
@@ -372,22 +365,23 @@ app.post('/create-order', async (req, res) => {
 
     } catch (err) {
         try {
+            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity || 1),
                 total_price: (parseFloat(price) * parseInt(quantity || 1)) + 1500, price_fcfa: parseFloat(price),
                 delivery_fee: 1500, selected_delivery_mode: delivery_mode || 'Standard', status: 'En attente de préparation',
-                buyer_email, buyer_address, buyer_phone, created_at: new Date()
+                buyer_email, buyer_address, buyer_phone, created_at: new Date().toISOString()
             }]);
         } catch (dbErr) { console.error(dbErr); }
 
         return res.status(200).json({ 
             success: true, 
-            redirect_url: `https://onrender.com{vendedor_id || ''}` 
+            redirect_url: `https://onrender.com${vendedor_id || ''}` 
         });
     }
 });
 
-// ⚡ 7. FEUILLE DE ROUTE LOGISTIQUE
+// ⚡ 7. FEUILLE DE ROUTE LOGISTIQUE INTERNATIONALE POUR LES LIVREURS
 app.get('/livreur/dashboard', async (req, res) => {
     try {
         const { data: activeOrders, error: ordersError } = await supabase
@@ -406,7 +400,7 @@ app.get('/livreur/dashboard', async (req, res) => {
     }
 });
 
-// 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER
+// 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER AVEC IP UNIVERSELLE
 app.listen(PORT, '0.0.0.0', () => { 
     console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
