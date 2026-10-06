@@ -1,30 +1,62 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Partenaires Jula</title>
+    <!-- Icônes Modernes Google Material -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .form-card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); max-width: 400px; width: 100%; text-align: center; }
-        h2 { color: #f57c00; margin-bottom: 20px; }
-        label { font-weight: bold; font-size: 13px; color: #495057; display: block; margin-top: 12px; text-align: left; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
-        .btn-submit { background-color: #f57c00; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 15px; }
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417;
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: #ecf0f1; }
+        .form-card { background: var(--card-bg); padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: 420px; width: 100%; text-align: center; border: 1px solid var(--border-color); position: relative; }
+        .btn-back { position: absolute; top: 20px; left: 20px; color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+        .btn-back:hover { color: var(--jula-orange); }
+        h2 { color: var(--jula-orange); margin-bottom: 8px; font-size: 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; }
+        .subtitle { font-size: 13px; color: #7f8c8d; margin-bottom: 25px; line-height: 18px; }
+        label { font-weight: 600; font-size: 13px; color: #ecf0f1; display: block; margin-top: 16px; text-align: left; letter-spacing: 0.3px; }
+        input { width: 100%; padding: 12px 14px; margin-top: 6px; border-radius: 6px; background-color: var(--dark-bg); border: 1px solid var(--border-color); color: #fff; font-size: 14.5px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        input:focus { border-color: var(--jula-orange); }
+        .btn-submit { background-color: var(--jula-orange); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; margin-top: 30px; cursor: pointer; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.2); transition: background-color 0.2s; }
+        .btn-submit:hover { background-color: #e65100; }
+        .footer-link { margin-top: 25px; font-size: 13px; color: #7f8c8d; }
+        .footer-link a { color: var(--jula-orange); text-decoration: none; font-weight: 600; }
+        .footer-link a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="form-card">
-        <h2>🔐 Connexion Espace Jula</h2>
+        <!-- Bouton retour discret vers l'accueil général du site -->
+        <a href="/" class="btn-back">
+            <span class="material-icons-round" style="font-size: 16px;">arrow_back</span>
+            Accueil
+        </a>
+
+        <h2><span class="material-icons-round" style="font-size: 26px;">lock</span> Espace Partenaires</h2>
+        <p class="subtitle">Connectez-vous pour piloter vos stocks et vos expéditions dans la zone UEMOA</p>
+        
         <form action="/login-partner" method="POST">
-            <label>Votre Adresse E-mail :</label>
-            <input type="email" name="email" required placeholder="Ex: boutique@gmail.com">
+            <label>Votre Adresse E-mail Professionnelle :</label>
+            <input type="email" name="email" required placeholder="Ex: grossiste@jula.com" autocomplete="email">
 
-            <label>Votre Mot de passe :</label>
-            <input type="password" name="password" required placeholder="Saisissez votre mot de passe">
+            <label>Votre Mot de passe Sécurisé :</label>
+            <input type="password" name="password" required placeholder="Saisissez votre mot de passe" autocomplete="current-password">
 
-            <button type="submit" class="btn-submit">Se connecter à mon Espace</button>
+            <button type="submit" class="btn-submit">Se connecter en toute sécurité</button>
         </form>
+
+        <div class="footer-link">
+            <span>Nouveau sur le réseau Jula ? </span>
+            <p style="margin-top: 8px;">
+                <a href="/#recrutement">Créer mon compte partenaire</a>
+            </p>
+        </div>
     </div>
 </body>
 </html>
