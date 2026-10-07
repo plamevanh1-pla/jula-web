@@ -3,43 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Point Relais - Jula</title>
+    <title>Jula - Inscription Point Relais</title>
+    <!-- Icônes Modernes Google Material -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .header { background: #111417; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-bottom: 4px solid #1072ba; }
-        h1 { margin: 0; font-size: 22px; color: #fff; }
-        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 10px; color: #f57c00; text-transform: uppercase; }
-        .info-line { font-size: 14px; margin: 6px 0; color: #555; }
-        .btn-action { display: block; width: 100%; text-align: center; background: #1072ba; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-decoration: none; margin-top: 15px; font-size: 14px; }
-        .no-orders { text-align: center; padding: 30px; color: #7f8c8d; font-style: italic; }
+        :root { 
+            --jula-orange: #f57c00; 
+            --station-green: #2e7d32; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .form-container { max-width: 500px; background: var(--card-bg); margin: 30px auto; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-top: 5px solid var(--station-green); position: relative; }
+        .btn-back { position: absolute; top: 20px; left: 20px; color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+        .btn-back:hover { color: var(--station-green); }
+        h2 { text-align: center; color: #fff; margin-bottom: 8px; font-weight: 800; font-size: 24px; margin-top: 15px; }
+        .subtitle { text-align: center; font-size: 13px; color: #7f8c8d; margin-bottom: 25px; line-height: 18px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13.5px; letter-spacing: 0.3px; color: #ecf0f1; }
+        input, select { width: 100%; padding: 12px 14px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14.5px; color: #fff; outline: none; transition: border-color 0.2s; }
+        input:focus, select:focus { border-color: var(--station-green); }
+        input[type="file"] { padding: 12px; background: rgba(255, 255, 255, 0.01); border: 1px dashed var(--border-color); cursor: pointer; color: #7f8c8d; }
+        input[type="file"]:focus { border-color: var(--station-green); }
+        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--station-green), #1b5e20); color: white; padding: 14px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(46,125,50,0.2); transition: all 0.2s; margin-top: 15px; }
+        .btn-submit:hover { opacity: 0.95; }
+        .info-file { font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 500; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏪 Espace Gestionnaire Point Relais Jula</h1>
-            <p style="margin: 5px 0 0 0; color: #aaa; font-size: 13px;">Magasin connecté : <%= email %></p>
-        </div>
 
-        <div class="card">
-            <div class="card-title">📦 Inventaire du Dépôt Jula</div>
-            <div class="info-line">📥 Colis reçus des grossistes : <strong>0 colis</strong></div>
-            <div class="info-line">📤 Colis récupérés par les clients : <strong>0 colis</strong></div>
-            <div class="info-line">⏳ Colis en attente de retrait : <strong>0 colis</strong></div>
-        </div>
+    <div class="form-container">
+        <!-- Bouton retour vers la page d'accueil -->
+        <a href="/" class="btn-back">
+            <span class="material-icons-round" style="font-size: 16px;">arrow_back</span>
+            Accueil
+        </a>
 
-        <div class="card">
-            <div class="card-title">📲 Scanner un Colis Jula</div>
-            <div class="no-orders">Aucun colis n'est actuellement en transit vers votre point relais. Votre espace de stockage est disponible !</div>
-        </div>
+        <h2>🏢 Devenir Point Relais Jula</h2>
+        <p class="subtitle">Rentabilisez votre espace de stockage, sécurisez les colis transfrontaliers et touchez des commissions régionales</p>
+        
+        <form action="/submit-partner" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="business_type" value="relais">
+            
+            <div class="form-group">
+                <label>Nom complet du gérant</label>
+                <input type="text" name="full_name" placeholder="Ex: Amadou Diallo" required>
+            </div>
 
-        <a href="/login" class="btn-action" style="background: #212529;">Déconnexion du Guichet</a>
-       <!-- 🏠 BOUTON RETOUR ACCUEIL CONSIGNES ET STOCKS -->
-<a href="/" style="display: inline-block; background: #1072ba; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-right: 10px; box-shadow: 0 4px 6px rgba(16,114,186,0.15);">
-    🏠 Accueil Portail Jula
-</a>
+            <div class="form-group">
+                <label>Nom de l'Espace / Point d'Accueil</label>
+                <input type="text" name="shop_name" placeholder="Ex: Boutique Diallo Telecom" required>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de Téléphone (Mobile Money actif)</label>
+                <input type="tel" name="phone" placeholder="Ex: +225 0101..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Adresse Électronique (Email)</label>
+                <input type="email" name="email" placeholder="Ex: diallo@jula-relais.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe secret</label>
+                <input type="password" name="password" placeholder="Minimum 6 caractères" required autocomplete="new-password">
+            </div>
+
+            <div class="form-group">
+                <label>Pays de localisation</label>
+                <select name="country" required>
+                    <option value="CI">🇨🇮 Côte d'Ivoire</option>
+                    <option value="SN">🇸🇳 Sénégal</option>
+                    <option value="TG">🇹🇬 Togo</option>
+                    <option value="BJ">🇧🇯 Bénin</option>
+                </select>
+            </div>
+             <!-- 📸 CNI RECTO -->
+            <div class="form-group">
+                <label>📄 Pièce d'identité nationale (RECTO)</label>
+                <input type="file" name="cni_recto" accept="image/*" required>
+                <div class="info-file">Photo nette de l'avant de votre carte nationale d'identité ou passeport.</div>
+            </div>
+
+            <!-- 📸 CNI VERSO -->
+            <div class="form-group">
+                <label>📄 Pièce d'identité nationale (VERSO)</label>
+                <input type="file" name="cni_verso" accept="image/*" required>
+                <div class="info-file">Photo nette de l'arrière de votre carte nationale d'identité.</div>
+            </div>
+
+            <!-- 📸 PHOTO DE LA BOUTIQUE / LOCAL DE STOCKAGE -->
+            <div class="form-group">
+                <label>🏪 Photo du Local de Stockage</label>
+                <input type="file" name="photo_boutique" accept="image/*" required>
+                <div class="info-file">Prenez une photo de votre espace où les colis sécurisés seront stockés.</div>
+            </div>
+
+            <button type="submit" class="btn-submit">Valider mon inscription Point Relais Jula</button>
+        </form>
     </div>
+
 </body>
 </html>
+
+ 
