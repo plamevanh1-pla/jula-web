@@ -1,167 +1,168 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portail Jula — Devenez Vendeur & Partenaire Logistique</title>
-    <!-- Importation officielle des icônes Google Material -->
+    <title>Portail Jula — Réseau Commercial et Logistique Interconnecté</title>
+    <!-- Importation des icônes pour le menu à trois barres ☰ -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
             --jula-blue: #1072ba; 
-            --glovo-green: #25D366; 
-            --card-bg: #1a1d21;
-            --border-color: #2d3139;
-            --light-bg: #111417; 
+            --jula-vert: #25D366; 
+            --fond-carte: #1a1d21;
+            --couleur-bordure: #2d3139;
+            --fond-sombre: #111417; 
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--light-bg); margin: 0; padding: 0; color: #ecf0f1; line-height: 1.6; overflow-x: hidden; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--fond-sombre); margin: 0; padding: 0; color: #ecf0f1; line-height: 1.6; overflow-x: hidden; }
         
-        /* 🪐 CONFIGURATION DE LA SIDEBAR GAUCHE PREMIUM */
-        .sidebar { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background-color: var(--card-bg); border-right: 1px solid var(--border-color); z-index: 1000; padding: 25px 20px; transition: left 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 5px 0 25px rgba(0,0,0,0.5); box-sizing: border-box; }
-        .sidebar.active { left: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        .sidebar-title { font-size: 15px; font-weight: 800; color: var(--jula-orange); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-close-sidebar { background: none; border: none; color: #7f8c8d; cursor: pointer; display: flex; align-items: center; }
-        .btn-close-sidebar:hover { color: var(--jula-orange); }
+        /* 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE PARFAITEMENT ALIGNÉ */
+        .panneau-navigation { position: fixed; top: 0; left: -320px; width: 310px; height: 100%; background-color: var(--fond-carte); border-right: 1px solid var(--couleur-bordure); z-index: 1000; padding: 25px 20px; transition: left 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 5px 0 25px rgba(0,0,0,0.5); box-sizing: border-box; }
+        .panneau-navigation.actif { left: 0; }
+        .entete-panneau { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--couleur-bordure); padding-bottom: 15px; }
+        .titre-panneau { font-size: 15px; font-weight: 800; color: var(--jula-orange); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .bouton-fermer { background: none; border: none; color: #7f8c8d; cursor: pointer; display: flex; align-items: center; transition: color 0.2s; }
+        .bouton-fermer:hover { color: var(--jula-orange); }
         
-        /* 🔗 LIENS INTERNES DU MENU COULISSANT */
-        .sidebar-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; margin-top: 20px; }
-        .sidebar-link { display: flex; align-items: center; gap: 12px; color: #ecf0f1; text-decoration: none; padding: 12px 14px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s; }
-        .sidebar-link:hover { background: rgba(255, 255, 255, 0.03); color: var(--jula-orange); }
+        /* 🔗 REGROUPEMENT DES LIENS ET ENCARTS DE SÉCURITÉ */
+        .menu-navigation { display: flex; flex-direction: column; gap: 6px; flex: 1; margin-top: 15px; }
+        .label-section-menu { font-size: 10.5px; color: #7f8c8d; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; margin-bottom: 5px; padding-left: 8px; }
         
-        /* 🔵🟢 BOUTONS DE COMMANDE SÉCURISÉS EN BAS DE LA SIDEBAR */
-        .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .btn-sidebar-blue { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(16, 114, 186, 0.15); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.3); text-decoration: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
-        .btn-sidebar-green { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(46, 125, 50, 0.15); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.3); text-decoration: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
-        .btn-sidebar-blue:hover { background-color: var(--jula-blue); color: #fff; }
-        .btn-sidebar-green:hover { background-color: #2e7d32; color: #fff; }
+        .lien-navigation { display: flex; align-items: center; gap: 12px; color: #ecf0f1; text-decoration: none; padding: 11px 14px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+        .lien-navigation:hover { background: rgba(255, 255, 255, 0.03); color: var(--jula-orange); }
+        .lien-navigation.onglet-actif { background: rgba(245, 124, 0, 0.08); color: var(--jula-orange); font-weight: bold; }
+        
+        /* 🔵🟢 BOUTONS DE LA CHARTE ET DU GUIDE EN BAS DU TIROIR GAUCHE */
+        .bas-panneau { border-top: 1px solid var(--couleur-bordure); padding-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .bouton-panneau-bleu { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(16, 114, 186, 0.12); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.25); text-decoration: none; padding: 11px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
+        .bouton-panneau-vert { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(46, 125, 50, 0.12); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.25); text-decoration: none; padding: 11px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
+        .bouton-panneau-bleu:hover { background-color: var(--jula-blue); color: #fff; }
+        .bouton-panneau-vert:hover { background-color: #2e7d32; color: #fff; }
 
-        /* 🪐 BARRE DE NAVIGATION SUPÉRIEURE AVEC ICÔNE CARREAUX TACTILE */
-        .navbar { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .btn-menu-trigger { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
-        .btn-menu-trigger:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--jula-orange); }
-        .nav-logo { font-size: 20px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
+        /* 🪐 BARRE DE NAVIGATION SUPÉRIEURE AVEC TON MENU À 3 BARRES ☰ */
+        .barre-navigation { background-color: var(--fond-carte); border-bottom: 1px solid var(--couleur-bordure); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; height: 65px; box-sizing: border-box; }
+        .declencheur-menu { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
+        .declencheur-menu:hover { background-color: rgba(255, 255, 255, 0.03); }
+        .logo-navigation { font-size: 18px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px; }
         
-        .hero { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 80px 20px; text-align: center; position: relative; border-bottom: 1px solid var(--border-color); }
-        .hero-badge { background: var(--jula-orange); color: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px; }
-        .hero h1 { font-size: 40px; margin: 0 0 15px 0; font-weight: 800; line-height: 50px; }
-        .hero p { font-size: 18px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
-        .hero-btns { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .btn-primary { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
-        .btn-secondary { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; border: 2px solid white; transition: 0.2s; }
-        .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); opacity: 0.9; }
+        /* VITRINE D'ACCUEIL */
+        .vitrine-principale { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 70px 20px; text-align: center; position: relative; border-bottom: 1px solid var(--couleur-bordure); }
+        .insigne-vitrine { background: var(--jula-orange); color: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px; }
+        .vitrine-principale h1 { font-size: 38px; margin: 0 0 15px 0; font-weight: 800; line-height: 48px; }
+        .vitrine-principale p { font-size: 17.5px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
+        .boutons-vitrine { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .bouton-orange { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
+        .bouton-transparent { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; border: 2px solid white; transition: 0.2s; }
+        .bouton-orange:hover, .bouton-transparent:hover { transform: translateY(-2px); opacity: 0.9; }
         
-        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; box-sizing: border-box; }
-        .section-title { text-align: center; margin-top: 20px; margin-bottom: 40px; }
-        .section-title h2 { font-size: 30px; color: #fff; margin: 0 0 10px 0; font-weight: 700; }
-        .section-title p { color: #95a5a6; font-size: 15.5px; margin: 0; }
-        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
-        .step-card { background: var(--card-bg); padding: 35px; border-radius: 12px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--border-color); position: relative; }
-        .step-num { font-size: 48px; font-weight: 900; color: rgba(16,114,186,0.1); position: absolute; top: 15px; right: 25px; }
-        .step-card h3 { font-size: 19px; margin: 0 0 12px 0; color: var(--jula-blue); }
-        .step-card p { margin: 0; color: #95a5a6; font-size: 14px; }
+        .conteneur { max-width: 1100px; margin: 0 auto; padding: 50px 20px; box-sizing: border-box; }
+        .titre-section { text-align: center; margin-top: 10px; margin-bottom: 40px; }
+        .titre-section h2 { font-size: 28px; color: #fff; margin: 0 0 10px 0; font-weight: 700; }
+        .titre-section p { color: #95a5a6; font-size: 15px; margin: 0; }
+        .grille-etapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
+        .carte-etape { background: var(--fond-carte); padding: 35px; border-radius: 12px; border: 1px solid var(--couleur-bordure); border-bottom: 4px solid var(--couleur-bordure); position: relative; }
+        .numero-etape { font-size: 48px; font-weight: 900; color: rgba(16,114,186,0.1); position: absolute; top: 15px; right: 25px; }
+        .carte-etape h3 { font-size: 19px; margin: 0 0 12px 0; color: var(--jula-blue); }
+        .carte-etape p { margin: 0; color: #95a5a6; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- 🪐 INTERFACE ACTIVE DE LA SIDEBAR GAUCHE -->
-    <div class="sidebar" id="julaSidebar">
+    <!-- 🪐 PANNEAU DE NAVIGATION INTEGRAL GAUCHE -->
+    <div class="panneau-navigation" id="panneauJula">
         <div style="display: flex; flex-direction: column; flex: 1;">
-            <div class="sidebar-header">
-                <div class="sidebar-title">
+            <div class="entete-panneau">
+                <div class="titre-panneau">
                     <span class="material-icons-round" style="color: var(--jula-orange);">menu_open</span>
-                    Options de Navigation
+                    Menu Principal
                 </div>
-                <button class="btn-close-sidebar" onclick="toggleJulaSidebar()">
+                <button class="bouton-fermer" onclick="basculerMenuJula()">
                     <span class="material-icons-round" style="font-size: 24px;">close</span>
                 </button>
             </div>
 
-            <!-- LIENS INTERNES EN FRANÇAIS PUR -->
-            <div class="sidebar-menu">
-                <a href="/login" class="sidebar-link">
-                    <span class="material-icons-round" style="color: var(--jula-orange);">vpn_key</span>
-                    Connexion Espace Professionnel
+            <div class="menu-navigation">
+                <span class="label-section-menu">🏠 Navigation</span>
+                <a href="/" class="lien-navigation onglet-actif">
+                    <span class="material-icons-round">home</span>
+                    Accueil du Portail Jula
                 </a>
-                <a href="/jacky-superadmin-control" class="sidebar-link" style="border: 1px dashed rgba(245,124,0,0.3); border-radius: 6px;">
+                
+                <span class="label-section-menu">💼 Espaces Professionnels</span>
+                <a href="/login" class="lien-navigation">
+                    <span class="material-icons-round">vpn_key</span>
+                    Connexion Compte Pro
+                </a>
+                <a href="/jacky-superadmin-control" class="lien-navigation" style="border: 1px dashed rgba(245,124,0,0.25); border-radius: 6px;">
                     <span class="material-icons-round" style="color: var(--jula-orange);">security</span>
-                    Espace Secret SuperAdmin Jacky
+                    Espace Secret Jacky
                 </a>
-                <div style="margin-top: 20px; padding: 12px; background: rgba(255,255,255,0.01); border-radius: 6px; border: 1px solid var(--border-color);">
-                    <span style="font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">ℹ️ Entreprise Jula Officiel</span>
-                    <p style="font-size: 13.5px; color: #fff; margin: 6px 0 0 0; font-weight: 500;">✉️ support@jula-network.com</p>
-                    <p style="font-size: 11px; color: var(--jula-orange); margin: 4px 0 0 0; font-weight: bold;">📅 Catalogue mis à jour en direct</p>
+
+                <span class="label-section-menu">🏢 Coordonnées Entreprise</span>
+                <div style="padding: 12px; background: rgba(255,255,255,0.01); border-radius: 6px; border: 1px solid var(--couleur-bordure);">
+                    <p style="font-size: 13px; color: #fff; margin: 0; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                        <span class="material-icons-round" style="font-size: 16px; color: var(--jula-blue);">email</span>
+                        support@jula-network.com
+                    </p>
+                    <p style="font-size: 11px; color: var(--jula-orange); margin: 6px 0 0 0; font-weight: bold; display: flex; align-items: center; gap: 4px;">
+                        <span class="material-icons-round" style="font-size: 14px;">sync</span>
+                        Mise à jour du catalogue en direct
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- CLAUSES EXIGÉES EN BAS DU TIROIR GAUCHE (BLEU / VERT) -->
-        <div class="sidebar-footer">
-            <a href="/politique-confidentialite" class="btn-sidebar-blue">
+        <div class="bas-panneau">
+            <a href="/politique-confidentialite" class="bouton-panneau-bleu">
                 <span class="material-icons-round" style="font-size: 16px;">gavel</span>
                 Charte de Confidentialité Jula
             </a>
-            <a href="#fonctionnement" class="btn-sidebar-green" onclick="toggleJulaSidebar()">
+            <a href="#fonctionnement" class="bouton-panneau-vert" onclick="basculerMenuJula()">
                 <span class="material-icons-round" style="font-size: 16px;">help_outline</span>
-                Comment utiliser le site internet ?
-            </a>
-        </div>
-    </div>
-
-    <!-- 🪐 BARRE DE NAVIGATION FIXE SUPÉRIEURE AVEC LOGO CARREAUX -->
-    <nav class="navbar">
-        <button class="btn-menu-trigger" onclick="toggleJulaSidebar()">
-            <span class="material-icons-round" style="font-size: 28px;">grid_view</span>
-        </button>
-        <div class="nav-logo">
-            <span class="material-icons-round" style="color: var(--jula-orange); font-size: 24px;">hub</span>
-            RÉSEAU JULA
-        </div>
-        <div style="width: 44px;"></div>
-    </nav>
-    <div class="hero">
-        <span class="hero-badge">Portail Régional Afrique de l'Ouest</span>
+    <!-- 🌠 VITRINE D'ACCUEIL PRINCIPALE JULA -->
+    <div class="vitrine-principale">
+        <span class="insigne-vitrine">Portail Officiel Jula Afrique de l'Ouest</span>
         <h1>Devenez Partenaire Jula & Boostez vos Revenus</h1>
-        <p>Rejoignez le réseau commercial interconnecté leader en Côte d'Ivoire, au Sénégal, au Togo et au Bénin. Vendez ou livrez en toute liberté.</p>
-        <div class="hero-btns">
-            <a href="#recrutement" class="btn-primary">Créer mon compte de partenaire</a>
-            <a href="/login" class="btn-secondary">🔐 Connexion Espace Pro</a>
+        <p>Rejoignez l'écosystème commercial interconnecté leader en Côte d'Ivoire, au Sénégal, au Togo et au Bénin. Vendez ou livrez en toute liberté.</p>
+        <div class="boutons-vitrine">
+            <a href="#recrutement" class="bouton-orange">Créer mon compte de partenaire</a>
+            <a href="/login" class="bouton-transparent">🔐 Connexion Espace Pro</a>
         </div>
     </div>
 
-    <div class="container" id="fonctionnement">
-        <div class="section-title">
+    <div class="conteneur" id="fonctionnement">
+        <div class="titre-section">
             <h2>Comment ça fonctionne ?</h2>
             <p>Trois étapes simples pour lancer votre activité indépendante sur Jula</p>
         </div>
-        <div class="steps-grid">
-            <div class="step-card">
-                <div class="step-num">01</div>
+        <div class="grille-etapes">
+            <div class="carte-etape">
+                <div class="numero-etape">01</div>
                 <h3>1. Inscription Gratuite</h3>
                 <p>Créez votre profil en ligne en quelques clics selon votre activité (Boutique, Coursier Moto ou Établissement Relais).</p>
             </div>
-            <div class="step-card">
-                <div class="step-num">02</div>
+            <div class="carte-etape">
+                <div class="numero-etape">02</div>
                 <h3>2. Configuration</h3>
                 <p>Accédez à votre espace privé sécurisé pour publier vos articles ou configurer vos trajets logistiques en zone CFA.</p>
             </div>
-            <div class="step-card">
-                <div class="step-num">03</div>
+            <div class="carte-etape">
+                <div class="numero-etape">03</div>
                 <h3>3. Touchez vos Gains</h3>
                 <p>Recevez vos paiements et commissions de façon automatisée et instantanée dès que les téléphones arrivent à destination.</p>
             </div>
         </div>
 
-        <!-- 🏪 SÉLECTION DES ACTIVITÉS STYLE JUMIA ÉLITE -->
-        <div class="section-title" id="recrutement">
+        <!-- 🏪 SÉLECTION DES ACTIVITÉS EN FRANÇAIS PUR -->
+        <div class="titre-section" id="recrutement">
             <h2>Sélectionnez votre activité régionale</h2>
             <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
         </div>
         
         <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px;">
             <!-- BOUTIQUE / GROSSISTE -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 16px; padding: 40px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
                 <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🏬 Boutique / Grossiste</h3>
                 <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">0 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">de frais d'affichage</span></div>
                 <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
@@ -169,7 +170,7 @@
             </div>
 
             <!-- COURSIER LIVREUR -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--glovo-green); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 16px; padding: 40px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-vert); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
                 <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🛵 Coursier Livreur Moto</h3>
                 <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/semaine</span></div>
                 <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Soyez votre propre patron ! Engin décent et permis requis. Recevez les fiches de livraison directement sur votre smartphone et maximisez vos gains logistiques.</p>
@@ -177,98 +178,100 @@
             </div>
 
             <!-- POINT RELAIS AGRÉÉ -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 16px; padding: 40px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
                 <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🏪 Point Relais Agréé</h3>
                 <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">Commissions <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/colis géré</span></div>
                 <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique. Devenez un guichet de dépôt officiel Jula pour la garde sécurisée des colis de smartphones de votre quartier.</p>
                 <a href="/register-station" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: var(--jula-orange); box-shadow: 0 4px 10px rgba(245,124,0,0.2);">Inscrire mon Espace Physique</a>
             </div>
         </div>
-        <!-- TARIFS LOGISTIQUES -->
-        <div class="section-title">
+        <!-- GRILLE DES TARIFS LOGISTIQUES RÉGIONAUX -->
+        <div class="titre-section">
             <h2>📊 Grille Tarifaire Jula Express</h2>
             <p>Stockage, Emballage professionnel et Expédition clés en main depuis nos entrepôts centraux</p>
         </div>
-        <div class="pricing-section" style="background: var(--card-bg); border-radius: 16px; padding: 30px; margin-bottom: 60px; border: 1px solid var(--border-color); overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+        <div class="pricing-section" style="background: var(--fond-carte); border-radius: 16px; padding: 30px; margin-bottom: 60px; border: 1px solid var(--couleur-bordure); overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
             <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Volume Article</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Exemples de produits</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Stockage Mensuel</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Préparation & Colisage</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--couleur-bordure); font-size: 14px;">Volume de l'Article</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--couleur-bordure); font-size: 14px;">Exemples de produits</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--couleur-bordure); font-size: 14px;">Stockage Mensuel</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--couleur-bordure); font-size: 14px;">Préparation & Colisage</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px;"><b>Petit format</b></td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">Smartphones, Écouteurs sans fil, Tablettes tactiles</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--jula-orange); font-weight: 800;">500 FCFA</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">300 FCFA /envoi</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px;"><b>Petit format</b></td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: #95a5a6;">Smartphones, Écouteurs sans fil, Tablettes tactiles</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: var(--jula-orange); font-weight: 800;">500 FCFA</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: #95a5a6;">300 FCFA /envoi</td>
                     </tr>
                     <tr>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px;"><b>Format Moyen</b></td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">Ordinateurs portables, Modems, Box Internet, Consoles</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--jula-orange); font-weight: 800;">1 500 FCFA</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">400 FCFA /envoi</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px;"><b>Format Moyen</b></td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: #95a5a6;">Ordinateurs portables, Modems, Box Internet, Consoles de jeux</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: var(--jula-orange); font-weight: 800;">1 500 FCFA</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--couleur-bordure); font-size: 14px; color: #95a5a6;">400 FCFA /envoi</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- FOIRE AUX QUESTIONS (FAQ) -->
-        <div class="section-title">
+        <!-- FOIRE AUX QUESTIONS (QUESTIONS FRÉQUENTES) -->
+        <div class="titre-section">
             <h2>Questions Fréquentes</h2>
-            <p>Tout ce que vous devez savoir pour démarrer sereinement</p>
+            <p>Tout ce que vous devez savoir pour démarrer sereinement votre activité</p>
         </div>
-        <div class="faq-section" style="background: var(--card-bg); padding: 40px; border-radius: 16px; margin-bottom: 60px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
-            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px;">
+        <div class="faq-section" style="background: var(--fond-carte); padding: 40px; border-radius: 16px; margin-bottom: 60px; border: 1px solid var(--couleur-bordure); box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+            <div style="border-bottom: 1px solid var(--couleur-bordure); padding-bottom: 20px;">
                 <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ L'inscription sur Jula est-elle payante ?</div>
-                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Non, l'ouverture de votre espace magasin et l'affichage de vos produits sur le catalogue sont entièrement gratuits pour tous les grossistes régionaux.</p>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Non, l'ouverture de votre espace magasin et l'affichage de vos produits sur le catalogue numérique sont entièrement gratuits pour tous les grossistes régionaux.</p>
             </div>
-            <div style="border-bottom: 1px solid var(--border-color); padding: 20px 0;">
+            <div style="border-bottom: 1px solid var(--couleur-bordure); padding: 20px 0;">
                 <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ Comment s'effectue le retrait de mes gains en zone CFA ?</div>
-                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Vos fonds sont sécurisés temporairement par Jula Pay et débloqués automatiquement vers votre compte Mobile Money dès que le client valide la réception physique de son smartphone.</p>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Vos fonds sont sécurisés temporairement par notre système de transaction et débloqués automatiquement vers votre compte de monnaie mobile (Mobile Money) dès que le client valide la réception physique de son colis.</p>
             </div>
             <div style="padding-top: 20px;">
-                <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ Dans quels pays le réseau logistique opère-t-il ?</div>
-                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Jula interconnecte quatre marchés majeurs d'Afrique de l'Ouest : la Côte d'Ivoire, le Sénégal, le Togo et le Bénin.</p>
+                <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ Dans quels pays le réseau logistique opère-t-il actuellement ?</div>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Jula interconnecte quatre marchés majeurs de l'Afrique de l'Ouest : la Côte d'Ivoire, le Sénégal, le Togo et le Bénin.</p>
             </div>
         </div>
 
-        <!-- ANNONCE GOOGLE PLAY STORE -->
-        <div style="margin: 20px auto; max-width: 900px; padding: 20px; background: rgba(255, 255, 255, 0.02); border-radius: 12px; text-align: center; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <!-- RECLAME APPLICATIVE POUR LES SMARTPHONES -->
+        <div style="margin: 20px auto; max-width: 900px; padding: 20px; background: rgba(255, 255, 255, 0.02); border-radius: 12px; text-align: center; border: 1px solid var(--couleur-bordure); border-left: 5px solid var(--jula-orange); box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
             <p style="margin: 0; font-weight: bold; color: #fff; font-size: 14px; letter-spacing: 0.3px;">
-                📱 L'application officielle Jula arrive très bientôt en téléchargement sécurisé sur le Google Play Store !
+                📱 L'application officielle Jula arrive très bientôt en téléchargement sécurisé sur le magasin d'applications Google !
             </p>
         </div>
 
-        <!-- PIED DE PAGE ET SÉCURITÉ -->
-        <div class="footer" style="text-align: center; padding-top: 40px; border-top: 1px solid var(--border-color); font-size: 12.5px; color: #7f8c8d; font-weight: 500; margin-top: 40px; letter-spacing: 0.3px;">
-            <p>© 2026 Réseau Logistique Jula & Co. • Interconnexion Régionale UEMOA • Abidjan - Dakar - Lomé - Cotonou • v1.1.0</p>
+        <!-- PIED DE PAGE ET RÉGULATION RÉGIONALE -->
+        <div class="footer" style="text-align: center; padding-top: 40px; border-top: 1px solid var(--couleur-bordure); font-size: 12.5px; color: #7f8c8d; font-weight: 500; margin-top: 40px; letter-spacing: 0.3px;">
+            <p>© 2026 Réseau Logistique Jula & Co. • Interconnexion Régionale UEMOA • Abidjan - Dakar - Lomé - Cotonou • Technologie Francophone v1.1.0</p>
         </div>
-    </div> <!-- Fin du conteneur .container -->
+    </div> <!-- Fin du conteneur .conteneur principal -->
 
-    <!-- ⚙️ LE MOTEUR JAVASCRIPT DE TA SIDEBAR INTERACTIVE -->
+    <!-- ⚙️ LE MOTEUR JAVASCRIPT CORRIGÉ EN FRANÇAIS POUR LA NAVIGATION -->
     <script>
-        function toggleJulaSidebar() {
-            const sidebar = document.getElementById('julaSidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
+        function basculerMenuJula() {
+            const panneau = document.getElementById('panneauJula');
+            if (panneau) {
+                panneau.classList.toggle('actif');
             }
         }
 
         // Fermer automatiquement le tiroir si le doigt clique en dehors du menu
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('julaSidebar');
-            const menuTrigger = document.querySelector('.btn-menu-trigger');
+        document.addEventListener('click', function(evenement) {
+            const panneau = document.getElementById('panneauJula');
+            const declencheur = document.querySelector('.declencheur-menu');
             
-            if (sidebar && sidebar.classList.contains('active')) {
-                if (!sidebar.contains(event.target) && !menuTrigger.contains(event.target)) {
-                    sidebar.classList.remove('active');
+            if (panneau && panneau.classList.contains('actif')) {
+                if (!panneau.contains(evenement.target) && !declencheur.contains(evenement.target)) {
+                    panneau.classList.remove('actif');
                 }
             }
         });
     </script>
 </body>
 </html>
+ 
+               
