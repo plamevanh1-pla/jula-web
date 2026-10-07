@@ -34,6 +34,23 @@ const supabase = createClient(urlSupabase, cleSupabase, {
     }, 
     realtime: { transport: ws } 
 });
+// 🕵️‍♂️ ACCÈS AU QG SECRET JACKY SANS PASSER PAR LE FORMULAIRE DE LOGIN
+app.get('/jacky-superadmin-control', async (req, res) => {
+    try {
+        // Le serveur va chercher tous les profils de ton Supabase pour que tu puisses les inspecter
+        const { data: profiles, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        // Le serveur charge ton fichier graphique en lui donnant la liste des CNI à valider !
+        res.render('admin-control', { profiles: profiles || [] });
+    } catch (err) {
+        res.status(500).send(`❌ Erreur d'accès au QG Jacky : ${err.message}`);
+    }
+});
 
 // 🌍 Routes d'affichage des formulaires graphiques de l'écosystème Jula
 app.get('/', (req, res) => { res.render('index'); });
