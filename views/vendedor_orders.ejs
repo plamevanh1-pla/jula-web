@@ -1,92 +1,133 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commandes Vendeur - Jula</title>
+    <!-- Icônes Modernes Google Material -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --success-green: #2e7d32;
+            --warning-gold: #ffc107;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
         .container { max-width: 1000px; margin: 0 auto; }
-        .header { background: #111417; color: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-bottom: 4px solid #f57c00; }
-        h1 { margin: 0; font-size: 24px; }
-        .nav-actions { margin-top: 15px; display: flex; gap: 10px; }
-        .btn-nav { display: inline-block; background: #1072ba; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(16,114,186,0.2); }
-        .order-card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 15px; border-left: 5px solid #1072ba; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .order-card.delivered { border-left-color: #28a745; }
-        .meta-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px; font-size: 14px; }
-        .badge-delivery { background: #fff3cd; color: #856404; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-        .product-title { font-size: 18px; font-weight: bold; color: #111417; margin: 5px 0; }
-        .client-info { background: #f8f9fa; padding: 10px; border-radius: 6px; margin: 10px 0; font-size: 13px; line-height: 1.6; }
-        .status-form { display: flex; gap: 10px; margin-top: 15px; align-items: center; flex-wrap: wrap; }
-        select { padding: 8px; border-radius: 6px; border: 1px solid #ced4da; font-size: 13px; cursor: pointer; }
-        .btn-update { background: #f57c00; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .btn-delete { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-left: auto; text-decoration: none; }
-        .no-orders { text-align: center; padding: 40px; background: white; border-radius: 12px; color: #7f8c8d; font-style: italic; }
+        
+        /* 🪐 EN-TÊTE ET PROFIL VENDEUR */
+        .header { background: var(--card-bg); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-orange); }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        
+        /* 🔄 ACTIONS DE NAVIGATION ACCESSIBLES */
+        .nav-actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .btn-nav { display: inline-flex; align-items: center; gap: 6px; background: var(--jula-blue); color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; transition: opacity 0.2s; }
+        .btn-home { display: inline-flex; align-items: center; gap: 6px; background: #2d3139; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid var(--border-color); transition: opacity 0.2s; }
+        .btn-logout { display: inline-flex; align-items: center; gap: 6px; background: rgba(220, 53, 69, 0.1); color: #dc3545; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(220, 53, 69, 0.2); transition: all 0.2s; }
+        .btn-logout:hover { background: #dc3545; color: white; }
+        .btn-nav:hover, .btn-home:hover { opacity: 0.9; }
+
+        /* 📦 ENCART DE FICHE DE COMMANDE JULA */
+        .order-card { background: var(--card-bg); border-radius: 12px; padding: 25px; margin-bottom: 15px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.15); transition: transform 0.2s; }
+        .order-card:hover { transform: translateY(-2px); }
+        .order-card.delivered { border-left-color: var(--success-green); }
+        
+        .meta-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 12px; font-size: 14px; color: #95a5a6; }
+        .badge-delivery { background: rgba(245, 124, 0, 0.1); color: var(--jula-orange); padding: 5px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; }
+        .product-title { font-size: 18px; font-weight: bold; color: #fff; margin: 5px 0; }
+        
+        /* 👤 DESIGN BLOC CLIENT COORDONNÉES */
+        .client-info { background: var(--dark-bg); padding: 15px; border-radius: 8px; margin: 15px 0; font-size: 13.5px; line-height: 1.6; border: 1px solid var(--border-color); }
+        .client-info b { color: var(--jula-orange); }
+        
+        /* 🔄 ACTIONS DE STATUT ET SUPPRESSION */
+        .status-form { display: flex; gap: 10px; margin-top: 20px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        select { padding: 10px; border-radius: 6px; background-color: var(--dark-bg); border: 1px solid var(--border-color); font-size: 13px; color: #fff; cursor: pointer; outline: none; }
+        select:focus { border-color: var(--jula-orange); }
+        .btn-update { background: var(--jula-orange); color: white; border: none; padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; transition: opacity 0.2s; }
+        .btn-update:hover { opacity: 0.9; }
+        .btn-delete { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-left: auto; text-decoration: none; transition: all 0.2s; }
+        .btn-delete:hover { background: #dc3545; color: white; }
+        .no-orders { text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; font-style: italic; border: 1px dashed var(--border-color); font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🏪 Tableau de bord & Analyses Commerciales</h1>
-            <p style="margin: 5px 0 15px 0; color: #aaa; font-size: 13px;">Identifiant Grossiste : <%= vendedor_id %></p>
+            <h1><span class="material-icons-round" style="color: var(--jula-orange);">analytics</span> Tableau de bord & Analyses Commerciales</h1>
+            <p style="margin: 5px 0 15px 0; color: #7f8c8d; font-size: 13px; font-weight: 500;">Identifiant Grossiste : <%= vendedor_id %></p>
             
             <!-- 📊 COMPTEURS DE PERFORMANCE FINANCIÈRE EN DIRECT -->
-            <div style="display: flex; gap: 15px; margin-top: 15px;">
-                <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #28a745;">
-                    <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">💰 Chiffre d'Affaires Encaissé</div>
-                    <div style="font-size: 20px; font-weight: bold; color: #28a745; margin-top: 5px;"><%= totalEarnings.toLocaleString('fr-FR') %> FCFA</div>
+            <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--success-green);">
+                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">💰 Chiffre d'Affaires Encaissé</div>
+                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= totalEarnings.toLocaleString('fr-FR') %> <span style="color: var(--jula-orange); font-size: 16px;">FCFA</span></div>
                 </div>
-                <div style="flex: 1; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107;">
-                    <div style="font-size: 12px; color: #ccc; text-transform: uppercase;">⏳ Colis à Préparer</div>
-                    <div style="font-size: 20px; font-weight: bold; color: #ffc107; margin-top: 5px;"><%= pendingOrdersCount %> colis</div>
+                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--warning-gold);">
+                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">⏳ Colis à Préparer en Magasin</div>
+                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= pendingOrdersCount %> <span style="color: var(--warning-gold); font-size: 16px;">colis</span></div>
                 </div>
             </div>
 
-             <!-- 🔄 BARRE DE NAVIGATION ET SÉCURITÉ VENDEUR INTERACTIVE -->
-<div class="nav-actions" style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-    <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav" style="display: inline-block; background: #1072ba; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px;">
-        ➕ Publier un Nouvel Article
-    </a>
-    
-    <!-- 🏠 BOUTON RETOUR ACCUEIL SITE GLOBAL -->
-    <a href="/" style="display: inline-block; background: #6c757d; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        🏠 Accueil Portail Jula
-    </a>
-
-    <!-- 🚪 BOUTON DECONNEXION SÉCURISÉE -->
-    <a href="/login" style="display: inline-block; background: #dc3545; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(220,53,69,0.2);" onclick="return confirm('Voulez-vous fermer votre session de grossiste Jula ?');">
-        🚪 Déconnexion du Magasin
-    </a>
-</div>
+            <!-- 🔄 BARRE DE NAVIGATION ET SÉCURITÉ VENDEUR INTERACTIVE -->
+            <div class="nav-actions">
+                <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav">
+                    <span class="material-icons-round" style="font-size: 16px;">add_circle_outline</span>
+                    Publier un Nouvel Article
+                </a>
+                <a href="/" class="btn-home">
+                    <span class="material-icons-round" style="font-size: 16px;">home</span>
+                    Accueil Portail Jula
+                </a>
+                <a href="/login" class="btn-logout" onclick="return confirm('Voulez-vous fermer votre session de grossiste Jula ?');">
+                    <span class="material-icons-round" style="font-size: 16px;">power_settings_new</span>
+                    Déconnexion du Magasin
+                </a>
+            </div>
         </div>
+    </div> <!-- Fermeture du bloc header de la partie 1 -->
 
+    <div class="container">
         <% if (orders.length === 0) { %>
-            <div class="no-orders">🎉 Aucune commande reçue pour le moment. Votre boutique est prête à s'allumer sur l'application !</div>
+            <div class="no-orders">
+                <span class="material-icons-round" style="font-size: 48px; color: #7f8c8d; display: block; margin-bottom: 10px;">celebration</span>
+                Aucune commande reçue pour le moment. Votre boutique est prête à s'allumer en direct sur l'application !
+            </div>
         <% } else { %>
             <% orders.forEach(order => { %>
                 <div class="order-card <%= order.status === 'Livré' ? 'delivered' : '' %>">
                     <div class="meta-row">
-                        <span style="color: #1072ba;">ID COMPTE : #<%= order.id.substring(0,8) %></span>
-                        <!-- 🛵 CORRECTION DE LA VARIABLE DE SELECTION DE LIVRAISON SÉCURISÉE -->
-                        <span class="badge-delivery">🛵 Mode : <%= order.selected_delivery_mode || 'Standard' %></span>
+                        <span style="color: var(--jula-blue); font-weight: bold; font-family: monospace;">ID COMPTE : #<%= order.id.substring(0,8) %></span>
+                        <span class="badge-delivery">
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">speed</span> 
+                            Mode : <%= order.selected_delivery_mode || 'Standard' %>
+                        </span>
                     </div>
                     
                     <div class="product-title">📦 Article : <%= order.product_title %></div>
-                    <div style="font-size: 16px; font-weight: bold; color: #f57c00; margin-bottom: 10px;"><%= order.total_price.toLocaleString('fr-FR') %> FCFA</div>
+                    <div style="font-size: 18px; font-weight: 800; color: var(--jula-orange); margin-bottom: 12px;"><%= order.total_price.toLocaleString('fr-FR') %> FCFA</div>
                     
                     <div class="client-info">
-                        <strong>👤 Infos Acheteur Jula :</strong><br>
+                        <strong style="color: #fff; display: flex; align-items: center; gap: 4px; margin-bottom: 6px;">
+                            <span class="material-icons-round" style="font-size: 16px; color: var(--jula-orange);">person</span> 
+                            Infos Acheteur Jula :
+                        </strong>
                         ✉️ Email : <%= order.buyer_email %><br>
                         📞 Téléphone : <%= order.buyer_phone || 'Non renseigné' %><br>
                         📍 Adresse d'expédition : <%= order.buyer_address || 'Non renseignée' %>
                     </div>
 
                     <!-- ACTION EN GRILLE : CHANGEMENT DE STATUT ET SUPPRESSION JULA-STYLE -->
-                    <div style="display: flex; align-items: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
-                        <form action="/vendedor/update-order-status" method="POST" class="status-form" style="margin: 0; flex: 1;">
+                    <div class="status-form">
+                        <form action="/vendedor/update-order-status" method="POST" style="margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex: 1;">
                             <input type="hidden" name="order_id" value="<%= order.id %>">
                             <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
-                            <label style="font-size: 13px; font-weight: bold;">Statut de préparation :</label>
+                            
+                            <label style="margin: 0; font-size: 13px; font-weight: bold; color: #ecf0f1;">Statut de préparation :</label>
                             <select name="new_status">
                                 <option value="En attente de préparation" <%= order.status === 'En attente de préparation' ? 'selected' : '' %>>⏳ En attente de préparation</option>
                                 <option value="En cours de livraison" <%= order.status === 'En cours de livraison' ? 'selected' : '' %>>🏍️ En cours de livraison</option>
@@ -95,11 +136,12 @@
                             <button type="submit" class="btn-update">Mettre à jour</button>
                         </form>
 
-                        <!-- 🗑️ LE BOUTON ROUGE DE SUPPRESSION CONNECTÉ À TA TABLE PRODUCTS -->
+                        <!-- 🗑️ LE BOUTON ROUGE DE SUPPRESSION DE PRODUIT -->
                         <form action="/delete-product/<%= order.product_id %>" method="POST" style="margin: 0;" onsubmit="return confirm('Voulez-vous vraiment détruire et retirer définitivement cet article du catalogue Jula ?');">
                             <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
                             <button type="submit" class="btn-delete">
-                                🗑️ Supprimer l'article
+                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">delete_forever</span>
+                                Supprimer l'article
                             </button>
                         </form>
                     </div>
@@ -109,3 +151,5 @@
     </div>
 </body>
 </html>
+
+         
