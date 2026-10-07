@@ -1,116 +1,146 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de Bord Vendeur Jula</title>
+    <!-- Icônes Modernes Google Material -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --jula-orange: #f57c00; --jula-blue: #1072ba; --dark: #212529; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f4f6; margin: 0; padding: 20px; }
-        .nav { background-color: #1072ba; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-radius: 8px; }
-        .container { max-width: 600px; margin: 30px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        h3 { color: #1072ba; margin-top: 0; }
-        label { font-weight: bold; font-size: 13px; color: #495057; display: block; margin-top: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border-radius: 4px; border: 1px solid #ced4da; box-sizing: border-box; }
-        input[type="file"] { background: #f8f9fa; padding: 15px; border: 2px dashed #ccc; cursor: pointer; }
-        .btn-publish { background-color: #f57c00; color: white; border: none; padding: 14px; width: 100%; border-radius: 4px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 10px rgba(245,124,0,0.2); }
-        .form-group { margin-bottom: 15px; }
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        
+        /* 🪐 BARRE DE NAVIGATION EN MODE SOMBRE */
+        .nav { background-color: var(--card-bg); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-radius: 12px; border: 1px solid var(--border-color); }
+        .nav h2 { margin: 0; font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .nav span { font-size: 13px; color: #95a5a6; }
+        .nav b { color: var(--jula-orange); }
+
+        /* 📋 SECTION CONTENEUR */
+        .container { max-width: 600px; margin: 30px auto; background: var(--card-bg); padding: 35px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
+        h3 { color: #fff; margin-top: 0; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* 📝 STYLES FORMULAIRE PREMIUM */
+        label { font-weight: 600; font-size: 13px; color: #ecf0f1; display: block; margin-top: 18px; letter-spacing: 0.3px; }
+        input, select, textarea { width: 100%; padding: 12px 14px; margin-top: 6px; border-radius: 6px; background-color: var(--dark-bg); border: 1px solid var(--border-color); color: #fff; font-size: 14.5px; box-sizing: border-box; outline: none; transition: border-color 0.2s; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: var(--jula-orange); }
+        textarea { resize: vertical; }
+        input[type="file"] { background: rgba(255, 255, 255, 0.01); padding: 15px; border: 1px dashed var(--border-color); cursor: pointer; color: #7f8c8d; }
+        
+        /* 🚀 BOUTONS D'ACTIONS */
+        .btn-publish { background: linear-gradient(135deg, var(--jula-orange), #e65100); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; margin-top: 30px; cursor: pointer; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.2); transition: opacity 0.2s; }
+        .btn-publish:hover { opacity: 0.95; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        small { color: #7f8c8d; font-size: 11px; font-weight: 500; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="nav">
-        <h2>🏬 Espace Magasin Vendeur</h2>
+        <h2><span class="material-icons-round" style="color: var(--jula-orange);">storefront</span> Espace Magasin Vendeur</h2>
         <span>Connecté : <b><%= email %></b></span>
     </div>
 
-    <!-- 📦 BOUTON D'ACCÈS AU TIROIR DES COMMANDES JULA CORRIGÉ -->
-    <div style="background: #fff; padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid #f57c00; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-top: 20px;">
-        <h3 style="margin: 0 0 10px 0; color: #111417;">📦 Vos Ventes Jula en Direct</h3>
-        <p style="margin: 0 0 15px 0; color: #666; font-size: 14px;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses de vos clients.</p>
+    <!-- 📦 BOUTON DE REDIRECTION VERS LE CARNET DES COMMANDES -->
+    <div style="background: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 25px;">
+        <h3 style="margin: 0 0 10px 0; color: #fff; border: none; padding: 0;"><span class="material-icons-round" style="color: var(--jula-orange);">assignment_turned_in</span> Vos Ventes Jula en Direct</h3>
+        <p style="margin: 0 0 20px 0; color: #95a5a6; font-size: 14px; line-height: 1.5;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses physiques de livraison de vos acheteurs.</p>
         
-        <!-- ✨ LA RECONNEXION SUR TU VARIABLE USERID -->
-        <a href="/vendedor/dashboard-orders/<%= userId %>" style="display: inline-block; background: #f57c00; color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 6px rgba(245,124,0,0.2);">
+        <a href="/vendedor/dashboard-orders/<%= userId %>" style="display: inline-block; background: var(--jula-orange); color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(245,124,0,0.2); transition: background-color 0.2s;">
             🛒 Ouvrir mon Carnet de Commandes →
         </a>
     </div>
-
     <div class="container">
-        <h3>🚀 Publier un nouvel article sur Jula</h3>
+        <h3><span class="material-icons-round" style="color: var(--jula-orange); font-size: 20px;">add_circle_outline</span> Publier un nouvel article sur Jula</h3>
         
         <form action="/publish-product" method="POST" enctype="multipart/form-data">
-            <!-- 🛡️ LA VARIABLE CORRIGÉE POUR REJOINDRE LE STOCK DE SÉCURITÉ SERVER.JS -->
             <input type="hidden" name="userId" value="<%= userId %>">
 
-            <label>Titre de l'article :</label>
-            <input type="text" name="title" required placeholder="Ex: iPhone 14 Pro Max 256Go">
+            <label>Modèle ou Nom du Smartphone :</label>
+            <input type="text" name="title" required placeholder="Ex: Tecno Pop 9 Pro 256Go">
 
-            <label>Description du produit :</label>
-            <textarea name="description" rows="4" required placeholder="Décrivez l'état, les accessoires fournis, la garantie..."></textarea>
+            <label>Description détaillée de l'appareil :</label>
+            <textarea name="description" rows="4" required placeholder="Décrivez la couleur, l'état de la batterie, la garantie grossiste fournie..."></textarea>
        
-            <!-- 📊 GESTION DES STOCKS EN TEMPS RÉEL FIXÉE -->
-            <div class="form-group">
-                <label>📦 Quantité en Stock disponible :</label>
-                <input type="number" name="stock" value="10" min="1" required style="border: 2px solid #dee2e6; border-radius: 8px;">
-                <small style="color:#6c757d; font-size:11px;">Indiquez le nombre exact d'articles que vous possédez en magasin.</small>
+            <!-- GESTION DU STOCK DE SMARTPHONES -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>📦 Quantité de pièces en Stock disponible :</label>
+                <input type="number" name="stock" value="10" min="1" required>
+                <small>Indiquez le nombre exact d'appareils de ce modèle actuellement disponibles dans vos rayons.</small>
             </div>
 
-            <label>Prix de vente normal d'origine (en FCFA) :</label>
-            <input type="number" name="price" required placeholder="Ex: 450000">
+            <label>Prix de vente de base (en FCFA) :</label>
+            <input type="number" name="price" required placeholder="Ex: 125000">
 
-            <!-- 📉 NOUVELLE CASE DE REMISE JUMIA-STYLE AJOUTÉE -->
-            <div class="form-group">
+            <!-- OPTION PRIX BARRÉ STYLE JUMIA -->
+            <div class="form-group" style="margin-top: 15px;">
                 <label>🔥 Prix Promotionnel réduit (Optionnel - en FCFA) :</label>
-                <input type="number" name="promo_price" placeholder="Ex: 350000 (Laissez vide s'il n'y a pas de réduction)">
-                <small style="color:#6c757d; font-size:11px;">Si rempli, le prix d'origine sera barré et le pourcentage (-45%) s'affichera automatiquement sur le Tecno !</small>
+                <input type="number" name="promo_price" placeholder="Ex: 95000 (Laissez vide s'il n'y a pas de réduction)">
+                <small>Si renseigné, le prix d'origine sera automatiquement barré à l'écran sur le Tecno Pop 9 de l'acheteur !</small>
             </div>
 
-            <!-- 📸 CHOIX PHOTO DE PRODUCTION -->
-            <label>📸 Prendre ou Choisir une photo de l'article :</label>
+            <!-- CHOIX IMAGE DE PRODUCTION -->
+            <label>📸 Sélectionner la photo du produit :</label>
             <input type="file" name="product_photo" accept="image/*" required>
 
-            <label>Catégorie du rayon Jula :</label>
+            <label>Rayon ou Catégorie Jula :</label>
             <select name="category">
                 <option value="Électronique">📱 Électronique & Téléphonie</option>
-                <option value="Mode">👗 Mode, Vêtements & Chaussures</option>
                 <option value="Informatique">💻 Ordinateurs & Accessoires</option>
                 <option value="Électroménager">📺 Électroménager & Maison</option>
+                <option value="Mode">👗 Mode, Vêtements & Chaussures</option>
             </select>
 
             <button type="submit" class="btn-publish">Ajouter et Propulser au Rayon Jula</button>
         </form>
     </div>
- <!-- 🔄 LOGIQUE UNIVERSELLE DE REDIRECTION AUTOMATIQUE JULA -->
-<script>
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Empêche le comportement standard pour éviter l'écran blanc
-            
-            const formData = new FormData(form);
-            const button = form.querySelector('button[type="submit"]');
-            if (button) button.innerText = "Propulsion en cours...";
 
-            try {
-                const response = await fetch('/publish-product', {
-                    method: 'POST',
-                    body: formData
-                });
+    <!-- MOTEUR DE PROPULSION ASYNCHRONNE SANS ÉCRAN BLANC -->
+    <script>
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); 
                 
-                const result = await response.json();
-                
-                if (result.success && result.redirect_url) {
-                    // 🎉 BOUM ! Le navigateur bascule instantanément vers ton carnet de commandes !
-                    window.location.href = result.redirect_url;
-                } else {
-                    alert("❌ Erreur : " + (result.error || "Impossible de publier l'article."));
-                    if (button) button.innerText = "Ajouter et Propulser au Rayon Jula";
+                const formData = new FormData(form);
+                const button = form.querySelector('button[type="submit"]');
+                if (button) {
+                    button.disabled = true;
+                    button.innerText = "Propulsion en cours...";
                 }
-            } catch (err) {
-                alert("📡 Erreur réseau avec le serveur Render.");
-                if (button) button.innerText = "Ajouter et Propulser au Rayon Jula";
-            }
-        });
-    }
-</script>
+
+                try {
+                    const response = await fetch('/publish-product', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success && result.redirect_url) {
+                        // Changement instantané de tableau après enregistrement
+                        window.location.href = result.redirect_url;
+                    } else {
+                        alert("❌ Erreur : " + (result.error || "Impossible de publier l'article."));
+                        if (button) {
+                            button.disabled = false;
+                            button.innerText = "Ajouter et Propulser au Rayon Jula";
+                        }
+                    }
+                } catch (err) {
+                    alert("📡 Erreur réseau avec le serveur de production Jula Network.");
+                    if (button) {
+                        button.disabled = false;
+                        button.innerText = "Ajouter et Propulser au Rayon Jula";
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
