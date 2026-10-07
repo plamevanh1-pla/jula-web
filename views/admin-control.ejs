@@ -1,89 +1,56 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jula - Centre de Contrôle Secret Jacky</title>
+    <!-- Icônes Modernes Google Material -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root { --jula-orange: #f57c00; --jula-blue: #1072ba; --dark: #111417; --success: #28a745; }
-        body { font-family: system-ui, sans-serif; background-color: #f1f3f5; margin: 0; padding: 20px; }
-        .admin-header { background: var(--dark); color: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--jula-orange); }
-        .admin-header h1 { margin: 0; font-size: 24px; font-weight: 800; }
-        .badge-admin { background: var(--jula-orange); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-        .partner-card { background: white; border-radius: 16px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 6px solid var(--jula-blue); }
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --success: #2e7d32;
+            --warning: #ffc107;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        
+        /* 🪐 PANNEAU EN-TÊTE SUPERADMIN */
+        .admin-header { background: var(--card-bg); color: white; padding: 25px 30px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .admin-header h1 { margin: 0; font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .badge-admin { background: var(--jula-orange); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(245,124,0,0.2); }
+        
+        /* 🗂️ CARTES DE SÉCURITÉ PARTENAIRES */
+        .partner-card { background: var(--card-bg); border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-left: 6px solid var(--jula-blue); transition: transform 0.2s; }
+        .partner-card:hover { transform: translateY(-2px); }
         .partner-card.verified { border-left-color: var(--success); }
-        .partner-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .info-block span { display: block; font-size: 12px; color: #6c757d; font-weight: bold; text-transform: uppercase; }
-        .info-block p { margin: 5px 0 0 0; font-size: 16px; font-weight: 600; color: #333; }
-        .photo-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px; }
-        .photo-box { background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 8px; padding: 8px; text-align: center; }
-        .photo-box span { display: block; font-size: 11px; font-weight: bold; margin-bottom: 6px; color: #495057; }
-        .photo-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; transition: 0.2s; }
-        .photo-box img:hover { transform: scale(1.03); }
-        .btn-verify { background: var(--success); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-verify:hover { background: #218838; }
-        .status-badge { display: inline-block; background: #ffeeba; color: #856404; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: bold; }
-        .status-badge.ok { background: #d4edda; color: #155724; }
+        
+        .partner-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .info-block span { display: block; font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .info-block p { margin: 5px 0 0 0; font-size: 15.5px; font-weight: 600; color: #fff; }
+        
+        /* 📸 COMPARTIMENT DES DOCUMENTS NUMÉRIQUES CNI */
+        .photo-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .photo-box { background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; text-align: center; }
+        .photo-box span { display: block; font-size: 11px; font-weight: bold; margin-bottom: 8px; color: #95a5a6; text-transform: uppercase; }
+        .photo-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); }
+        .photo-box img:hover { transform: scale(1.02); border-color: var(--jula-orange); }
+        
+        /* 🟢 ACTION DE VALIDATION DU DOSSIER */
+        .btn-verify { background: var(--success); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(46,125,50,0.2); }
+        .btn-verify:hover { opacity: 0.9; }
+        
+        /* ⚠️ BADGES DE STATUT D'INSPECTION */
+        .status-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 193, 7, 0.1); color: var(--warning); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 193, 7, 0.2); }
+        .status-badge.ok { background: rgba(46, 125, 50, 0.1); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.2); }
     </style>
 </head>
 <body>
 
     <div class="admin-header">
-        <h1>🕵️ Center de Validation des Partenaires Jula</h1>
+        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">security</span> Centre de Validation des Partenaires Jula</h1>
         <div class="badge-admin">Jacky SuperAdmin</div>
     </div>
-
-    <% if (profiles.length === 0) { %>
-        <div style="text-align: center; color: #6c757d; margin-top: 50px; font-weight: bold;">
-            🎉 Aucun nouveau partenaire en attente de vérification !
-        </div>
-    <% } %>
-
-    <% profiles.forEach(function(profile) { %>
-        <div class="partner-card <%= profile.is_verified ? 'verified' : '' %>">
-            <div class="partner-info">
-                <div class="info-block"><span>Rôle</span><p>💼 <%= profile.role.toUpperCase() %></p></div>
-                <div class="info-block"><span>Nom Complet</span><p><%= profile.full_name %></p></div>
-                <div class="info-block"><span>Téléphone</span><p>📞 <%= profile.phone %></p></div>
-                <div class="info-block"><span>E-mail</span><p>✉️ <%= profile.email %></p></div>
-                <div class="info-block"><span>Pays / Ville</span><p>📍 <%= profile.country %></p></div>
-                <% if(profile.shop_name) { %>
-                    <div class="info-block"><span>Nom Établissement</span><p>🏪 <%= profile.shop_name %></p></div>
-                <% } %>
-                <% if(profile.vehicle_plate) { %>
-                    <div class="info-block"><span>Immatriculation</span><p>🏍️ <%= profile.vehicle_plate %></p></div>
-                <% } %>
-            </div>
-
-            <!-- 📸 EXPOSITION DES PIÈCES ET JUSTIFICATIFS DE CHAQUE PARTENAIRE -->
-            <div class="photo-gallery">
-                <% if (profile.cni_recto_url) { %>
-                    <div class="photo-box"><span>CNI (RECTO)</span><a href="<%= profile.cni_recto_url %>" target="_blank"><img src="<%= profile.cni_recto_url %>" alt="Recto"></a></div>
-                <% } %>
-                <% if (profile.cni_verso_url) { %>
-                    <div class="photo-box"><span>CNI (VERSO)</span><a href="<%= profile.cni_verso_url %>" target="_blank"><img src="<%= profile.cni_verso_url %>" alt="Verso"></a></div>
-                <% } %>
-                <% if (profile.photo_boutique_url) { %>
-                    <div class="photo-box"><span>BOUTIQUE / STOCK</span><a href="<%= profile.photo_boutique_url %>" target="_blank"><img src="<%= profile.photo_boutique_url %>" alt="Boutique"></a></div>
-                <% } %>
-                <% if (profile.photo_vehicule_url) { %>
-                    <div class="photo-box"><span>VÉHICULE</span><a href="<%= profile.photo_vehicule_url %>" target="_blank"><img src="<%= profile.photo_vehicule_url %>" alt="Véhicule"></a></div>
-                <% } %>
-            </div>
-
-            <div style="margin-top: 20px; text-align: right;">
-                <% if (!profile.is_verified) { %>
-                    <!-- Formulaire d'approbation directe -->
-                    <form action="/verify-partner" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<%= profile.id %>">
-                        <button type="submit" class="btn-verify">✅ Valider le partenaire</button>
-                    </form>
-                <% } else { %>
-                    <span class="status-badge ok">🔒 Compte Vérifié Officiel</span>
-                <% } %>
-            </div>
-        </div>
-    <% }); %>
-
-</body>
-</html>
