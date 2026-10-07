@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -54,3 +54,67 @@
         <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">security</span> Centre de Validation des Partenaires Jula</h1>
         <div class="badge-admin">Jacky SuperAdmin</div>
     </div>
+    <div class="container" style="max-width: 1000px; margin: 0 auto;">
+        <% if (profiles.length === 0) { %>
+            <div class="no-orders" style="text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; font-style: italic; border: 1px dashed var(--border-color); font-size: 14.5px;">
+                <span class="material-icons-round" style="font-size: 48px; color: #7f8c8d; display: block; margin-bottom: 10px;">celebration</span>
+                🎉 Aucun nouveau partenaire en attente de vérification sur la Zone CFA !
+            </div>
+        <% } %>
+
+        <% profiles.forEach(function(profile) { %>
+            <div class="partner-card <%= profile.is_verified ? 'verified' : '' %>">
+                <div class="partner-info">
+                    <div class="info-block"><span>Rôle</span><p style="color: var(--jula-orange);">💼 <%= profile.role.toUpperCase() %></p></div>
+                    <div class="info-block"><span>Nom Complet</span><p><%= profile.full_name %></p></div>
+                    <div class="info-block"><span>Téléphone</span><p>📞 <%= profile.phone %></p></div>
+                    <div class="info-block"><span>E-mail</span><p>✉️ <%= profile.email %></p></div>
+                    <div class="info-block"><span>Pays / Hub</span><p>📍 <%= profile.country %></p></div>
+                    <% if(profile.shop_name) { %>
+                        <div class="info-block"><span>Nom Établissement</span><p>🏪 <%= profile.shop_name %></p></div>
+                    <% } %>
+                    <% if(profile.vehicle_plate) { %>
+                        <div class="info-block"><span>Immatriculation</span><p>🏍️ <%= profile.vehicle_plate %></p></div>
+                    <% } %>
+                </div>
+
+                <!-- 📸 EXPOSITION DES PIÈCES ET JUSTIFICATIFS EN HAUTE DÉFINITION -->
+                <div class="photo-gallery">
+                    <% if (profile.cni_recto_url) { %>
+                        <div class="photo-box"><span>CNI (RECTO)</span><a href="<%= profile.cni_recto_url %>" target="_blank"><img src="<%= profile.cni_recto_url %>" alt="Recto"></a></div>
+                    <% } %>
+                    <% if (profile.cni_verso_url) { %>
+                        <div class="photo-box"><span>CNI (VERSO)</span><a href="<%= profile.cni_verso_url %>" target="_blank"><img src="<%= profile.cni_verso_url %>" alt="Verso"></a></div>
+                    <% } %>
+                    <% if (profile.photo_boutique_url) { %>
+                        <div class="photo-box"><span>BOUTIQUE / STOCK</span><a href="<%= profile.photo_boutique_url %>" target="_blank"><img src="<%= profile.photo_boutique_url %>" alt="Boutique"></a></div>
+                    <% } %>
+                    <% if (profile.photo_vehicule_url) { %>
+                        <div class="photo-box"><span>VÉHICULE</span><a href="<%= profile.photo_vehicule_url %>" target="_blank"><img src="<%= profile.photo_vehicule_url %>" alt="Véhicule"></a></div>
+                    <% } %>
+                </div>
+
+                <div style="margin-top: 25px; text-align: right; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                    <% if (!profile.is_verified) { %>
+                        <!-- Formulaire d'approbation en un clic relié à Supabase -->
+                        <form action="/verify-partner" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="<%= profile.id %>">
+                            <button type="submit" class="btn-verify">
+                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">verified_user</span>
+                                Valider et Activer le partenaire
+                            </button>
+                        </form>
+                    <% } else { %>
+                        <span class="status-badge ok">
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">lock</span>
+                            Compte Vérifié Officiel
+                        </span>
+                    <% } %>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+</body>
+</html>
+
