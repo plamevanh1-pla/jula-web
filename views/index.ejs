@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vendorhub Jula - Devenez Vendeur & Partenaire Logistique</title>
-    <!-- Icônes Modernes Google Material -->
+    <title>Portail Jula — Devenez Vendeur & Partenaire Logistique</title>
+    <!-- Importation officielle des icônes Google Material -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
             --jula-blue: #1072ba; 
             --glovo-green: #25D366; 
-            --dark: #1a1d20; 
             --card-bg: #1a1d21;
             --border-color: #2d3139;
             --light-bg: #111417; 
@@ -22,118 +21,115 @@
         .sidebar { position: fixed; top: 0; left: -320px; width: 300px; height: 100%; background-color: var(--card-bg); border-right: 1px solid var(--border-color); z-index: 1000; padding: 25px 20px; transition: left 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 5px 0 25px rgba(0,0,0,0.5); box-sizing: border-box; }
         .sidebar.active { left: 0; }
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
-        .sidebar-title { font-size: 16px; font-weight: 800; color: var(--jula-orange); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .sidebar-title { font-size: 15px; font-weight: 800; color: var(--jula-orange); display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-close-sidebar { background: none; border: none; color: #7f8c8d; cursor: pointer; display: flex; align-items: center; }
         .btn-close-sidebar:hover { color: var(--jula-orange); }
         
-        /* 🔗 LIENS INTERNES DU MENU */
+        /* 🔗 LIENS INTERNES DU MENU COULISSANT */
         .sidebar-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; margin-top: 20px; }
         .sidebar-link { display: flex; align-items: center; gap: 12px; color: #ecf0f1; text-decoration: none; padding: 12px 14px; border-radius: 6px; font-size: 14px; font-weight: 500; transition: all 0.2s; }
         .sidebar-link:hover { background: rgba(255, 255, 255, 0.03); color: var(--jula-orange); }
         
-        /* 🔵 BOUTONS VERT ET BLEU REGLEMENTAIRES EN BAS DE SIDEBAR */
+        /* 🔵🟢 BOUTONS DE COMMANDE SÉCURISÉS EN BAS DE LA SIDEBAR */
         .sidebar-footer { border-top: 1px solid var(--border-color); padding-top: 20px; display: flex; flex-direction: column; gap: 10px; }
         .btn-sidebar-blue { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(16, 114, 186, 0.15); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.3); text-decoration: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
         .btn-sidebar-green { display: flex; align-items: center; justify-content: center; gap: 8px; background-color: rgba(46, 125, 50, 0.15); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.3); text-decoration: none; padding: 12px; border-radius: 6px; font-size: 13px; font-weight: bold; transition: all 0.2s; }
         .btn-sidebar-blue:hover { background-color: var(--jula-blue); color: #fff; }
         .btn-sidebar-green:hover { background-color: #2e7d32; color: #fff; }
 
-        /* 🪐 BARRE DE NAVIGATION SUPÉRIEURE */
+        /* 🪐 BARRE DE NAVIGATION SUPÉRIEURE AVEC ICÔNE CARREAUX TACTILE */
         .navbar { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .btn-menu-trigger { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: bold; transition: color 0.2s; outline: none; }
-        .btn-menu-trigger:hover { color: var(--jula-orange); }
+        .btn-menu-trigger { background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
+        .btn-menu-trigger:hover { background-color: rgba(255, 255, 255, 0.03); color: var(--jula-orange); }
         .nav-logo { font-size: 20px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
         
         .hero { background: linear-gradient(135deg, #132237, #1072ba); color: white; padding: 80px 20px; text-align: center; position: relative; border-bottom: 1px solid var(--border-color); }
         .hero-badge { background: var(--jula-orange); color: white; padding: 6px 14px; border-radius: 30px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: inline-block; margin-bottom: 20px; }
-        .hero h1 { font-size: 46px; margin: 0 0 15px 0; font-weight: 800; }
-        .hero p { font-size: 19px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
+        .hero h1 { font-size: 40px; margin: 0 0 15px 0; font-weight: 800; line-height: 50px; }
+        .hero p { font-size: 18px; max-width: 700px; margin: 0 auto 30px auto; opacity: 0.9; }
         .hero-btns { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-        .btn-primary { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
-        .btn-secondary { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 16px; border: 2px solid white; transition: 0.2s; }
+        .btn-primary { background-color: var(--jula-orange); color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.3); transition: 0.2s; }
+        .btn-secondary { background-color: transparent; color: white; padding: 14px 32px; border-radius: 8px; font-weight: bold; text-decoration: none; font-size: 15px; border: 2px solid white; transition: 0.2s; }
         .btn-primary:hover, .btn-secondary:hover { transform: translateY(-2px); opacity: 0.9; }
         
         .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; box-sizing: border-box; }
-        .section-title { text-align: center; margin-top: 40px; margin-bottom: 40px; }
-        .section-title h2 { font-size: 32px; color: #fff; margin: 0 0 10px 0; font-weight: 700; }
-        .section-title p { color: #95a5a6; font-size: 16px; margin: 0; }
+        .section-title { text-align: center; margin-top: 20px; margin-bottom: 40px; }
+        .section-title h2 { font-size: 30px; color: #fff; margin: 0 0 10px 0; font-weight: 700; }
+        .section-title p { color: #95a5a6; font-size: 15.5px; margin: 0; }
         .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 60px; }
         .step-card { background: var(--card-bg); padding: 35px; border-radius: 12px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--border-color); position: relative; }
         .step-num { font-size: 48px; font-weight: 900; color: rgba(16,114,186,0.1); position: absolute; top: 15px; right: 25px; }
-        .step-card h3 { font-size: 20px; margin: 0 0 12px 0; color: var(--jula-blue); }
-        .step-card p { margin: 0; color: #95a5a6; font-size: 14.5px; }
+        .step-card h3 { font-size: 19px; margin: 0 0 12px 0; color: var(--jula-blue); }
+        .step-card p { margin: 0; color: #95a5a6; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <!-- 🪐 STRUCTURE INTERACTIVE DE LA SIDEBAR GAUCHE -->
+    <!-- 🪐 INTERFACE ACTIVE DE LA SIDEBAR GAUCHE -->
     <div class="sidebar" id="julaSidebar">
         <div style="display: flex; flex-direction: column; flex: 1;">
             <div class="sidebar-header">
                 <div class="sidebar-title">
                     <span class="material-icons-round" style="color: var(--jula-orange);">menu_open</span>
-                    Menu Principal
+                    Options de Navigation
                 </div>
                 <button class="btn-close-sidebar" onclick="toggleJulaSidebar()">
                     <span class="material-icons-round" style="font-size: 24px;">close</span>
                 </button>
             </div>
 
-            <!-- ENCART DES LIENS INTERNES ET INFOS DE LA SOCIÉTÉ -->
+            <!-- LIENS INTERNES EN FRANÇAIS PUR -->
             <div class="sidebar-menu">
                 <a href="/login" class="sidebar-link">
                     <span class="material-icons-round" style="color: var(--jula-orange);">vpn_key</span>
-                    🔐 Connexion Espace Pro
+                    Connexion Espace Professionnel
                 </a>
                 <a href="/jacky-superadmin-control" class="sidebar-link" style="border: 1px dashed rgba(245,124,0,0.3); border-radius: 6px;">
                     <span class="material-icons-round" style="color: var(--jula-orange);">security</span>
-                    🕵️‍♂️ QG Validation Jacky
+                    Espace Secret SuperAdmin Jacky
                 </a>
-                <div style="margin-top: 15px; padding: 12px; background: rgba(255,255,255,0.01); border-radius: 6px; border: 1px solid var(--border-color);">
-                    <span style="font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">ℹ️ Société Jula Officiel</span>
-                    <p style="font-size: 13px; color: #fff; margin: 6px 0 0 0; font-weight: 500;">✉️ support@jula-network.com</p>
-                    <p style="font-size: 11px; color: var(--jula-orange); margin: 4px 0 0 0; font-weight: bold;">📅 Catalogue Mis à jour en Direct</p>
+                <div style="margin-top: 20px; padding: 12px; background: rgba(255,255,255,0.01); border-radius: 6px; border: 1px solid var(--border-color);">
+                    <span style="font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">ℹ️ Entreprise Jula Officiel</span>
+                    <p style="font-size: 13.5px; color: #fff; margin: 6px 0 0 0; font-weight: 500;">✉️ support@jula-network.com</p>
+                    <p style="font-size: 11px; color: var(--jula-orange); margin: 4px 0 0 0; font-weight: bold;">📅 Catalogue mis à jour en direct</p>
                 </div>
             </div>
         </div>
 
-        <!-- 🔵🟢 ZONE DES BOUTONS BLEU ET VERT RÉGLEMENTAIRES -->
+        <!-- CLAUSES EXIGÉES EN BAS DU TIROIR GAUCHE (BLEU / VERT) -->
         <div class="sidebar-footer">
             <a href="/politique-confidentialite" class="btn-sidebar-blue">
                 <span class="material-icons-round" style="font-size: 16px;">gavel</span>
-                🔒 Politique de Confidentialité
+                Charte de Confidentialité Jula
             </a>
             <a href="#fonctionnement" class="btn-sidebar-green" onclick="toggleJulaSidebar()">
                 <span class="material-icons-round" style="font-size: 16px;">help_outline</span>
-                📖 Comment utiliser le site ?
+                Comment utiliser le site internet ?
             </a>
         </div>
     </div>
-    <!-- 🪐 BARRE DE NAVIGATION FIXE SUPÉRIEURE -->
+
+    <!-- 🪐 BARRE DE NAVIGATION FIXE SUPÉRIEURE AVEC LOGO CARREAUX -->
     <nav class="navbar">
         <button class="btn-menu-trigger" onclick="toggleJulaSidebar()">
-            <span class="material-icons-round" style="font-size: 24px;">menu</span>
-            MENU
+            <span class="material-icons-round" style="font-size: 28px;">grid_view</span>
         </button>
         <div class="nav-logo">
             <span class="material-icons-round" style="color: var(--jula-orange); font-size: 24px;">hub</span>
-            JULA NETWORK
+            RÉSEAU JULA
         </div>
-        <div style="width: 70px;"></div> <!-- Équilibreur pour centrer le logo -->
+        <div style="width: 44px;"></div>
     </nav>
-
-    <!-- 🌌 SECTION PRINCIPALE HERO -->
     <div class="hero">
-        <span class="hero-badge">Portail Officiel Jula Afrique de l'Ouest</span>
+        <span class="hero-badge">Portail Régional Afrique de l'Ouest</span>
         <h1>Devenez Partenaire Jula & Boostez vos Revenus</h1>
-        <p>Rejoignez l'écosystème commercial interconnecté leader en Côte d'Ivoire, Sénégal, Togo et Bénin. Vendez ou livrez en toute liberté.</p>
+        <p>Rejoignez le réseau commercial interconnecté leader en Côte d'Ivoire, au Sénégal, au Togo et au Bénin. Vendez ou livrez en toute liberté.</p>
         <div class="hero-btns">
-            <a href="#recrutement" class="btn-primary">Créer mon compte</a>
+            <a href="#recrutement" class="btn-primary">Créer mon compte de partenaire</a>
             <a href="/login" class="btn-secondary">🔐 Connexion Espace Pro</a>
         </div>
     </div>
 
-    <!-- 📋 SECTION GUIDE DE FONCTIONNEMENT -->
     <div class="container" id="fonctionnement">
         <div class="section-title">
             <h2>Comment ça fonctionne ?</h2>
@@ -152,117 +148,106 @@
             </div>
             <div class="step-card">
                 <div class="step-num">03</div>
-                <h3>3. Encaissez vos Gains</h3>
-                <p>Recevez vos paiements et commissions de façon automatisée et instantanée dès que les colis arrivent à destination.</p>
+                <h3>3. Touchez vos Gains</h3>
+                <p>Recevez vos paiements et commissions de façon automatisée et instantanée dès que les téléphones arrivent à destination.</p>
             </div>
         </div>
 
-        <!-- 🏪 3. LES OFFRES DE RECRUTEMENT GLOVO/JUMIA STYLE -->
+        <!-- 🏪 SÉLECTION DES ACTIVITÉS STYLE JUMIA ÉLITE -->
         <div class="section-title" id="recrutement">
-            <h2>Choisissez votre profil Jula</h2>
+            <h2>Sélectionnez votre activité régionale</h2>
             <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
         </div>
         
         <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px;">
             <!-- BOUTIQUE / GROSSISTE -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between;">
-                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🏬 Boutique / Grossiste</h3>
-                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">0 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">de frais d'exposition</span></div>
-                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Exposez vos articles sur notre catalogue web. Vos produits deviennent instantanément visibles et commandables par des milliers de clients sur l'application mobile Jula.</p>
-                <a href="/register-seller" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🏬 Boutique / Grossiste</h3>
+                <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">0 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">de frais d'affichage</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
+                <a href="/register-seller" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: var(--jula-blue); box-shadow: 0 4px 10px rgba(16,114,186,0.2);">Ouvrir mon Magasin</a>
             </div>
 
             <!-- COURSIER LIVREUR -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--glovo-green); display: flex; flex-direction: column; justify-content: space-between;">
-                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🛵 Coursier Livreur</h3>
-                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/semaine</span></div>
-                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Soyez votre propre patron ! Moto et permis obligatoires. Recevez les notifications de livraison de colis CFA directement sur votre smartphone et maximisez vos gains logistiques.</p>
-                <a href="/register-driver" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--glovo-green);">Devenir Coursier</a>
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--glovo-green); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🛵 Coursier Livreur Moto</h3>
+                <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/semaine</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Soyez votre propre patron ! Engin décent et permis requis. Recevez les fiches de livraison directement sur votre smartphone et maximisez vos gains logistiques.</p>
+                <a href="/register-driver" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: #2e7d32; box-shadow: 0 4px 10px rgba(46,125,50,0.2);">Devenir Coursier Officiel</a>
             </div>
 
-            <!-- POINT RELAIS AGREÉ -->
-            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between;">
-                <h3 style="font-size: 24px; margin: 0 0 10px 0; color: #fff;">🏪 Point Relais Agréé</h3>
-                <div class="salary" style="font-size: 26px; font-weight: 800; margin: 15px 0; color: #fff;">Commissions <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/colis stocké</span></div>
-                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique (boutique, supérette). Devenez un point de dépôt officiel Jula pour la réception et la sécurisation des colis transfrontaliers de votre quartier.</p>
-                <a href="/register-station" class="btn-portal" style="display: block; padding: 15px; border-radius: 8px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 15px; background-color: var(--jula-orange);">Inscrire mon Point</a>
+            <!-- POINT RELAIS AGRÉÉ -->
+            <div class="portal-card" style="background: var(--card-bg); border-radius: 16px; padding: 40px; border: 1px solid var(--border-color); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #fff; font-weight: 700;">🏪 Point Relais Agréé</h3>
+                <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: #fff;">Commissions <span style="font-size:14px; color:#95a5a6; font-weight:normal;">/colis géré</span></div>
+                <p style="color: #95a5a6; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique. Devenez un guichet de dépôt officiel Jula pour la garde sécurisée des colis de smartphones de votre quartier.</p>
+                <a href="/register-station" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: var(--jula-orange); box-shadow: 0 4px 10px rgba(245,124,0,0.2);">Inscrire mon Espace Physique</a>
             </div>
         </div>
-        <!-- 4. GRILLE DES TARIFS LOGISTIQUES -->
+        <!-- TARIFS LOGISTIQUES -->
         <div class="section-title">
-            <h2>📊 Grille Tarifaire Jula Express (Fulfillment)</h2>
+            <h2>📊 Grille Tarifaire Jula Express</h2>
             <p>Stockage, Emballage professionnel et Expédition clés en main depuis nos entrepôts centraux</p>
         </div>
-        <div class="pricing-section" style="background: var(--card-bg); border-radius: 16px; padding: 30px; margin-bottom: 60px; border: 1px solid var(--border-color); overflow-x: auto;">
-            <table class="pricing-table" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <div class="pricing-section" style="background: var(--card-bg); border-radius: 16px; padding: 30px; margin-bottom: 60px; border: 1px solid var(--border-color); overflow-x: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color);">Taille du Produit</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color);">Exemples d'articles</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color);">Stockage (Par mois / Unité)</th>
-                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color);">Emballage & Préparation</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Volume Article</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Exemples de produits</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Stockage Mensuel</th>
+                        <th style="background-color: rgba(255, 255, 255, 0.02); color: #fff; padding: 15px; font-weight: bold; border-bottom: 2px solid var(--border-color); font-size: 14px;">Préparation & Colisage</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;"><b>Petit produit</b></td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">Smartphones, Bijoux, Écouteurs, Maquillage</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px; font-weight: bold; color: var(--jula-orange);">500 FCFA</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">300 FCFA /colis expédié</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px;"><b>Petit format</b></td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">Smartphones, Écouteurs sans fil, Tablettes tactiles</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--jula-orange); font-weight: 800;">500 FCFA</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">300 FCFA /envoi</td>
                     </tr>
                     <tr>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;"><b>Moyen produit</b></td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">Ordinateurs portables, Micro-ondes, Mixeurs, Sacs de mode</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px; font-weight: bold; color: var(--jula-orange);">1 500 FCFA</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">400 FCFA /colis expédié</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;"><b>Gros produit</b></td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">Téléviseurs, Réfrigérateurs, Ventilateurs sur pied</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px; font-weight: bold; color: var(--jula-orange);">3 000 FCFA</td>
-                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14.5px;">600 FCFA /colis expédié</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px;"><b>Format Moyen</b></td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">Ordinateurs portables, Modems, Box Internet, Consoles</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--jula-orange); font-weight: 800;">1 500 FCFA</td>
+                        <td style="padding: 15px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: #95a5a6;">400 FCFA /envoi</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <!-- 5. FOIRE AUX QUESTIONS (FAQ) -->
+        <!-- FOIRE AUX QUESTIONS (FAQ) -->
         <div class="section-title">
             <h2>Questions Fréquentes</h2>
             <p>Tout ce que vous devez savoir pour démarrer sereinement</p>
         </div>
-        <div class="faq-section" style="background: var(--card-bg); padding: 40px; border-radius: 16px; margin-bottom: 60px; border: 1px solid var(--border-color);">
-            <div class="faq-item" style="border-bottom: 1px solid var(--border-color); padding: 20px 0;">
-                <div class="faq-q" style="font-weight: 700; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">❓ L'inscription sur Jula est-elle payante ?</div>
-                <p class="faq-a" style="color: #95a5a6; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px;">Non, l'ouverture de compte et la publication classique des produits sur la plateforme sont totalement gratuites pour tous les partenaires.</p>
+        <div class="faq-section" style="background: var(--card-bg); padding: 40px; border-radius: 16px; margin-bottom: 60px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.15);">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px;">
+                <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ L'inscription sur Jula est-elle payante ?</div>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Non, l'ouverture de votre espace magasin et l'affichage de vos produits sur le catalogue sont entièrement gratuits pour tous les grossistes régionaux.</p>
             </div>
-            <div class="faq-item" style="border-bottom: 1px solid var(--border-color); padding: 20px 0;">
-                <div class="faq-q" style="font-weight: 700; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">❓ Comment s'effectue le retrait de mes gains en zone CFA ?</div>
-                <p class="faq-a" style="color: #95a5a6; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px;">Vos fonds sont bloqués de manière sécurisée et débloqués automatiquement via Jula Pay instantanément dès que l'acheteur confirme la réception de la marchandise.</p>
+            <div style="border-bottom: 1px solid var(--border-color); padding: 20px 0;">
+                <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ Comment s'effectue le retrait de mes gains en zone CFA ?</div>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Vos fonds sont sécurisés temporairement par Jula Pay et débloqués automatiquement vers votre compte Mobile Money dès que le client valide la réception physique de son smartphone.</p>
             </div>
-            <div class="faq-item" style="border-bottom: 1px solid var(--border-color); padding: 20px 0;">
-                <div class="faq-q" style="font-weight: 700; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">🍊 Qu'est-ce que le service "Jula Express" ?</div>
-                <p class="faq-a" style="color: #95a5a6; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px;">C'est notre service de traitement logistique d'élite. Vous déposez vos stocks à l'avance dans notre entrepôt central Jula. Dès qu'un client commande, nos équipes s'occupent de l'emballage professionnel et de l'expédition immédiate sous 2 heures, sans que vous n'ayez à vous déplacer !</p>
-            </div>
-            <div class="faq-item" style="border-top: none; padding: 20px 0 0 0;">
-                <div class="faq-q" style="font-weight: 700; font-size: 16px; color: #fff; margin-bottom: 8px; display: flex; align-items: center; gap: 10px;">❓ Dans quels pays le réseau Jula opère-t-il ?</div>
-                <p class="faq-a" style="color: #95a5a6; font-size: 14px; margin: 0; padding-left: 5px; line-height: 22px;">Jula interconnecte quatre marchés clés d'Afrique de l'Ouest : la Côte d'Ivoire, le Sénégal, le Togo et le Bénin.</p>
+            <div style="padding-top: 20px;">
+                <div style="font-weight: 700; font-size: 15.5px; color: #fff; margin-bottom: 8px;">❓ Dans quels pays le réseau logistique opère-t-il ?</div>
+                <p style="color: #95a5a6; font-size: 14px; margin: 0; line-height: 22px;">Jula interconnecte quatre marchés majeurs d'Afrique de l'Ouest : la Côte d'Ivoire, le Sénégal, le Togo et le Bénin.</p>
             </div>
         </div>
 
-        <!-- 🚀 EMBALLAGE D'ANNONCE GOOGLE PLAY STORE -->
-        <div style="margin: 20px auto; max-width: 900px; padding: 20px; background: rgba(255, 255, 255, 0.02); border-radius: 12px; text-align: center; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange);">
-            <p style="margin: 0; font-weight: bold; color: #fff; font-size: 14.5px; letter-spacing: 0.3px;">
+        <!-- ANNONCE GOOGLE PLAY STORE -->
+        <div style="margin: 20px auto; max-width: 900px; padding: 20px; background: rgba(255, 255, 255, 0.02); border-radius: 12px; text-align: center; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+            <p style="margin: 0; font-weight: bold; color: #fff; font-size: 14px; letter-spacing: 0.3px;">
                 📱 L'application officielle Jula arrive très bientôt en téléchargement sécurisé sur le Google Play Store !
             </p>
         </div>
 
-        <!-- 🔒 FOOTER SÉCURISÉ RESTRUCTURÉ -->
-        <div class="footer" style="text-align: center; padding-top: 40px; border-top: 1px solid var(--border-color); font-size: 13px; color: #7f8c8d; font-weight: 500; margin-top: 40px;">
-            <p>© 2026 Jula Logistique & Co. • Interconnexion Ouest-Africaine • Abidjan - Dakar - Lomé - Cotonou • UEMOA Tech v1.1.0</p>
+        <!-- PIED DE PAGE ET SÉCURITÉ -->
+        <div class="footer" style="text-align: center; padding-top: 40px; border-top: 1px solid var(--border-color); font-size: 12.5px; color: #7f8c8d; font-weight: 500; margin-top: 40px; letter-spacing: 0.3px;">
+            <p>© 2026 Réseau Logistique Jula & Co. • Interconnexion Régionale UEMOA • Abidjan - Dakar - Lomé - Cotonou • v1.1.0</p>
         </div>
-
-    </div> <!-- Fermeture du .container principal -->
+    </div> <!-- Fin du conteneur .container -->
 
     <!-- ⚙️ LE MOTEUR JAVASCRIPT DE TA SIDEBAR INTERACTIVE -->
     <script>
@@ -273,7 +258,7 @@
             }
         }
 
-        // Fermer la Sidebar automatiquement si le grossiste clique en dehors du menu
+        // Fermer automatiquement le tiroir si le doigt clique en dehors du menu
         document.addEventListener('click', function(event) {
             const sidebar = document.getElementById('julaSidebar');
             const menuTrigger = document.querySelector('.btn-menu-trigger');
@@ -287,6 +272,3 @@
     </script>
 </body>
 </html>
-
-        
-      
