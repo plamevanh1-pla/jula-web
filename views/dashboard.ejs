@@ -1,146 +1,183 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de Bord Vendeur Jula</title>
-    <!-- Icônes Modernes Google Material -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <title>Espace Grossiste Jula — Publier un Article</title>
+    <!-- Chargement du moteur d'icônes universel FontAwesome -->
+    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         :root { 
             --jula-orange: #f57c00; 
             --jula-blue: #1072ba; 
-            --dark-bg: #111417; 
-            --card-bg: #1a1d21;
-            --border-color: #2d3139;
+            --couleur-bordure: #dee2e6; 
+            --fond-sombre: #f8f9fa; 
         }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--fond-sombre); margin: 0; padding: 0; color: #212529; line-height: 1.6; }
         
-        /* 🪐 BARRE DE NAVIGATION EN MODE SOMBRE */
-        .nav { background-color: var(--card-bg); padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; color: white; border-radius: 12px; border: 1px solid var(--border-color); }
-        .nav h2 { margin: 0; font-size: 20px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-        .nav span { font-size: 13px; color: #95a5a6; }
-        .nav b { color: var(--jula-orange); }
+        .barre-superieure { background-color: #1072ba; border-bottom: 3px solid var(--jula-orange); padding: 15px 24px; display: flex; justify-content: space-between; align-items: center; color: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .titre-barre { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .bouton-deconnexion { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 6px; transition: 0.2s; }
+        .bouton-deconnexion:hover { background-color: #d32f2f; }
 
-        /* 📋 SECTION CONTENEUR */
-        .container { max-width: 600px; margin: 30px auto; background: var(--card-bg); padding: 35px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); }
-        h3 { color: #fff; margin-top: 0; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .conteneur { max-width: 700px; margin: 30px auto; padding: 0 20px; box-sizing: border-box; }
+        .carte-formulaire { background: #ffffff; border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .carte-formulaire h2 { font-size: 22px; color: #212529; margin-top: 0; margin-bottom: 20px; font-weight: 700; border-bottom: 2px solid var(--fond-sombre); padding-bottom: 10px; }
         
-        /* 📝 STYLES FORMULAIRE PREMIUM */
-        label { font-weight: 600; font-size: 13px; color: #ecf0f1; display: block; margin-top: 18px; letter-spacing: 0.3px; }
-        input, select, textarea { width: 100%; padding: 12px 14px; margin-top: 6px; border-radius: 6px; background-color: var(--dark-bg); border: 1px solid var(--border-color); color: #fff; font-size: 14.5px; box-sizing: border-box; outline: none; transition: border-color 0.2s; font-family: inherit; }
-        input:focus, select:focus, textarea:focus { border-color: var(--jula-orange); }
-        textarea { resize: vertical; }
-        input[type="file"] { background: rgba(255, 255, 255, 0.01); padding: 15px; border: 1px dashed var(--border-color); cursor: pointer; color: #7f8c8d; }
+        .groupe-champ { margin-bottom: 20px; }
+        .groupe-champ label { display: block; font-size: 14px; font-weight: bold; color: #495057; margin-bottom: 8px; }
+        .champ-saisie { width: 100%; padding: 12px; border: 1px solid var(--couleur-bordure); border-radius: 6px; font-size: 14.5px; box-sizing: border-box; transition: border-color 0.2s; background: #ffffff; color: #212529; }
+        .champ-saisie:focus { border-color: var(--jula-blue); outline: none; }
         
-        /* 🚀 BOUTONS D'ACTIONS */
-        .btn-publish { background: linear-gradient(135deg, var(--jula-orange), #e65100); color: white; border: none; padding: 14px; width: 100%; border-radius: 6px; font-weight: bold; margin-top: 30px; cursor: pointer; font-size: 15px; box-shadow: 0 4px 12px rgba(245,124,0,0.2); transition: opacity 0.2s; }
-        .btn-publish:hover { opacity: 0.95; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        small { color: #7f8c8d; font-size: 11px; font-weight: 500; display: block; margin-top: 5px; }
+        .grille-double { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Zone de capture photo optimisée pour mobile */
+        .zone-photo { border: 2px dashed var(--jula-blue); padding: 20px; border-radius: 8px; text-align: center; background: rgba(16, 114, 186, 0.02); cursor: pointer; position: relative; transition: 0.2s; }
+        .zone-photo:hover { background: rgba(16, 114, 186, 0.05); }
+        .zone-photo i { font-size: 32px; color: var(--jula-blue); margin-bottom: 8px; }
+        .zone-photo p { margin: 0; font-size: 13.5px; color: #6c757d; }
+        .fichier-cache { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .bouton-publier { width: 100%; background-color: var(--jula-orange); color: white; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(245,124,0,0.25); transition: 0.2s; margin-top: 10px; }
+        .bouton-publier:hover { transform: translateY(-1px); opacity: 0.95; }
+        
+        /* Indicateur de calcul en temps réel du pourcentage */
+        .badge-aperçu-reduction { display: inline-block; background-color: rgba(245,124,0,0.1); color: var(--jula-orange); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; margin-top: 8px; display: none; }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <h2><span class="material-icons-round" style="color: var(--jula-orange);">storefront</span> Espace Magasin Vendeur</h2>
-        <span>Connecté : <b><%= email %></b></span>
+
+    <div class="barre-superieure">
+        <div class="titre-barre"><i class="fa-solid fa-store"></i> Réseau Jula — Espace Grossiste</div>
+        <a href="/login" class="bouton-deconnexion"><i class="fa-solid fa-right-from-bracket"></i> Quitter</a>
     </div>
 
-    <!-- 📦 BOUTON DE REDIRECTION VERS LE CARNET DES COMMANDES -->
-    <div style="background: var(--card-bg); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 25px;">
-        <h3 style="margin: 0 0 10px 0; color: #fff; border: none; padding: 0;"><span class="material-icons-round" style="color: var(--jula-orange);">assignment_turned_in</span> Vos Ventes Jula en Direct</h3>
-        <p style="margin: 0 0 20px 0; color: #95a5a6; font-size: 14px; line-height: 1.5;">Consultez les colis en attente de préparation, gérez les livraisons express et lisez les adresses physiques de livraison de vos acheteurs.</p>
-        
-        <a href="/vendedor/dashboard-orders/<%= userId %>" style="display: inline-block; background: var(--jula-orange); color: white; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 14px; box-shadow: 0 4px 12px rgba(245,124,0,0.2); transition: background-color 0.2s;">
-            🛒 Ouvrir mon Carnet de Commandes →
-        </a>
+    <div class="conteneur">
+        <div class="carte-formulaire">
+            <h2><i class="fa-solid fa-plus-circle" style="color: var(--jula-orange);"></i> Ajouter un nouvel article au rayon</h2>
+            
+            <!-- Formulaire connecté en direct à notre route d'upload du server.js -->
+            <form id="formulairePublication" enctype="multipart/form-data">
+                <!-- Identifiant caché pour lier le vendeur -->
+                <input type="hidden" name="userId" value="<%= userId %>">
+
+                <div class="groupe-champ">
+                    <label for="title">Titre du produit ou Modèle de smartphone</label>
+                    <input type="text" id="title" name="title" class="champ-saisie" placeholder="Exemple : Tecno Pop 9 Pro 128Go" required>
+                </div>
+
+                <div class="groupe-champ">
+                    <label for="category">Catégorie du rayon</label>
+                    <select id="category" name="category" class="champ-saisie" required>
+                        <option value="📱 Écrans Connectés">📱 Écrans Connectés</option>
+                        <option value="🔥 Offres Phares Jula">🔥 Offres Phares Jula</option>
+                        <option value="💻 Parcs Informatiques">💻 Parcs Informatiques</option>
+                    </select>
+                </div>
+
+                <div class="grille-double">
+                    <div class="groupe-champ">
+                        <label for="price">Prix d'origine (FCFA)</label>
+                        <input type="number" id="price" name="price" class="champ-saisie" placeholder="Ex : 100000" oninput="calculerPourcentageRemise()" required>
+                    </div>
+                    <div class="groupe-champ">
+                        <label for="promo_price">Prix promotionnel (Optionnel - FCFA)</label>
+                        <input type="number" id="promo_price" name="promo_price" class="champ-saisie" placeholder="Ex : 80000" oninput="calculerPourcentageRemise()">
+                        <div id="apercuReduction" class="badge-aperçu-reduction"></div>
+                    </div>
+                </div>
+                <div class="grille-double">
+                    <div class="groupe-champ">
+                        <label for="stock">Quantité disponible en stock</label>
+                        <input type="number" id="stock" name="stock" class="champ-saisie" value="1" min="1" required>
+                    </div>
+                    <div class="groupe-champ">
+                        <label>Photo officielle de l'article</label>
+                        <div class="zone-photo">
+                            <i class="fa-solid fa-camera"></i>
+                            <p id="textePhoto">Cliquez pour prendre une photo ou ouvrir votre galerie</p>
+                            <!-- L'attribut accept="image/*" force l'ouverture de l'appareil photo sur le Tecno Pop 9 -->
+                            <input type="file" id="photoFichier" name="image" class="fichier-cache" accept="image/*" onchange="validerFichierPhoto()" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="groupe-champ">
+                    <label for="description">Fiche technique ou détails du produit</label>
+                    <textarea id="description" name="description" class="champ-saisie" rows="4" placeholder="Ex : État neuf, scellé dans le carton, garantie de 12 mois officielle..." required></textarea>
+                </div>
+
+                <button type="submit" class="bouton-publier" id="btnValider">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Valider et mettre en rayon sur Jula
+                </button>
+            </form>
+        </div>
     </div>
-    <div class="container">
-        <h3><span class="material-icons-round" style="color: var(--jula-orange); font-size: 20px;">add_circle_outline</span> Publier un nouvel article sur Jula</h3>
-        
-        <form action="/publish-product" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="userId" value="<%= userId %>">
 
-            <label>Modèle ou Nom du Smartphone :</label>
-            <input type="text" name="title" required placeholder="Ex: Tecno Pop 9 Pro 256Go">
-
-            <label>Description détaillée de l'appareil :</label>
-            <textarea name="description" rows="4" required placeholder="Décrivez la couleur, l'état de la batterie, la garantie grossiste fournie..."></textarea>
-       
-            <!-- GESTION DU STOCK DE SMARTPHONES -->
-            <div class="form-group" style="margin-top: 15px;">
-                <label>📦 Quantité de pièces en Stock disponible :</label>
-                <input type="number" name="stock" value="10" min="1" required>
-                <small>Indiquez le nombre exact d'appareils de ce modèle actuellement disponibles dans vos rayons.</small>
-            </div>
-
-            <label>Prix de vente de base (en FCFA) :</label>
-            <input type="number" name="price" required placeholder="Ex: 125000">
-
-            <!-- OPTION PRIX BARRÉ STYLE JUMIA -->
-            <div class="form-group" style="margin-top: 15px;">
-                <label>🔥 Prix Promotionnel réduit (Optionnel - en FCFA) :</label>
-                <input type="number" name="promo_price" placeholder="Ex: 95000 (Laissez vide s'il n'y a pas de réduction)">
-                <small>Si renseigné, le prix d'origine sera automatiquement barré à l'écran sur le Tecno Pop 9 de l'acheteur !</small>
-            </div>
-
-            <!-- CHOIX IMAGE DE PRODUCTION -->
-            <label>📸 Sélectionner la photo du produit :</label>
-            <input type="file" name="product_photo" accept="image/*" required>
-
-            <label>Rayon ou Catégorie Jula :</label>
-            <select name="category">
-                <option value="Électronique">📱 Électronique & Téléphonie</option>
-                <option value="Informatique">💻 Ordinateurs & Accessoires</option>
-                <option value="Électroménager">📺 Électroménager & Maison</option>
-                <option value="Mode">👗 Mode, Vêtements & Chaussures</option>
-            </select>
-
-            <button type="submit" class="btn-publish">Ajouter et Propulser au Rayon Jula</button>
-        </form>
-    </div>
-
-    <!-- MOTEUR DE PROPULSION ASYNCHRONNE SANS ÉCRAN BLANC -->
+    <!-- ⚙️ ROBOT DE LOGIQUE COMMERCIALE EN TEMPS RÉEL (FRANÇAIS UEMOA) -->
     <script>
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault(); 
-                
-                const formData = new FormData(form);
-                const button = form.querySelector('button[type="submit"]');
-                if (button) {
-                    button.disabled = true;
-                    button.innerText = "Propulsion en cours...";
-                }
+        // 1. CALCUL AUTOMATIQUE ET INSTANTANÉ DU POURCENTAGE DE RÉDUCTION
+        function calculerPourcentageRemise() {
+            const prixOrigine = parseFloat(document.getElementById('price').value) || 0;
+            const prixPromo = parseFloat(document.getElementById('promo_price').value) || 0;
+            const badgeApercu = document.getElementById('apercuReduction');
 
-                try {
-                    const response = await fetch('/publish-product', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    
-                    const result = await response.json();
-                    
-                    if (result.success && result.redirect_url) {
-                        // Changement instantané de tableau après enregistrement
-                        window.location.href = result.redirect_url;
-                    } else {
-                        alert("❌ Erreur : " + (result.error || "Impossible de publier l'article."));
-                        if (button) {
-                            button.disabled = false;
-                            button.innerText = "Ajouter et Propulser au Rayon Jula";
-                        }
-                    }
-                } catch (err) {
-                    alert("📡 Erreur réseau avec le serveur de production Jula Network.");
-                    if (button) {
-                        button.disabled = false;
-                        button.innerText = "Ajouter et Propulser au Rayon Jula";
-                    }
-                }
-            });
+            if (prixOrigine > 0 && prixPromo > 0 && prixPromo < prixOrigine) {
+                // Formule de soustraction et division mathématique identique à l'application mobile
+                const calculRemise = Math.round(((prixOrigine - prixPromo) / prixOrigine) * 100);
+                
+                badgeApercu.style.display = 'inline-block';
+                badgeApercu.innerHTML = `<i class="fa-solid fa-tags"></i> Badge créé automatiquement : -${calculRemise}% de réduction`;
+            } else {
+                badgeApercu.style.display = 'none';
+            }
         }
+
+        // 2. MODIFICATION DU TEXTE DÈS QUE LA PHOTO EST PREMIÈREMENT CHOISIE
+        function validerFichierPhoto() {
+            const selecteur = document.getElementById('photoFichier');
+            const texteVisuel = document.getElementById('textePhoto');
+            
+            if (selecteur.files && selecteur.files[0]) {
+                texteVisuel.style.color = '#2e7d32';
+                texteVisuel.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #2e7d32; font-size: 16px;"></i> Image sélectionnée : ${selecteur.files[0].name}`;
+            }
+        }
+
+        // 3. EXPÉDITION SÉCURISÉE EN AJAX VERS LE SERVEUR RENDER SANS RAFRAÎCHIR LA PAGE
+        document.getElementById('formulairePublication').addEventListener('submit', async function(evenement) {
+            evenement.preventDefault();
+            
+            const btn = document.getElementById('btnValider');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Traitement et envoi vers Supabase Storage en cours...`;
+
+            try {
+                const donneesFormulaire = new FormData(this);
+                
+                // Envoi vers la route de publication du server.js
+                const reponse = await fetch('/publish-product', {
+                    method: 'POST',
+                    body: donneesFormulaire
+                });
+
+                const resultat = await reponse.json();
+
+                if (resultat.success) {
+                    alert(`✅ Félicitations ! Votre article a été mis en rayon avec succès. Les pourcentages s'affichent en direct sur l'application mobile !`);
+                    window.location.href = resultat.redirect_url;
+                } else {
+                    alert(`❌ Échec de la mise en rayon : ${resultat.error}`);
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Valider et mettre en rayon sur Jula`;
+                }
+            } catch (erreur) {
+                alert(`❌ Erreur réseau : Impossible de joindre l'infrastructure Jula. Réessayez.`);
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Valider et mettre en rayon sur Jula`;
+            }
+        });
     </script>
 </body>
 </html>
+             
