@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -17,11 +17,11 @@
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--fond-sombre); margin: 0; padding: 0; color: #212529; line-height: 1.6; overflow-x: hidden; }
         
-        /* 🪐 🟢 NOUVELLE BARRE DE NAVIGATION SUPÉRIEURE - FINI LE NOIR, PLACE À UN STYLE BLANC LUMINEUX JUMIA */
-        .barre-navigation { background-color: #ffffff; border-bottom: 2px solid var(--jula-orange); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1100; height: 65px; box-sizing: border-box; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .declencheur-menu { background: none; border: none; color: #212529; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
-        .declencheur-menu:hover { background-color: rgba(0, 0, 0, 0.05); color: var(--jula-orange); }
-        .logo-navigation { font-size: 18px; font-weight: 800; color: #212529; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        /* 🪐 🟢 CORRECTIF CONTRASTE : BARRE SUPÉRIEURE EN ARDOISE SOMBRE POUR BIEN DÉTACHER LES 3 TRAITS BLANCS */
+        .barre-navigation { background-color: #1e2229 !important; border-bottom: 3px solid var(--jula-orange); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1100; height: 65px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .declencheur-menu { background: none; border: none; color: #ffffff !important; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
+        .declencheur-menu:hover { background-color: rgba(255, 255, 255, 0.1); color: var(--jula-orange) !important; }
+        .logo-navigation { font-size: 19px; font-weight: 800; color: #ffffff !important; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
 
         /* 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE PROFESSIONNEL */
         .panneau-navigation { position: fixed; top: 0; left: -320px; width: 310px; height: 100%; background-color: #1a1d21; border-right: 1px solid #2d3139; z-index: 1200; padding: 25px 20px; transition: left 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 5px 0 25px rgba(0,0,0,0.4); box-sizing: border-box; }
@@ -64,7 +64,7 @@
 </head>
 <body>
 
-    <!-- 🪐 INTERFACE TECHNIQUE DU MENU COULISSANT GAUCHE -->
+    <!-- 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE -->
     <div class="panneau-navigation" id="panneauJula">
         <div style="display: flex; flex-direction: column; flex: 1;">
             <div class="entete-panneau">
@@ -92,18 +92,17 @@
         </div>
     </div>
 
-    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ ET LE NOM FORCE EN NOIR CHARBON SUR FOND BLANC PROPRE -->
+    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ ET LE NOM QUI FLASHENT EN BLANC SÉCURISÉ -->
     <nav class="barre-navigation">
         <button class="declencheur-menu" onclick="basculerMenuJula()">
-            <i class="fa-solid fa-bars" style="font-size: 28px;"></i> <!-- ☰ LES 3 BARRES REPASSENT EN GRIS FONCÉ INTENSE -->
+            <i class="fa-solid fa-bars" style="font-size: 30px; color: #ffffff !important;"></i> <!-- ☰ ICI LES 3 TRAITS RESSORTENT FIÈREMENT EN BLANC -->
         </button>
         <div class="logo-navigation">
             <i class="fa-solid fa-circle-nodes" style="color: var(--jula-orange); font-size: 20px;"></i>
-            RÉSEAU JULA <!-- 🟢 LE NOM S'AFFICHE DÉSORMAIS EN NOIR TRÈS VISIBLE ET LUMINEUX -->
+            RÉSEAU JULA <!-- 🟢 LE NOM DU PORTAIL BRILLE EN BLANC PUR -->
         </div>
         <div style="width: 44px;"></div>
     </nav>
-
     <!-- 🌠 VITRINE COMMERCIALE ALIGNÉE -->
     <div class="vitrine-principale">
         <span class="insigne-vitrine">Portail Officiel Jula Afrique de l'Ouest</span>
@@ -145,9 +144,9 @@
         </div>
         
         <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
-            <!-- BOUTIQUE / GROSSISTE -->
+            <!-- MAGASIN / GROSSISTE -->
             <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Boutique / Grossiste</h3>
+                <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Magasin / Grossiste</h3>
                 <div style="font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--jula-blue);">0 FCFA <span style="font-size:13px; color:#6c757d; font-weight:normal;">de frais d'affichage</span></div>
                 <p style="color: #212529; font-size: 14px; margin: 0 0 20px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
                 <a href="/register-seller" style="display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14px; background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
@@ -164,7 +163,7 @@
             <!-- POINT RELAIS AGRÉÉ -->
             <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                 <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏪 Point Relais Agréé</h3>
-                <div style="font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--jula-orange);">Commissions <span style="font-size:13px; color:#6c757d; font-weight:normal;">/colis géré</span></div>
+                <div style="font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--jula-orange);">Commissions <span style="font-size:14px; color:#6c757d; font-weight:normal;">/colis géré</span></div>
                 <p style="color: #212529; font-size: 14px; margin: 0 0 20px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique. Devenez un guichet de dépôt officiel Jula pour la garde sécurisée des colis de smartphones de votre quartier.</p>
                 <a href="/register-station" style="display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14px; background-color: var(--jula-orange);">Inscrire mon Espace Physique</a>
             </div>
@@ -234,7 +233,7 @@
         </div>
     </div> <!-- Fin du conteneur .conteneur principal -->
 
-    <!-- ⚙️ LE MOTEUR JAVASCRIPT POUR FAIRE COULISSER TON NOUVEAU TIROIR GAUCHE -->
+    <!-- ⚙️ LE MOTEUR JAVASCRIPT CORRIGÉ EN FRANÇAIS POUR LA NAVIGATION -->
     <script>
         function basculerMenuJula() {
             const panneau = document.getElementById('panneauJula');
@@ -257,3 +256,4 @@
     </script>
 </body>
 </html>
+          
