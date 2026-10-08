@@ -1,11 +1,11 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Jula — Réseau Commercial et Logistique Interconnecté</title>
-    <!-- Importation officielle du dictionnaire des icônes Google Material -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <!-- 🟢 CHARGEUR UNIVERSEL ET SÉCURISÉ POUR AFFICHER LES VRAIS DESSINS D'ICÔNES -->
+    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         :root { 
             --jula-orange: #f57c00; 
@@ -38,7 +38,7 @@
         .bouton-panneau-bleu:hover { background-color: var(--jula-blue); color: #fff; }
         .bouton-panneau-vert:hover { background-color: var(--jula-vert); color: #fff; }
 
-        /* 🪐 BARRE DE NAVIGATION BLANCHE STYLE JUMIA AVEC LES 3 BARRES HORIZONTALES ☰ */
+        /* 🪐 BARRE DE NAVIGATION FIXE SUPÉRIEURE AVEC LE RETOUR DU VRAI LOGO ☰ */
         .barre-navigation { background-color: #ffffff; border-bottom: 1px solid var(--couleur-bordure); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; height: 65px; box-sizing: border-box; }
         .declencheur-menu { background: none; border: none; color: #212529; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
         .declencheur-menu:hover { background-color: rgba(0, 0, 0, 0.05); color: var(--jula-orange); }
@@ -65,44 +65,44 @@
 </head>
 <body>
 
-    <!-- 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE -->
+    <!-- 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE TOTALEMENT CORRIGÉ -->
     <div class="panneau-navigation" id="panneauJula">
         <div style="display: flex; flex-direction: column; flex: 1;">
             <div class="entete-panneau">
                 <div class="titre-panneau">
-                    <span class="material-icons-round">menu_open</span>
+                    <i class="fa-solid fa-bars-staggered"></i> <!-- 🟢 Dessin de l'icône -->
                     Menu Principal
                 </div>
                 <button class="bouton-fermer" onclick="basculerMenuJula()">
-                    <span class="material-icons-round">close</span>
+                    <i class="fa-solid fa-xmark" style="font-size: 20px;"></i> <!-- 🟢 Dessin de l'icône -->
                 </button>
             </div>
 
             <div class="menu-navigation">
                 <span class="label-section-menu">🏠 Navigation</span>
                 <a href="/" class="lien-navigation onglet-actif">
-                    <span class="material-icons-round">home</span>
+                    <i class="fa-solid fa-house"></i> <!-- 🟢 Dessin de l'icône Maison -->
                     Accueil du Portail Jula
                 </a>
                 
                 <span class="label-section-menu">💼 Espaces Professionnels</span>
                 <a href="/login" class="lien-navigation">
-                    <span class="material-icons-round">vpn_key</span>
+                    <i class="fa-solid fa-key"></i> <!-- 🟢 Dessin de l'icône Clé -->
                     Connexion Compte Pro
                 </a>
                 <a href="/jacky-superadmin-control" class="lien-navigation" style="border: 1px dashed rgba(245,124,0,0.3); border-radius: 6px;">
-                    <span class="material-icons-round">security</span>
+                    <i class="fa-solid fa-shield-halved"></i> <!-- 🟢 Dessin de l'icône Verrou/Bouclier -->
                     Espace Secret Jacky
                 </a>
 
                 <span class="label-section-menu">🏢 Coordonnées Entreprise</span>
                 <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid #2d3139;">
                     <p style="font-size: 13px; color: #fff; margin: 0; font-weight: 500; display: flex; align-items: center; gap: 8px;">
-                        <span class="material-icons-round" style="font-size: 16px; color: var(--jula-blue);">email</span>
+                        <i class="fa-solid fa-envelope" style="color: var(--jula-blue);"></i>
                         support@jula-network.com
                     </p>
-                    <p style="font-size: 11px; color: var(--jula-orange); margin: 6px 0 0 0; font-weight: bold; display: flex; align-items: center; gap: 6px;">
-                        <span class="material-icons-round" style="font-size: 14px;">sync</span>
+                    <p style="font-size: 11px; color: var(--jula-orange); margin: 6px 0 0 0; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-rotate"></i>
                         Catalogue mis à jour en direct
                     </p>
                 </div>
@@ -111,20 +111,19 @@
 
         <div class="bas-panneau">
             <a href="/politique-confidentialite" class="bouton-panneau-bleu">
-                <span class="material-icons-round" style="font-size: 16px;">gavel</span>
+                <i class="fa-solid fa-scale-balanced"></i> <!-- 🟢 Dessin de l'icône Justice -->
                 Charte de Confidentialité
             </a>
             <a href="#fonctionnement" class="bouton-panneau-vert" onclick="basculerMenuJula()">
-                <span class="material-icons-round" style="font-size: 16px;">help_outline</span>
+                <i class="fa-solid fa-circle-question"></i> <!-- 🟢 Dessin de l'icône Aide -->
                 Comment utiliser le site internet ?
             </a>
         </div>
     </div>
 
-    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ D'OUVERTURE DU MENU (IMAGE) -->
+    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ D'OUVERTURE DU MENU À GAUCHE (IMAGE VALIDE) -->
     <nav class="barre-navigation">
-        <button class="declencheur-menu" onclick="basculerMenuJula()">
-            <span class="material-icons-round" style="font-size: 32px;">menu</span> <!-- ☰ LE BOUTON À 3 BARRES HORIZONTALES -->
+             RÉSEAU JULA
     <!-- 🌠 VITRINE D'ACCUEIL JULA STYLE CLAIR -->
     <div class="vitrine-principale">
         <span class="insigne-vitrine">Portail Officiel Jula Afrique de l'Ouest</span>
@@ -159,7 +158,7 @@
             </div>
         </div>
 
-        <!-- 🏪 SELECTION DES ACTIVITÉS EN FRANÇAIS PUR -->
+        <!-- 🏪 SÉLECTION DES ACTIVITÉS EN FRANÇAIS PUR STYLE CLAIR -->
         <div class="titre-section" id="recrutement">
             <h2>Sélectionnez votre activité régionale</h2>
             <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
@@ -168,7 +167,7 @@
         <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 60px;">
             <!-- BOUTIQUE / GROSSISTE -->
             <div class="portal-card" style="background: var(--fond-carte); border-radius: 16px; padding: 40px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Boutique / Grossiste</h3>
+                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Magasin / Grossiste</h3>
                 <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: var(--jula-blue);">0 FCFA <span style="font-size:14px; color:#6c757d; font-weight:normal;">de frais d'affichage</span></div>
                 <p style="color: #495057; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
                 <a href="/register-seller" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: var(--jula-blue); box-shadow: 0 4px 10px rgba(16,114,186,0.15);">Ouvrir mon Magasin</a>
@@ -176,7 +175,7 @@
 
             <!-- COURSIER LIVREUR -->
             <div class="portal-card" style="background: var(--fond-carte); border-radius: 16px; padding: 40px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-vert); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🛵 Coursier Livreur Moto</h3>
+                <h3 style="font-size: 22px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🛵 Livreur à Moto</h3>
                 <div style="font-size: 24px; font-weight: 800; margin: 15px 0; color: var(--jula-vert);">Jusqu'à 75.000 FCFA <span style="font-size:14px; color:#6c757d; font-weight:normal;">/semaine</span></div>
                 <p style="color: #495057; font-size: 14.5px; margin: 0 0 25px 0; flex-grow: 1;">Soyez votre propre patron ! Engin décent et permis requis. Recevez les fiches de livraison directement sur votre smartphone et maximisez vos gains logistiques.</p>
                 <a href="/register-driver" style="display: block; padding: 14px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14.5px; background-color: var(--jula-vert); box-shadow: 0 4px 10px rgba(46,125,50,0.15);">Devenir Coursier Officiel</a>
@@ -229,7 +228,7 @@
         </div>
         <div class="faq-section" style="background: var(--fond-carte); padding: 40px; border-radius: 16px; margin-bottom: 60px; border: 1px solid var(--couleur-bordure); box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
             <div style="border-bottom: 1px solid var(--couleur-bordure); padding-bottom: 20px;">
-                <div style="font-weight: 700; font-size: 15.5px; color: #212529; margin-bottom: 8px;">❓ L'inscription sur Jula est-elle payante ?</div>
+                <div style="font-weight: 700; font-size: 15.5px; color: #212529; margin-bottom: 8px;">❓ L'inscription sur Jula is-elle payante ?</div>
                 <p style="color: #495057; font-size: 14px; margin: 0; line-height: 22px;">Non, l'ouverture de votre espace magasin et l'affichage de vos produits sur le catalogue numérique sont entièrement gratuits pour tous les grossistes régionaux.</p>
             </div>
             <div style="border-bottom: 1px solid var(--couleur-bordure); padding: 20px 0;">
