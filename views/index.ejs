@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Jula — Réseau Commercial et Logistique Interconnecté</title>
-    <!-- 🟢 CHARGEUR UNIVERSEL FONTAWESOME POUR ASSURER LES 3 TRAITS HORIZONTAUX -->
+    <!-- CHARGEUR UNIVERSEL FONTAWESOME POUR ASSURER LES 3 TRAITS HORIZONTAUX -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         :root { 
@@ -17,11 +17,11 @@
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--fond-sombre); margin: 0; padding: 0; color: #212529; line-height: 1.6; overflow-x: hidden; }
         
-        /* 🪐 BARRE DE NAVIGATION SUPÉRIEURE FORCEE EN NOIR POUR BIEN VOIR LES 3 TRAITS */
-        .barre-navigation { background-color: #1a1d21; border-bottom: 2px solid var(--jula-orange); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1100; height: 65px; box-sizing: border-box; }
-        .declencheur-menu { background: none; border: none; color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
-        .declencheur-menu:hover { background-color: rgba(255, 255, 255, 0.1); color: var(--jula-orange); }
-        .logo-navigation { font-size: 18px; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        /* 🪐 🟢 NOUVELLE BARRE DE NAVIGATION SUPÉRIEURE - FINI LE NOIR, PLACE À UN STYLE BLANC LUMINEUX JUMIA */
+        .barre-navigation { background-color: #ffffff; border-bottom: 2px solid var(--jula-orange); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1100; height: 65px; box-sizing: border-box; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .declencheur-menu { background: none; border: none; color: #212529; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 8px; transition: all 0.2s; outline: none; }
+        .declencheur-menu:hover { background-color: rgba(0, 0, 0, 0.05); color: var(--jula-orange); }
+        .logo-navigation { font-size: 18px; font-weight: 800; color: #212529; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
 
         /* 🪐 PANNEAU DE NAVIGATION COULISSANT GAUCHE PROFESSIONNEL */
         .panneau-navigation { position: fixed; top: 0; left: -320px; width: 310px; height: 100%; background-color: #1a1d21; border-right: 1px solid #2d3139; z-index: 1200; padding: 25px 20px; transition: left 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 5px 0 25px rgba(0,0,0,0.4); box-sizing: border-box; }
@@ -92,17 +92,18 @@
         </div>
     </div>
 
-    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ FORCEES EN BLANC SUR BANDEAU CARBON -->
+    <!-- 🪐 LES 3 BARRES HORIZONTALES ☰ ET LE NOM FORCE EN NOIR CHARBON SUR FOND BLANC PROPRE -->
     <nav class="barre-navigation">
         <button class="declencheur-menu" onclick="basculerMenuJula()">
-            <i class="fa-solid fa-bars" style="font-size: 28px;"></i> <!-- ☰ LES 3 BARRES DE TON IMAGE SONT ICI ! -->
+            <i class="fa-solid fa-bars" style="font-size: 28px;"></i> <!-- ☰ LES 3 BARRES REPASSENT EN GRIS FONCÉ INTENSE -->
         </button>
         <div class="logo-navigation">
             <i class="fa-solid fa-circle-nodes" style="color: var(--jula-orange); font-size: 20px;"></i>
-            RÉSEAU JULA
+            RÉSEAU JULA <!-- 🟢 LE NOM S'AFFICHE DÉSORMAIS EN NOIR TRÈS VISIBLE ET LUMINEUX -->
         </div>
         <div style="width: 44px;"></div>
     </nav>
+
     <!-- 🌠 VITRINE COMMERCIALE ALIGNÉE -->
     <div class="vitrine-principale">
         <span class="insigne-vitrine">Portail Officiel Jula Afrique de l'Ouest</span>
