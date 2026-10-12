@@ -51,8 +51,8 @@
 <body>
 
     <div class="admin-header">
-        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">security</span> Centre de Validation des Partenaires Jula</h1>
-        <div class="badge-admin">Jacky SuperAdmin</div>
+        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
+        <div class="badge-admin">Plamé SuperAdmin</div>
     </div>
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
         <% if (profiles.length === 0) { %>
@@ -100,13 +100,13 @@
                         <form action="/verify-partner" method="POST" style="display:inline;">
                             <input type="hidden" name="id" value="<%= profile.id %>">
                             <button type="submit" class="btn-verify">
-                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">verified_user</span>
+                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;"></span>
                                 Valider et Activer le partenaire
                             </button>
                         </form>
                     <% } else { %>
                         <span class="status-badge ok">
-                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">lock</span>
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;"></span>
                             Compte Vérifié Officiel
                         </span>
                     <% } %>
