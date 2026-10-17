@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jula - Centre de Contrôle Secret Jacky</title>
-    <!-- Icônes Modernes Google Material -->
+    <!-- Icônes Modernes Google Material Sécurisées -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
@@ -15,6 +15,7 @@
             --border-color: #2d3139;
             --success: #2e7d32;
             --warning: #ffc107;
+            --danger: #c62828;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
         
@@ -39,9 +40,11 @@
         .photo-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); }
         .photo-box img:hover { transform: scale(1.02); border-color: var(--jula-orange); }
         
-        /* 🟢 ACTION DE VALIDATION DU DOSSIER */
+        /* 🟢 ACTIONS DE CONFIGURATION DU DOSSIER */
+        .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
         .btn-verify { background: var(--success); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(46,125,50,0.2); }
-        .btn-verify:hover { opacity: 0.9; }
+        .btn-reject { background: var(--danger); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(198,40,40,0.2); }
+        .btn-verify:hover, .btn-reject:hover { opacity: 0.9; }
         
         /* ⚠️ BADGES DE STATUT D'INSPECTION */
         .status-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 193, 7, 0.1); color: var(--warning); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 193, 7, 0.2); }
@@ -49,9 +52,8 @@
     </style>
 </head>
 <body>
-
-    <div class="admin-header">
-        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
+<div class="admin-header">
+        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">shield</span> Centre de Validation des Partenaires Jula</h1>
         <div class="badge-admin">Plamé SuperAdmin</div>
     </div>
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
@@ -96,17 +98,28 @@
 
                 <div style="margin-top: 25px; text-align: right; border-top: 1px solid var(--border-color); padding-top: 15px;">
                     <% if (!profile.is_verified) { %>
-                        <!-- Formulaire d'approbation en un clic relié à Supabase -->
-                        <form action="/verify-partner" method="POST" style="display:inline;">
-                            <input type="hidden" name="id" value="<%= profile.id %>">
-                            <button type="submit" class="btn-verify">
-                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;"></span>
-                                Valider et Activer le partenaire
-                            </button>
-                        </form>
+                        <div class="admin-actions" style="display: inline-flex; gap: 12px; justify-content: flex-end; width: 100%;">
+                            <!-- 🔴 Formulaire de rejet / suppression des faux comptes de test -->
+                            <form action="https://onrender.com" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<%= profile.id %>">
+                                <button type="submit" class="btn-reject">
+                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">cancel</span>
+                                    Rejeter le profil
+                                </button>
+                            </form>
+
+                            <!-- 🟢 Formulaire d'approbation internationale connecté en direct à Render -->
+                            <form action="https://jula-app.onrender.com" method="POST" style="display:inline;">
+                                <input type="hidden" name="id" value="<%= profile.id %>">
+                                <button type="submit" class="btn-verify">
+                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">check_circle</span>
+                                    Valider et Activer le partenaire
+                                </button>
+                            </form>
+                        </div>
                     <% } else { %>
                         <span class="status-badge ok">
-                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;"></span>
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
                             Compte Vérifié Officiel
                         </span>
                     <% } %>
@@ -117,4 +130,3 @@
 
 </body>
 </html>
-
