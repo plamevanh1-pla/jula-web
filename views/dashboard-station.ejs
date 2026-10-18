@@ -9,49 +9,68 @@
     <style>
         :root { 
             --jula-orange: #f57c00; 
-            --jula-vert: #2e7d32; 
+            --jula-blue: #1072ba; 
             --dark-bg: #111417; 
             --card-bg: #1a1d21;
             --border-color: #2d3139;
-            --success: #81c784;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .content-container { max-width: 900px; margin: 0 auto; }
         
         .header-station { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .header-station h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
         
-        .status-badge-active { background: rgba(245, 124, 0, 0.1); color: var(--jula-orange); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(245, 124, 0, 0.2); }
+        .status-badge-station { background: rgba(16, 114, 186, 0.1); color: #29b6f6; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(16, 114, 186, 0.25); }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
         
-        .content-container { max-width: 800px; margin: 0 auto; }
-        .card-station-info { background: var(--card-bg); border-radius: 12px; padding: 24px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        
-        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-        .btn-logout:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.02); }
+        .card-colis { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-blue); }
     </style>
 </head>
 <body>
 
     <div class="content-container">
-        <!-- 🪐 EN-TÊTE DE L'ESPACE PRIVÉ POINT RELAIS -->
         <div class="header-station">
-            <h1><span class="material-icons-round" style="color: var(--jula-orange);">storefront</span> Espace Gérant Point Relais Jula</h1>
+            <h1><span class="material-icons-round" style="color: var(--jula-orange);">storefront</span> Espace Bureau Point Relais Réel</h1>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="status-badge-active">● Guichet Agréé & Actif</span>
+                <span class="status-badge-station">● Guichet Ouvert & Actif</span>
                 <a href="/" class="btn-logout">Déconnexion</a>
             </div>
         </div>
 
-        <!-- 📦 COMPARTIMENT STATISTIQUES ET COMMISSIONS DE STOCKAGE -->
-        <div style="margin-bottom: 20px;"><b style="color: var(--jula-orange);">👤 Identifiant de l'Espace :</b> <%= email %></div>
-        
-        <div class="card-station-info">
-            <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 6px;">
-                <span class="material-icons-round" style="color: var(--jula-orange); font-size: 18px;">inventory_2</span> 
-                Inventaire des Colis de Smartphones
-            </h3>
-            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 0; line-height: 22px;">
-                Félicitations Jacky ! Ton compte de Point Relais fonctionne désormais à merveille. Cet espace privé et crypté affichera en temps réel les colis déposés par les grossistes et récupérés par les clients de ton secteur.
-            </p>
+        <div style="margin-bottom: 20px;"><b style="color: var(--jula-blue);">🏪 Nom de l'Établissement :</b> <%= email %></div>
+
+        <h2>📦 Inventaire Physique du Stock Sécurisé</h2>
+
+        <div style="margin-top: 20px;">
+            <% if (orders.length === 0) { %>
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; border: 1px dashed var(--border-color);">
+                    <span class="material-icons-round" style="font-size: 48px; display: block; margin-bottom: 10px;">inventory_2</span>
+                    Aucun colis n'est actuellement stocké dans votre hub.
+                </div>
+            <% } else { %>
+                <% orders.forEach(function(order) { %>
+                    <div class="card-colis">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px;">
+                            <div>
+                                <span style="font-size: 11px; color: #7f8c8d; font-weight: bold;">RÉFÉRENCE COLIS : #<%= order.id %></span>
+                                <h3 style="margin: 5px 0; color: #fff;"><%= order.product_title %></h3>
+                            </div>
+                            <span class="status-badge-station" style="background: rgba(46,125,50,0.1); color: #81c784; border-color: rgba(46,125,50,0.2);"><%= order.status %></span>
+                        </div>
+                        <p style="margin: 5px 0; font-size: 14px;">👤 <b>Destinataire (Acheteur) :</b> <%= order.buyer_email %> / Tel: <%= order.buyer_phone %></p>
+                        <p style="margin: 5px 0; font-size: 14px;">🏢 <b>Mode de retrait choisi :</b> <%= order.selected_delivery_mode %></p>
+                        
+                        <div style="text-align: right; margin-top: 15px;">
+                            <form action="/vendedor/update-order-status" method="POST">
+                                <input type="hidden" name="order_id" value="<%= order.id %>">
+                                <input type="hidden" name="vendedor_id" value="<%= order.vendedor_id %>">
+                                <input type="hidden" name="new_status" value="Livré">
+                                <button type="submit" style="background: var(--jula-orange); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px;">📦 Valider le retrait par le client</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
         </div>
     </div>
 
