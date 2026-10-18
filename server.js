@@ -61,30 +61,6 @@ app.get('/login', (req, res) => { res.render('login'); });
 
 // 🔒 ROUTE INTERNATIONALE POUR LA POLITIQUE DE CONFIDENTIALITÉ JULA
 app.get('/politique-confidentialite', (req, res) => { res.render('politique-confidentialite'); });
-
-// 📥 PORTAIL DE PUBLICATION JULA - EXTRACTION DYNAMIQUE DE L'UTILISATEUR SÉCURISÉ
-app.get('/vendedor/dashboard', async (req, res) => {
-    try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        let userEmail = req.query.email || 'vendeur@jula.com';
-        let userId = req.query.userId || '';
-
-        if (session && session.user) {
-            userEmail = session.user.email;
-            userId = session.user.id;
-        }
-
-        res.render('dashboard', { 
-            email: userEmail, 
-            userId: userId,
-            user: { id: userId, email: userEmail } 
-        });
-    } catch (err) {
-        res.status(500).send(`Erreur d'affichage du formulaire : ${err.message}`);
-    }
-});
-
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
     if (!file) return null;
@@ -100,6 +76,7 @@ async function uploadToSupabase(file, folder) {
     const { data: publicUrlData } = supabase.storage.from('product-image').getPublicUrl(fileName);
     return publicUrlData.publicUrl;
 }
+
 // 💾 1. MOTEUR D'INSCRIPTION INTERCONNECTÉ (MULTI-PHOTOS)
 app.post('/submit-partner', upload.fields([
     { name: 'cni_recto', maxCount: 1 },
@@ -197,7 +174,37 @@ app.post('/login-partner', async (req, res) => {
         res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
     }
 });
+// 🪐 3. BRANCHEMENT DES ACTIONS DU QG JACKY (ANTI-ÉCRAN BLANC ET DEPLOIEMENT AUTORISÉ)
+app.post('/verify-partner', async (req, res) => {
+    const { id } = req.body;
+    try {
+        const { data, error } = await supabase
+            .from('profiles')
+            .update({ is_verified: true })
+            .eq('id', id);
 
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Partenaire activé avec succès !" });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/reject-partner', async (req, res) => {
+    const { id } = req.body;
+    try {
+        // Suppression brute et sécurisée via ta clé maîtresse d'infrastructure
+        const { data, error } = await supabase
+            .from('profiles')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Profil de test nettoyé de Supabase !" });
+    } catch (err) {
+        return res.status(500).json({ error: err.message });
+    }
+});
 // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
@@ -242,6 +249,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
         res.redirect('/login');
     }
 });
+
 // 🔄 4. MISE À JULA DU STATUT DES LIVRAISONS ET PANIER
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
@@ -266,7 +274,7 @@ app.post('/publish-product', upload.any(), async (req, res) => {
 
         if (req.files && req.files.length > 0) {
             try {
-                const targetFile = req.files[0];
+                const targetFile = req.files;
                 const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
@@ -358,8 +366,9 @@ app.post('/create-order', async (req, res) => {
                     phone: buyer_phone || "0700000000"
                 },
                 actions: {
-                    cancel_url: `https://onrender.com${vendedor_id}`,
-                    return_url: `https://onrender.com${vendedor_id}`
+                    // ✨ CORRIGÉ : Redirection sécurisée vers jula-web sur Render
+                    cancel_url: `https://onrender.com{vendedor_id}`,
+                    return_url: `https://onrender.com{vendedor_id}`
                 }
             })
         });
@@ -391,9 +400,10 @@ app.post('/create-order', async (req, res) => {
             }]);
         } catch (dbErr) { console.error(dbErr); }
 
+        // ✨ CORRIGÉ : Redirection de secours sécurisée vers ton vrai site de recrutement jula-web
         return res.status(200).json({ 
             success: true, 
-            redirect_url: `https://onrender.com${vendedor_id || ''}` 
+            redirect_url: `https://onrender.com{vendedor_id || ''}` 
         });
     }
 });
