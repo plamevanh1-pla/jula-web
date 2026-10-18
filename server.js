@@ -130,7 +130,7 @@ app.post('/submit-partner', upload.fields([
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
 
-// 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES (SÉCURISÉE CONTRE LES SLASHES VIDES)
+ // 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES SÉCURISÉE ET DYNAMIQUE
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -151,29 +151,47 @@ app.post('/login-partner', async (req, res) => {
             return res.redirect('/vendedor/dashboard');
         }
 
+        // 🏪 Si c'est un Vendeur / Grossiste
         if (userRole === 'boutique' || userRole === 'vendedor') {
             return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
         }
         
+        // 🏍️ Si c'est un Livreur / Coursier Réel
         if (userRole === 'livreur' || userRole === 'driver') {
+            // Le serveur extrait les colis en attente pour le livreur
+            const { data: activeOrders } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('status', 'En attente de préparation');
+
             return res.render('dashboard-driver', { 
                 email: profile.email, 
                 userId: profileId,
-                user: { id: profileId, email: profile.email }
+                user: { id: profileId, email: profile.email },
+                orders: activeOrders || [] // Transmet les vrais colis sans planter !
             });
         }
         
+        // 🏪 Si c'est un Point Relais Hub Réel
         if (userRole === 'relais' || userRole === 'station') {
+            // Le serveur extrait les colis stockés dans le secteur
+            const { data: stationOrders } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('status', 'En attente de préparation');
+
             return res.render('dashboard-station', { 
                 email: profile.email, 
                 userId: profileId,
-                user: { id: profileId, email: profile.email }
+                user: { id: profileId, email: profile.email },
+                orders: stationOrders || [] // Transmet les vrais colis sans planter !
             });
         }
     } catch (err) {
         res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
     }
 });
+
 // 🪐 3. BRANCHEMENT DES ACTIONS DU QG JACKY (ANTI-ÉCRAN BLANC ET DEPLOIEMENT AUTORISÉ)
 app.post('/verify-partner', async (req, res) => {
     const { id } = req.body;
