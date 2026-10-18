@@ -1,111 +1,58 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jula - Inscription Livreur Coursier</title>
+    <title>Jula Express — Espace Logistique Coursier</title>
     <!-- Icônes Modernes Google Material -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
-            --jula-blue: #1072ba; 
+            --jula-vert: #2e7d32; 
             --dark-bg: #111417; 
             --card-bg: #1a1d21;
             --border-color: #2d3139;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
-        .form-container { max-width: 500px; background: var(--card-bg); margin: 30px auto; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-top: 5px solid var(--jula-blue); position: relative; }
-        .btn-back { position: absolute; top: 20px; left: 20px; color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; transition: color 0.2s; }
-        .btn-back:hover { color: var(--jula-blue); }
-        h2 { text-align: center; color: #fff; margin-bottom: 8px; font-weight: 800; font-size: 24px; margin-top: 15px; }
-        .subtitle { text-align: center; font-size: 13px; color: #7f8c8d; margin-bottom: 25px; line-height: 18px; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13.5px; letter-spacing: 0.3px; color: #ecf0f1; }
-        input, select { width: 100%; padding: 12px 14px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14.5px; color: #fff; outline: none; transition: border-color 0.2s; }
-        input:focus, select:focus { border-color: var(--jula-blue); }
-        input[type="file"] { padding: 12px; background: rgba(255, 255, 255, 0.01); border: 1px dashed var(--border-color); cursor: pointer; color: #7f8c8d; }
-        input[type="file"]:focus { border-color: var(--jula-blue); }
-        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--jula-blue), #0d5c97); color: white; padding: 14px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(16,114,186,0.2); transition: all 0.2s; margin-top: 15px; }
-        .btn-submit:hover { opacity: 0.95; }
-        .info-file { font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 500; }
+        
+        .header-driver { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-vert); }
+        .header-driver h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+        
+        .status-badge-active { background: rgba(46, 125, 50, 0.1); color: #81c784; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(46, 125, 50, 0.2); }
+        
+        .content-container { max-width: 800px; margin: 0 auto; }
+        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border-color); }
+        
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
+        .btn-logout:hover { color: #fff; border-color: #fff; }
     </style>
 </head>
 <body>
 
-     <div class="form-container">
-        <!-- Bouton retour discret vers l'accueil général du site -->
-        <a href="/" class="btn-back">
-            ← Accueil
-        </a>
+    <div class="content-container">
+        <!-- 🪐 EN-TÊTE DE L'ESPACE PRIVÉ LIVREUR -->
+        <div class="header-driver">
+            <h1><span class="material-icons-round" style="color: var(--jula-vert);">two_wheeler</span> Espace Coursier Officiel Jula</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="status-badge-active">● Compte Validé et Actif</span>
+                <a href="/" class="btn-logout">Déconnexion</a>
+            </div>
+        </div>
 
-
-        <h2>🇲🇱 Devenir Livreur Jula</h2>
-        <p class="subtitle">Rejoignez la flotte Jula Network, accédez aux feuilles de route et maximisez vos gains logistiques en zone CFA</p>
+        <!-- 📦 FEUILLE DE ROUTE LOGISTIQUE DES SMARTPHONES -->
+        <div style="margin-bottom: 15px;"><b style="color: var(--jula-orange);">👤 Compte Connecté :</b> <%= email %></div>
         
-        <form action="/submit-partner" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="business_type" value="livreur">
-            
-            <div class="form-group">
-                <label>Nom complet du coursier</label>
-                <input type="text" name="full_name" placeholder="Ex: Sékou Touré" required>
-            </div>
-
-            <div class="form-group">
-                <label>Numéro de Plaque d'Immatriculation</label>
-                <input type="text" name="vehicle_plate" placeholder="Ex: 4567-IU-01" required>
-            </div>
-
-            <div class="form-group">
-                <label>Numéro de Téléphone (Orange, Wave, MTN...)</label>
-                <input type="tel" name="phone" placeholder="Ex: +225 0505..." required>
-            </div>
-
-            <div class="form-group">
-                <label>Adresse Électronique (Email)</label>
-                <input type="email" name="email" placeholder="Ex: sekou@jula-livraison.com" required autocomplete="email">
-            </div>
-
-            <div class="form-group">
-                <label>Mot de passe secret</label>
-                <input type="password" name="password" placeholder="Minimum 6 caractères" required autocomplete="new-password">
-            </div>
-
-            <div class="form-group">
-                <label>Zone de livraison principale</label>
-                <select name="country" required>
-                    <option value="CI">🇨🇮 Côte d'Ivoire</option>
-                    <option value="SN">🇸🇳 Sénégal</option>
-                    <option value="TG">🇹🇬 Togo</option>
-                    <option value="BJ">🇧🇯 Bénin</option>
-                </select>
-            </div>
-            <!-- 📸 CNI RECTO -->
-            <div class="form-group">
-                <label>📄 Pièce d'identité nationale (RECTO)</label>
-                <input type="file" name="cni_recto" accept="image/*" required>
-                <div class="info-file">Photo nette de l'avant de votre carte nationale d'identité ou permis.</div>
-            </div>
-
-            <!-- 📸 CNI VERSO -->
-            <div class="form-group">
-                <label>📄 Pièce d'identité nationale (VERSO)</label>
-                <input type="file" name="cni_verso" accept="image/*" required>
-                <div class="info-file">Photo nette de l'arrière de votre carte nationale d'identité.</div>
-            </div>
-
-            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE -->
-            <div class="form-group">
-                <label>🏍️ Photo de votre Moto ou Véhicule</label>
-                <input type="file" name="photo_vehicule" accept="image/*" required>
-                <div class="info-file">Prenez une photo claire de votre engin où la plaque d'immatriculation est bien lisible.</div>
-            </div>
-
-            <button type="submit" class="btn-submit">Valider mon inscription de coursier Jula</button>
-        </form>
+        <div class="card-mission">
+            <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 6px;">
+                <span class="material-icons-round" style="color: var(--jula-orange); font-size: 18px;">local_shipping</span> 
+                Feuille de Route CFA de Test
+            </h3>
+            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 0;">
+                Félicitations Jacky ! Ton faux compte de test fonctionne à merveille. Cet espace logistique privé affichera en direct les commandes de smartphones à livrer dès le lancement général [1.1].
+            </p>
+        </div>
     </div>
 
 </body>
 </html>
-
-    
