@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -15,42 +15,70 @@
             --border-color: #2d3139;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .content-container { max-width: 900px; margin: 0 auto; }
         
         .header-driver { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-vert); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .header-driver h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
         
         .status-badge-active { background: rgba(46, 125, 50, 0.1); color: #81c784; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(46, 125, 50, 0.2); }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
         
-        .content-container { max-width: 800px; margin: 0 auto; }
-        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 24px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        
-        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-        .btn-logout:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.02); }
+        /* STYLE DES CARTES DE COURSES */
+        .grille-missions { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); }
+        .mission-info { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px; }
+        .btn-action-livraison { background: var(--jula-vert); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div class="content-container">
-        <!-- 🪐 EN-TÊTE DE L'ESPACE PRIVÉ LIVREUR -->
         <div class="header-driver">
-            <h1><span class="material-icons-round" style="color: var(--jula-vert);">two_wheeler</span> Espace Coursier Officiel Jula</h1>
+            <h1><span class="material-icons-round" style="color: var(--jula-vert);">two_wheeler</span> Espace Coursier Réel Jula</h1>
             <div style="display: flex; align-items: center; gap: 15px;">
-                <span class="status-badge-active">● Compte Validé et Actif</span>
+                <span class="status-badge-active">● Connecté & Disponible</span>
                 <a href="/" class="btn-logout">Déconnexion</a>
             </div>
         </div>
 
-        <!-- 📦 FEUILLE DE ROUTE LOGISTIQUE DES SMARTPHONES -->
-        <div style="margin-bottom: 20px;"><b style="color: var(--jula-orange);">👤 Compte Utilisateur :</b> <%= email %></div>
+        <div style="margin-bottom: 20px;"><b style="color: var(--jula-orange);">🏍️ ID Livreur :</b> <%= email %></div>
+
+        <h2>📦 Votre Feuille de Route en Direct</h2>
         
-        <div class="card-mission">
-            <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 6px;">
-                <span class="material-icons-round" style="color: var(--jula-orange); font-size: 18px;">local_shipping</span> 
-                Feuille de Route des Livraisons
-            </h3>
-            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 0; line-height: 22px;">
-                Félicitations Jacky ! Ton compte de test fonctionne à merveille. Cet espace logistique privé affichera en direct toutes les commandes de smartphones à livrer à moto dès le lancement officiel du réseau.
-            </p>
+        <div class="grille-missions">
+            <% if (orders.length === 0) { %>
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; border: 1px dashed var(--border-color);">
+                    <span class="material-icons-round" style="font-size: 48px; display: block; margin-bottom: 10px;">sports_motorsports</span>
+                    Aucune livraison disponible dans votre secteur pour le moment.
+                </div>
+            <% } else { %>
+                <% orders.forEach(function(order) { %>
+                    <div class="card-mission">
+                        <div class="mission-info">
+                            <div>
+                                <span style="font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">Colis ID: <%= order.id %></span>
+                                <h3 style="margin: 5px 0; color: #fff;"><%= order.product_title %> (Qté: <%= order.product_quantity %>)</h3>
+                            </div>
+                            <span class="status-badge-active" style="background: rgba(245,124,0,0.1); color: var(--jula-orange); border-color: rgba(245,124,0,0.2);"><%= order.status %></span>
+                        </div>
+                        <p style="margin: 5px 0; font-size: 14px;">📍 <b>Adresse de Livraison :</b> <%= order.buyer_address %></p>
+                        <p style="margin: 5px 0; font-size: 14px;">📞 <b>Contact Client :</b> <%= order.buyer_phone %></p>
+                        <p style="margin: 5px 0; font-size: 15px; font-weight: bold; color: #81c784;">💰 Montant à encaisser : <%= order.total_price %> FCFA</p>
+                        
+                        <div style="text-align: right; margin-top: 15px;">
+                            <form action="/vendedor/update-order-status" method="POST">
+                                <input type="hidden" name="order_id" value="<%= order.id %>">
+                                <input type="hidden" name="vendedor_id" value="<%= order.vendedor_id %>">
+                                <select name="new_status" style="width: auto; padding: 6px; background: var(--dark-bg); color: #fff; border: 1px solid var(--border-color); border-radius: 4px; margin-right: 10px;">
+                                    <option value="En cours de livraison">Prendre la course 🏍️</option>
+                                    <option value="Livré">Marquer comme Livré et Encaissé 💵</option>
+                                </select>
+                                <button type="submit" class="btn-action-livraison">Mettre à jour</button>
+                            </form>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
         </div>
     </div>
 
