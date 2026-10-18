@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jula Express — Espace Logistique Coursier</title>
-    <!-- Icônes Modernes Google Material -->
+    <!-- Icônes Modernes Google Material Sécurisées -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
@@ -16,16 +16,16 @@
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
         
-        .header-driver { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-vert); }
-        .header-driver h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+        .header-driver { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-vert); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header-driver h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
         
         .status-badge-active { background: rgba(46, 125, 50, 0.1); color: #81c784; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(46, 125, 50, 0.2); }
         
         .content-container { max-width: 800px; margin: 0 auto; }
-        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border-color); }
+        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 24px; margin-bottom: 15px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         
-        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
-        .btn-logout:hover { color: #fff; border-color: #fff; }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+        .btn-logout:hover { color: #fff; border-color: #fff; background: rgba(255,255,255,0.02); }
     </style>
 </head>
 <body>
@@ -41,15 +41,15 @@
         </div>
 
         <!-- 📦 FEUILLE DE ROUTE LOGISTIQUE DES SMARTPHONES -->
-        <div style="margin-bottom: 15px;"><b style="color: var(--jula-orange);">👤 Compte Connecté :</b> <%= email %></div>
+        <div style="margin-bottom: 20px;"><b style="color: var(--jula-orange);">👤 Compte Utilisateur :</b> <%= email %></div>
         
         <div class="card-mission">
             <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 6px;">
                 <span class="material-icons-round" style="color: var(--jula-orange); font-size: 18px;">local_shipping</span> 
-                Feuille de Route CFA de Test
+                Feuille de Route des Livraisons
             </h3>
-            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 0;">
-                Félicitations Jacky ! Ton faux compte de test fonctionne à merveille. Cet espace logistique privé affichera en direct les commandes de smartphones à livrer dès le lancement général [1.1].
+            <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 0; line-height: 22px;">
+                Félicitations Jacky ! Ton compte de test fonctionne à merveille. Cet espace logistique privé affichera en direct toutes les commandes de smartphones à livrer à moto dès le lancement officiel du réseau.
             </p>
         </div>
     </div>
