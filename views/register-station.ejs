@@ -71,15 +71,16 @@
                 <input type="email" name="email" placeholder="Ex: diallo@jula-relais.com" required autocomplete="email">
             </div>
 
-            <div class="form-group">
+                         <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
                     <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility</span>
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
                     </button>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label>Pays de localisation</label>
@@ -98,7 +99,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto"></span>
                     <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
@@ -110,7 +111,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (VERSO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniVerso')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso"></span>
                     <p id="txt-fichCniVerso">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
@@ -120,9 +121,9 @@
 
             <!-- 📸 PHOTO DE LA BOUTIQUE / LOCAL DE STOCKAGE INTERACTIVE -->
             <div class="form-group" style="text-align: center;">
-                <label style="text-align: left;">🏪 Photo du Local de Stockage</label>
+                <label style="text-align: left;"> Photo du Local de Stockage</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichBoutique')">
-                    <span class="material-icons-round icone-cam" id="ic-fichBoutique">storefront</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichBoutique"></span>
                     <p id="txt-fichBoutique">Prenez une photo claire de votre local ou espace physique</p>
                     <img id="img-fichBoutique" class="image-rendu" alt="Aperçu Espace">
                     <input type="file" id="fichBoutique" name="photo_boutique" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichBoutique')" required>
@@ -132,7 +133,7 @@
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
+                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
                 </a>
                 <button type="submit" class="btn-submit" style="width: 65%;">Valider mon inscription Point Relais Jula</button>
             </div>
@@ -141,20 +142,20 @@
 
     <!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
     <script>
-        // 1. GESTION DE L'ŒIL MAGIQUE DU MOT DE PASSE
-        function basculerOeilInscription() {
+                 function basculerOeilInscription() {
             const champ = document.getElementById('champMotDePasse');
             const icone = document.getElementById('iconeOeil');
             if (champ.type === 'password') {
                 champ.type = 'text';
-                icone.innerText = 'visibility_off';
+                icone.innerText = 'visibility'; // Devient un œil ouvert quand on voit le texte
                 icone.style.color = 'var(--jula-orange)';
             } else {
                 champ.type = 'password';
-                icone.innerText = 'visibility';
+                icone.innerText = 'visibility_off'; // Revent un œil barré quand c'est caché
                 icone.style.color = '#7f8c8d';
             }
         }
+
 
         // 2. DECLENCHEUR DU CLIC SUR LE MOBILE DE CAPTURE PHOTO
         function declencherApercuPhoto(inputId) {
