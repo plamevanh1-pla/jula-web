@@ -143,22 +143,7 @@
             </div>
         </form>
     </div>
-<!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
-    <script>
-        // 1. GESTION DE L'ŒIL MAGIQUE DU MOT DE PASSE
-        function basculerOeilInscription() {
-            const champ = document.getElementById('champMotDePasse');
-            const icone = document.getElementById('iconeOeil');
-            if (champ.type === 'password') {
-                champ.type = 'text';
-                icone.innerText = 'visibility'; // Devient un œil ouvert quand on voit le texte
-                icone.style.color = 'var(--jula-orange, #f57c00)';
-            } else {
-                champ.type = 'password';
-                icone.innerText = 'visibility_off'; // Redevient un œil fermé quand c'est caché
-                icone.style.color = '#7f8c8d';
-            }
-        }
+ 
     // 3. AFFICHAGE ET MODIFICATION EN DIRECT SI LE COURSIER SE TROMPE
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
