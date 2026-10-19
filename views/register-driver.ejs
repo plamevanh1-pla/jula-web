@@ -40,11 +40,11 @@
 </head>
 <body>
 
-     <div class="form-container">
-        <!-- Bouton retour discret vers l'accueil général du site -->
+             <!-- Bouton retour universel en français Jula -->
         <a href="/" class="btn-back">
-            <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">arrow_back</span> Accueil
+            ← Accueil
         </a>
+
 
         <h2>🇲🇱 Devenir Livreur Jula</h2>
         <p class="subtitle">Rejoignez la flotte Jula Network, contrôlez vos justificatifs et maximisez vos gains logistiques en zone CFA</p>
@@ -71,15 +71,16 @@
                 <input type="email" name="email" placeholder="Ex: sekou@jula-livraison.com" required autocomplete="email">
             </div>
 
-            <div class="form-group">
+                        <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
                     <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility</span>
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
                     </button>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label>Zone de livraison principale</label>
@@ -98,7 +99,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto"></span>
                     <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
@@ -110,7 +111,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (VERSO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniVerso')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso"></span>
                     <p id="txt-fichCniVerso">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
@@ -122,7 +123,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">🏍️ Photo de votre Moto ou Véhicule</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichVehicule')">
-                    <span class="material-icons-round icone-cam" id="ic-fichVehicule">motorcycle</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichVehicule"></span>
                     <p id="txt-fichVehicule">Prenez une photo claire de votre engin avec plaque visible</p>
                     <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule">
                     <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
@@ -132,7 +133,7 @@
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
+                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
                 </a>
                 <button type="submit" class="btn-submit" style="width: 65%;">Valider mon inscription de coursier Jula</button>
             </div>
