@@ -223,7 +223,8 @@ app.post('/reject-partner', async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 });
-  // 📥 1. PORTAIL DE PUBLICATION (AVEC "O" - ROUTE HISTORIQUE)
+   
+// 📥 1. PORTAIL DE PUBLICATION (AVEC "O" - ROUTE HISTORIQUE)
 app.get('/vendedor/dashboard', async (req, res) => {
     try {
         let userEmail = req.query.email || 'vendeur@jula.com';
@@ -256,6 +257,8 @@ app.get('/vendeur/dashboard', async (req, res) => {
         res.status(500).send(`❌ Erreur d'affichage du formulaire Jula : ${err.message}`);
     }
 });
+
+ 
 
 
 // 🔄 4. MISE À JULA DU STATUT DES LIVRAISONS ET PANIER
