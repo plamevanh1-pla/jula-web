@@ -1,10 +1,10 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jula - Inscription Vendeur Grossiste</title>
-    <!-- Icônes Modernes Google Material -->
+    <!-- Icônes Modernes Google Material Sécurisées -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
@@ -36,9 +36,8 @@
    <div class="form-container">
         <!-- Bouton retour discret vers la vitrine générale du site -->
         <a href="/" class="btn-back">
-            ← Accueil
+            <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">arrow_back</span> Accueil
         </a>
-
 
         <h2>🏬 Devenir Vendeur Jula</h2>
         <p class="subtitle">Créez votre vitrine grossiste et commencez à distribuer vos stocks de smartphones en zone CFA</p>
@@ -50,7 +49,6 @@
                 <label>Nom complet du gérant</label>
                 <input type="text" name="full_name" placeholder="Ex: Koffi Kouamé" required>
             </div>
-
             <div class="form-group">
                 <label>Nom de la Boutique / Grossiste</label>
                 <input type="text" name="shop_name" placeholder="Ex: Établissement Koffi & Fils" required>
@@ -76,15 +74,19 @@
                 <select name="country" required>
                     <option value="CI">🇨🇮 Côte d'Ivoire</option>
                     <option value="SN">🇸🇳 Sénégal</option>
+                    <option value="ML">🇲🇱 Mali</option>
+                    <option value="BF">🇧🇫 Burkina Faso</option>
                     <option value="TG">🇹🇬 Togo</option>
                     <option value="BJ">🇧🇯 Bénin</option>
+                    <option value="NE">🇳🇪 Niger</option>
                 </select>
             </div>
+            
             <!-- 📸 RECTO DE LA PIÈCE D'IDENTITÉ -->
             <div class="form-group">
                 <label>📄 Pièce d'identité nationale (RECTO)</label>
                 <input type="file" name="cni_recto" accept="image/*" required>
-                <div class="info-file">Photo nette du recto de votre CNI, Passeport ou carte CENA.</div>
+                <div class="info-file">Photo nette du recto de votre CNI, Passeport ou pièce officielle.</div>
             </div>
 
             <!-- 📸 VERSO DE LA PIÈCE D'IDENTITÉ -->
