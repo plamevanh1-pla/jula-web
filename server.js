@@ -224,7 +224,7 @@ app.post('/reject-partner', async (req, res) => {
     }
 });
    
- // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+  // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     
@@ -266,6 +266,23 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     } catch (err) {
         console.error("❌ Erreur critique sur le dashboard orders:", err.message);
         res.redirect('/login');
+    }
+});
+
+// 📥 3B. PORTAIL DE PUBLICATION (LA ROUTE MANQUANTE QUI CORRIGE L'ERREUR CANNOT GET)
+app.get('/vendedor/dashboard', async (req, res) => {
+    try {
+        let userEmail = req.query.email || 'vendeur@jula.com';
+        let userId = req.query.userId || '';
+
+        // Ouvre exactement ton fichier views/dashboard.ejs
+        res.render('dashboard', { 
+            email: userEmail, 
+            userId: userId,
+            user: { id: userId, email: userEmail } 
+        });
+    } catch (err) {
+        res.status(500).send(`❌ Erreur d'affichage du formulaire Jula : ${err.message}`);
     }
 });
 
