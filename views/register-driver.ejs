@@ -74,16 +74,12 @@
           <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
-                    <!-- Le champ démarre masqué par défaut grâce à type="password" -->
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
-                    
-                    <!-- Bouton cliquable avec l'œil configuré correctement -->
-                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0; display: flex; align-items: center;">
-                        <!-- ✨ CORRIGÉ : L'icône "visibility_off" est maintenant bien insérée à l'intérieur -->
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
                     </button>
                 </div>
-            </div>
+            </div>   
 
 
             <div class="form-group">
