@@ -40,10 +40,11 @@
 </head>
 <body>
 
-   <div class="form-container">
+            <!-- Bouton retour universel en français Jula -->
         <a href="/" class="btn-back">
-            <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">arrow_back</span> Accueil
+            ← Accueil
         </a>
+
 
         <h2>🏬 Devenir Vendeur Jula</h2>
         <p class="subtitle">Créez votre vitrine grossiste, modifiez vos documents en direct et commencez à distribuer vos stocks en zone CFA</p>
@@ -73,12 +74,15 @@
             <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
+                    <!-- Caché par défaut (type="password") -->
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
                     <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility</span>
+                        <!-- ✨ CORRIGÉ : L'œil est barré/caché par défaut -->
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
                     </button>
                 </div>
             </div>
+
 
             <div class="form-group">
                 <label>Pays d'activité régional</label>
@@ -97,7 +101,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto"></span>
                     <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
@@ -109,7 +113,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (VERSO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniVerso')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso">photo_camera</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso"></span>
                     <p id="txt-fichCniVerso">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
@@ -121,7 +125,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">🏪 Photo de votre Magasin / Établissement</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichBoutique')">
-                    <span class="material-icons-round icone-cam" id="ic-fichBoutique">storefront</span>
+                    <span class="material-icons-round icone-cam" id="ic-fichBoutique"></span>
                     <p id="txt-fichBoutique">Prenez une vue claire de votre vitrine ou étagères</p>
                     <img id="img-fichBoutique" class="image-rendu" alt="Aperçu Boutique">
                     <input type="file" id="fichBoutique" name="photo_boutique" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichBoutique')" required>
@@ -131,7 +135,7 @@
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
+                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
                 </a>
                 <button type="submit" class="btn-submit" style="width: 65%;">Finaliser mon inscription</button>
             </div>
