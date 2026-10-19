@@ -223,48 +223,37 @@ app.post('/reject-partner', async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 });
- // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
-app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
-    const { vendedor_id } = req.params;
-    
+  // 📥 1. PORTAIL DE PUBLICATION (AVEC "O" - ROUTE HISTORIQUE)
+app.get('/vendedor/dashboard', async (req, res) => {
     try {
-        if (!vendedor_id || vendedor_id === 'undefined' || vendedor_id.trim() === '') {
-            console.log("⚠️ Identifiant de grossiste manquant dans l'URL. Redirection vers le login.");
-            return res.redirect('/login');
-        }
+        let userEmail = req.query.email || 'vendeur@jula.com';
+        let userId = req.query.userId || '';
 
-        const { data: orders, error: ordersError } = await supabase
-            .from('orders')
-            .select('*')
-            .eq('vendedor_id', vendedor_id);
-
-        if (ordersError) {
-            return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
-        }
-
-        let totalEarnings = 0;
-        let pendingOrdersCount = 0;
-        
-        if (orders && orders.length > 0) {
-            orders.forEach(order => {
-                if (order.status === 'Livré' || order.status === 'En cours de livraison') {
-                    totalEarnings += Number(order.total_price || order.price_fcfa || 0);
-                }
-                if (order.status === 'En attente de préparation') {
-                    pendingOrdersCount++;
-                }
-            });
-        }
-
-        res.render('vendedor_orders', { 
-            orders: orders || [], 
-            vendedor_id, 
-            totalEarnings, 
-            pendingOrdersCount 
+        // ✨ Ouvre exactement ton fichier views/dashboard.ejs
+        res.render('dashboard', { 
+            email: userEmail, 
+            userId: userId,
+            user: { id: userId, email: userEmail } 
         });
     } catch (err) {
-        console.error("❌ Erreur critique sur le dashboard orders:", err.message);
-        res.redirect('/login');
+        res.status(500).send(`❌ Erreur d'affichage du formulaire Jula : ${err.message}`);
+    }
+});
+
+// 📥 2. DOUBLE SÉCURITÉ (AVEC "EU" - ROUTE FRANÇAISE)
+app.get('/vendeur/dashboard', async (req, res) => {
+    try {
+        let userEmail = req.query.email || 'vendeur@jula.com';
+        let userId = req.query.userId || '';
+
+        // ✨ Ouvre également ton fichier views/dashboard.ejs
+        res.render('dashboard', { 
+            email: userEmail, 
+            userId: userId,
+            user: { id: userId, email: userEmail } 
+        });
+    } catch (err) {
+        res.status(500).send(`❌ Erreur d'affichage du formulaire Jula : ${err.message}`);
     }
 });
 
