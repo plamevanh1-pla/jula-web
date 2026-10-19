@@ -71,12 +71,16 @@
                 <input type="email" name="email" placeholder="Ex: sekou@jula-livraison.com" required autocomplete="email">
             </div>
 
-                        <div class="form-group">
+          <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
+                    <!-- Le champ démarre masqué par défaut grâce à type="password" -->
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
-                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
+                    
+                    <!-- Bouton cliquable avec l'œil configuré correctement -->
+                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0; display: flex; align-items: center;">
+                        <!-- ✨ CORRIGÉ : L'icône "visibility_off" est maintenant bien insérée à l'intérieur -->
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
                     </button>
                 </div>
             </div>
@@ -162,6 +166,28 @@
             document.getElementById(inputId).click();
         }
 
+        <!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
+    <script>
+        // 1. GESTION DE L'ŒIL MAGIQUE DU MOT DE PASSE
+        function basculerOeilInscription() {
+            const champ = document.getElementById('champMotDePasse');
+            const icone = document.getElementById('iconeOeil');
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                icone.innerText = 'visibility'; // Devient un œil ouvert quand on voit le texte
+                icone.style.color = 'var(--jula-orange, #f57c00)';
+            } else {
+                champ.type = 'password';
+                icone.innerText = 'visibility_off'; // Redevient un œil fermé quand c'est caché
+                icone.style.color = '#7f8c8d';
+            }
+        }
+
+        // 2. ✨ AJOUTÉ : DÉCLENCHEUR DE CLIC POUR OUVRIR L'APPAREIL PHOTO OU LA GALERIE
+        function declencherApercuPhoto(inputId) {
+            document.getElementById(inputId).click();
+        }
+
         // 3. AFFICHAGE ET MODIFICATION EN DIRECT SI LE COURSIER SE TROMPE
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
@@ -187,5 +213,7 @@
             }
         }
     </script>
+</body>
+</html>
 </body>
 </html>
