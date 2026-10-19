@@ -54,7 +54,7 @@
 <body>
 
     <div class="admin-header">
-        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">shield</span> Centre de Validation des Partenaires Jula</h1>
+        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
         <div class="badge-admin"> Plamé SuperAdmin</div>
     </div>
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
@@ -102,19 +102,19 @@
                         <div class="admin-actions" style="display: inline-flex; gap: 12px; justify-content: flex-end; width: 100%;">
                             <!-- 🔴 Bouton Rejeter Épuré -->
                             <button type="button" class="btn-reject" onclick="gererPartenaire('<%= profile.id %>', 'reject')">
-                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">cancel</span>
+                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
                                 Rejeter le profil
                             </button>
 
                             <!-- 🟢 Bouton Valider Épuré Connecté au Vrai Lien Render -->
                             <button type="button" class="btn-verify" onclick="gererPartenaire('<%= profile.id %>', 'verify')">
-                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">check_circle</span>
+                                <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
                                 Valider et Activer le partenaire
                             </button>
                         </div>
                     <% } else { %>
                         <span class="status-badge ok">
-                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;"></span>
                             Compte Vérifié Officiel
                         </span>
                     <% } %>
@@ -161,7 +161,7 @@
                     document.getElementById('card-' + id).classList.add('verified');
                     document.getElementById('actions-' + id).innerHTML = `
                         <span class="status-badge ok">
-                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
+                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;"></span>
                             Compte Vérifié Officiel
                         </span>`;
                 }
