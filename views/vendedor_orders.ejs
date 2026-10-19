@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -11,33 +11,23 @@
             --jula-orange: #f57c00; 
             --jula-blue: #1072ba; 
             --dark-bg: #111417; 
-            --card-bg: #1a1d21;
-            --border-color: #2d3139;
-            --success-green: #2e7d32;
-            --warning-gold: #ffc107;
+            --card-bg: #1a1d21; 
+            --border-color: #2d3139; 
+            --success-green: #2e7d32; 
+            --warning-gold: #ffc107; 
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
         .container { max-width: 1000px; margin: 0 auto; }
         
-        /* 🪐 EN-TÊTE ET PROFIL VENDEUR GROSSISTE */
-        .header { background: var(--card-bg); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-blue); }
+        /* 🪐 EN-TÊTE ET PROFIL VENDEUR */
+        .header { background: var(--card-bg); color: white; padding: 30px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-orange); }
         .header h1 { margin: 0; font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
         
-        /* 🛡️ BLOC PARAMÈTRES INTERACTIF DU MAGASIN */
-        .card-parametres-grossiste { background: rgba(255, 255, 255, 0.01); border-radius: 10px; padding: 20px; margin-top: 20px; border: 1px solid var(--border-color); }
-        .input-mdp-grossiste { background: var(--dark-bg); border: 1px solid var(--border-color); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 220px; box-sizing: border-box; outline: none; }
-        .btn-oeil-grossiste { background: none; border: none; color: #7f8c8d; cursor: pointer; vertical-align: middle; margin-left: -35px; outline: none; padding: 0; }
-        .btn-oeil-grossiste:hover { color: var(--jula-orange); }
-        .zone-avatar-grossiste { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .img-logo-magasin { width: 65px; height: 65px; border-radius: 10px; object-fit: cover; border: 2px solid var(--jula-blue); background: #2d3139; }
-        .btn-modif-logo { background: rgba(16, 114, 186, 0.15); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.25); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-modif-logo:hover { background: var(--jula-blue); color: #fff; }
-
-        /* 🔄 ACTIONS DE NAVIGATION ACCESSIBLES TRADUITES */
-        .nav-actions { margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap; }
+        /* 🔄 ACTIONS DE NAVIGATION ACCESSIBLES */
+        .nav-actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
         .btn-nav { display: inline-flex; align-items: center; gap: 6px; background: var(--jula-blue); color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; transition: opacity 0.2s; }
         .btn-home { display: inline-flex; align-items: center; gap: 6px; background: #2d3139; color: white; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid var(--border-color); transition: opacity 0.2s; }
-        .btn-logout { display: inline-flex; align-items: center; gap: 6px; background: rgba(220, 53, 69, 0.1); color: #dc3545; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(220, 53, 69, 0.2); font-weight: bold; transition: all 0.2s; }
+        .btn-logout { display: inline-flex; align-items: center; gap: 6px; background: rgba(220, 53, 69, 0.1); color: #dc3545; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; font-size: 13px; border: 1px solid rgba(220, 53, 69, 0.2); transition: all 0.2s; }
         .btn-logout:hover { background: #dc3545; color: white; }
         .btn-nav:hover, .btn-home:hover { opacity: 0.9; }
 
@@ -62,49 +52,30 @@
         .btn-update:hover { opacity: 0.9; }
         .btn-delete { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); padding: 10px 18px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; margin-left: auto; text-decoration: none; transition: all 0.2s; }
         .btn-delete:hover { background: #dc3545; color: white; }
-        .no-orders { text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; font-style: italic; border: 1px dashed var(--border-color); font-size: 14px; }
+        .no-orders { text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; font-style: italic; border: 1px dashed var(--border-color); font-size: 14px; } 
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1><span class="material-icons-round" style="color: var(--jula-blue); font-size: 26px;">analytics</span> Tableau de bord & Analyses Commerciales</h1>
-            <p style="margin: 5px 0 15px 0; color: #7f8c8d; font-size: 13px; font-weight: 500;">Identifiant Grossiste : <%= vendedor_id %></p>
+            <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">analytics</span> Tableau de bord & Analyses Commerciales</h1>
+            <p style="margin: 5px 0 15px 0; color: #7f8c8d; font-size: 13px; font-weight: 500;">Identifiant Grossiste : <%= vendedor_id %></p> 
             
             <!-- 📊 COMPTEURS DE PERFORMANCE FINANCIÈRE EN DIRECT -->
-            <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--success-green);">
-                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">💰 Chiffre d'Affaires Encaissé</div>
-                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= totalEarnings.toLocaleString('fr-FR') %> <span style="color: var(--jula-orange); font-size: 16px;">FCFA</span></div>
-                </div>
-                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--warning-gold);">
-                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">⏳ Colis à Préparer en Magasin</div>
-                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= pendingOrdersCount %> <span style="color: var(--warning-gold); font-size: 16px;">colis</span></div>
-                </div>
-            </div>
-
-            <!-- 🛡️ CONFIGURATION INTERACTIVE ET FRANÇAISE DU COMPTE GROSSISTE -->
-            <div class="card-parametres-grossiste">
-                <div class="zone-avatar-grossiste">
-                    <img src="https://unsplash.com" id="logoBoutiqueGrossiste" class="img-logo-magasin" alt="Logo Boutique">
-                    <div>
-                        <label style="display: block; font-size: 12.5px; font-weight: bold; margin-bottom: 5px; color: #ecf0f1;">Enseigne ou Logo du Magasin</label>
-                        <input type="file" id="selecteurLogoGrossiste" accept="image/*" style="display: none;" onchange="changerLogoGrossisteEnDirect(event)">
-                        <button type="button" class="btn-modif-logo" onclick="document.getElementById('selecteurLogoGrossiste').click()"><span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">add_photo_alternate</span> Charger une image</button>
-                    </div>
-                </div>
-                <div style="margin-top: 10px;">
-                    <label style="display: inline-block; width: 150px; font-size: 13px; font-weight: 600; color: #ecf0f1;">Mot de passe secret :</label>
-                    <input type="password" id="champMdpGrossiste" class="input-mdp-grossiste" value="JulaVendeurAbonne2026" readonly>
-                    <button type="button" class="btn-oeil-grossiste" onclick="basculerOeilGrossiste()">
-                        <span class="material-icons-round" id="iconeOeilGrossiste" style="font-size: 20px; vertical-align: middle;">visibility_off</span>
-                    </button>
-                </div>
+            <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;"> 
+                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--success-green);"> 
+                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">💰 Chiffre d'Affaires Encaissé</div> 
+                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= totalEarnings.toLocaleString('fr-FR') %> <span style="color: var(--jula-orange); font-size: 16px;">FCFA</span></div> 
+                </div> 
+                <div style="flex: 1; min-width: 240px; background: rgba(255,255,255,0.02); padding: 18px; border-radius: 8px; border: 1px solid var(--border-color); border-left: 4px solid var(--warning-gold);"> 
+                    <div style="font-size: 11px; color: #7f8c8d; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">⏳ Colis à Préparer en Magasin</div> 
+                    <div style="font-size: 22px; font-weight: bold; color: #fff; margin-top: 5px;"><%= pendingOrdersCount %> <span style="color: var(--warning-gold); font-size: 16px;">colis</span></div> 
+                </div> 
             </div>
 <!-- 🔄 BARRE DE NAVIGATION ET SÉCURITÉ VENDEUR INTERACTIVE -->
             <div class="nav-actions">
                 <a href="/vendedor/dashboard?userId=<%= vendedor_id %>" class="btn-nav">
-                    <span class="material-icons-round" style="font-size: 16px; margin-right: 4px;">add_box</span>
+                    <span class="material-icons-round" style="font-size: 16px; margin-right: 4px;"></span>
                     Publier un Nouvel Article
                 </a>
                 <a href="/" class="btn-home">
@@ -112,7 +83,7 @@
                     Accueil Portail Jula
                 </a>
                 <a href="/login" class="btn-logout" onclick="return confirm('Voulez-vous fermer votre session de grossiste Jula ?');">
-                    <span class="material-icons-round" style="font-size: 16px; margin-right: 4px;">logout</span>
+                    <span class="material-icons-round" style="font-size: 16px; margin-right: 4px;"></span>
                     Déconnexion du Magasin
                 </a>
             </div>
@@ -141,7 +112,7 @@
                     
                     <div class="client-info">
                         <strong style="color: #fff; display: flex; align-items: center; gap: 4px; margin-bottom: 6px;">
-                            <span class="material-icons-round" style="font-size: 16px; color: var(--jula-orange);"></span> 
+                            <span class="material-icons-round" style="font-size: 16px; color: var(--jula-orange);">person</span> 
                             Infos Acheteur Jula :
                         </strong>
                         ✉️ Email : <%= order.buyer_email %><br>
@@ -168,7 +139,7 @@
                         <form action="/delete-product/<%= order.product_id %>" method="POST" style="margin: 0;" onsubmit="return confirm('Voulez-vous vraiment détruire et retirer définitivement cet article du catalogue Jula ?');">
                             <input type="hidden" name="vendedor_id" value="<%= vendedor_id %>">
                             <button type="submit" class="btn-delete">
-                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">delete_forever</span>
+                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;"></span>
                                 Supprimer l'article
                             </button>
                         </form>
@@ -177,36 +148,5 @@
             <% }) %>
         <% } %>
     </div>
-
-    <!-- ⚙️ MOTEUR INTERACTIF DU COMPTE GROSSISTE (ŒIL ET CHANGER LOGO) -->
-    <script>
-        // 1. ACTION DE L'ŒIL MAGIQUE : CACHÉ PAR DÉFAUT
-        function basculerOeilGrossiste() {
-            const champ = document.getElementById('champMdpGrossiste');
-            const icone = document.getElementById('iconeOeilGrossiste');
-            if (champ.type === 'password') {
-                champ.type = 'text';
-                icone.innerText = 'visibility';
-                icone.style.color = 'var(--jula-orange)';
-            } else {
-                champ.type = 'password';
-                icone.innerText = 'visibility_off';
-                icone.style.color = '#7f8c8d';
-            }
-        }
-
-        // 2. MODIFICATION DU LOGO ET REVOIR L'IMAGE INSTANTANÉMENT
-        function changerLogoGrossisteEnDirect(evenement) {
-            const fichierSelectionne = evenement.target.files[0];
-            if (fichierSelectionne) {
-                const lecteurRendu = new FileReader();
-                lecteurRendu.onload = function(e) {
-                    document.getElementById('logoBoutiqueGrossiste').src = e.target.result;
-                    alert('📸 Logo du magasin synchronisé dans votre espace grossiste !');
-                };
-                lecteurRendu.readAsDataURL(fichierSelectionne);
-            }
-        }
-    </script>
 </body>
 </html>
