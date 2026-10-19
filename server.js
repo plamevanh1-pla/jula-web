@@ -223,7 +223,7 @@ app.post('/reject-partner', async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 });
-// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+ // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
     
@@ -267,6 +267,7 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
         res.redirect('/login');
     }
 });
+
 
 // 🔄 4. MISE À JULA DU STATUT DES LIVRAISONS ET PANIER
 app.post('/vendedor/update-order-status', async (req, res) => {
