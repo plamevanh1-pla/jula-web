@@ -1,112 +1,130 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jula - Inscription Livreur Coursier</title>
+    <title>Jula Express — Espace Logistique Coursier</title>
     <!-- Icônes Modernes Google Material Sécurisées -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
-            --jula-blue: #1072ba; 
+            --jula-vert: #2e7d32; 
             --dark-bg: #111417; 
             --card-bg: #1a1d21;
             --border-color: #2d3139;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
-        .form-container { max-width: 500px; background: var(--card-bg); margin: 30px auto; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-top: 5px solid var(--jula-blue); position: relative; }
-        .btn-back { position: absolute; top: 20px; left: 20px; color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; transition: color 0.2s; }
-        .btn-back:hover { color: var(--jula-blue); }
-        h2 { text-align: center; color: #fff; margin-bottom: 8px; font-weight: 800; font-size: 24px; margin-top: 15px; }
-        .subtitle { text-align: center; font-size: 13px; color: #7f8c8d; margin-bottom: 25px; line-height: 18px; }
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13.5px; letter-spacing: 0.3px; color: #ecf0f1; }
-        input, select { width: 100%; padding: 12px 14px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14.5px; color: #fff; outline: none; transition: border-color 0.2s; }
-        input:focus, select:focus { border-color: var(--jula-blue); }
-        input[type="file"] { padding: 12px; background: rgba(255, 255, 255, 0.01); border: 1px dashed var(--border-color); cursor: pointer; color: #7f8c8d; }
-        input[type="file"]:focus { border-color: var(--jula-blue); }
-        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--jula-blue), #0d5c97); color: white; padding: 14px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(16,114,186,0.2); transition: all 0.2s; margin-top: 15px; }
-        .btn-submit:hover { opacity: 0.95; }
-        .info-file { font-size: 11px; color: #7f8c8d; margin-top: 5px; font-weight: 500; }
+        .content-container { max-width: 900px; margin: 0 auto; }
+        
+        .header-driver { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-vert); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header-driver h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
+        
+        .status-badge-active { background: rgba(46, 125, 50, 0.1); color: #81c784; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(46, 125, 50, 0.2); }
+        .btn-logout { background: #c62828; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
+        .btn-logout:hover { background: #b71c1c; }
+        
+        /* ⚙️ BLOC PARAMÈTRES SÉCURISÉ */
+        .card-parametres { background: var(--card-bg); border-radius: 12px; padding: 24px; margin-bottom: 20px; border: 1px solid var(--border-color); }
+        .input-securise { background: var(--dark-bg); border: 1px solid var(--border-color); color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 14px; width: 200px; }
+        
+        .btn-oeil { background: none; border: none; color: #7f8c8d; cursor: pointer; vertical-align: middle; margin-left: -40px; outline: none; }
+        .btn-oeil:hover { color: var(--jula-orange); }
+
+        .zone-avatar { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .img-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--jula-orange); background: #333; }
+        .btn-photo-modif { background: rgba(16, 114, 186, 0.15); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.25); padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
+
+        .grille-missions { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+        .card-mission { background: var(--card-bg); border-radius: 12px; padding: 20px; border: 1px solid var(--border-color); border-left: 5px solid var(--jula-orange); }
     </style>
 </head>
 <body>
 
-     <div class="form-container">
-        <!-- Bouton retour discret vers l'accueil général du site -->
-        <a href="/" class="btn-back">
-            <span class="material-icons-round" style="font-size: 16px; vertical-align: middle;">arrow_back</span> Accueil
-        </a>
+    <div class="content-container">
+        <!-- 🪐 EN-TÊTE DE L'ESPACE PRIVÉ LIVREUR -->
+        <div class="header-driver">
+            <h1><span class="material-icons-round" style="color: var(--jula-vert);">two_wheeler</span> Espace Coursier Réel Jula</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="status-badge-active">● Connecté & Disponible</span>
+                <a href="/login" class="btn-logout"><span class="material-icons-round" style="font-size: 16px;">power_settings_new</span> Fermer la session</a>
+            </div>
+        </div>
 
-        <h2>🇲🇱 Devenir Livreur Jula</h2>
-        <p class="subtitle">Rejoignez la flotte Jula Network, accédez aux feuilles de route et maximisez vos gains logistiques en zone CFA</p>
+        <!-- 🛡️ BLOC DE GESTION DU PROFIL (FRANÇAIS PROPRE) -->
+        <div class="card-parametres">
+            <h3 style="margin-top: 0; color: #fff; display: flex; align-items: center; gap: 6px;"><span class="material-icons-round" style="color: var(--jula-orange); font-size: 20px;">manage_accounts</span> Gestion de votre profil coursier</h3>
+            
+            <!-- Modification de la photo de profil -->
+            <div class="zone-avatar">
+                <img src="https://unsplash.com" id="avatarLivreur" class="img-avatar" alt="Profil">
+                <div>
+                    <label style="display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px;">Photo de profil officielle</label>
+                    <input type="file" id="selecteurAvatar" accept="image/*" style="display: none;" onchange="changerPhotoEnDirect(event)">
+                    <button type="button" class="btn-photo-modif" onclick="document.getElementById('selecteurAvatar').click()"><span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">photo_camera</span> Modifier ma photo</button>
+                </div>
+            </div>
+
+            <!-- Visualisation du mot de passe sécurisé -->
+            <div style="margin-top: 15px;">
+                <label style="display: inline-block; width: 150px; font-size: 13.5px; font-weight: 600;">Mot de passe secret :</label>
+                <input type="password" id="champMotDePasse" class="input-securise" value="JulaExpress2026" readonly>
+                <button type="button" class="btn-oeil" onclick="basculerAffichageMotDePasse()">
+                    <span class="material-icons-round" id="iconeOeil" style="font-size: 20px; vertical-align: middle;">visibility</span>
+                </button>
+                <span style="font-size: 12px; color: #7f8c8d; margin-left: 15px;">✉️ Compte : <%= email %></span>
+            </div>
+        </div>
+
+        <h2>📦 Votre Feuille de Route en Direct</h2>
         
-        <form action="/submit-partner" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="business_type" value="livreur">
-            
-            <div class="form-group">
-                <label>Nom complet du coursier</label>
-                <input type="text" name="full_name" placeholder="Ex: Sékou Touré" required>
-            </div>
-
-            <div class="form-group">
-                <label>Numéro de Plaque d'Immatriculation</label>
-                <input type="text" name="vehicle_plate" placeholder="Ex: 4567-IU-01" required>
-            </div>
-
-            <div class="form-group">
-                <label>Numéro de Téléphone (Orange, Wave, MTN...)</label>
-                <input type="tel" name="phone" placeholder="Ex: +225 0505..." required>
-            </div>
-
-            <div class="form-group">
-                <label>Adresse Électronique (Email)</label>
-                <input type="email" name="email" placeholder="Ex: sekou@jula-livraison.com" required autocomplete="email">
-            </div>
-
-            <div class="form-group">
-                <label>Mot de passe secret</label>
-                <input type="password" name="password" placeholder="Minimum 6 caractères" required autocomplete="new-password">
-            </div>
-
-            <div class="form-group">
-                <label>Zone de livraison principale</label>
-                <select name="country" required>
-                    <option value="CI">🇨🇮 Côte d'Ivoire</option>
-                    <option value="SN">🇸🇳 Sénégal</option>
-                    <option value="ML">🇲🇱 Mali</option>
-                    <option value="BF">🇧🇫 Burkina Faso</option>
-                    <option value="TG">🇹🇬 Togo</option>
-                    <option value="BJ">🇧🇯 Bénin</option>
-                    <option value="NE">🇳🇪 Niger</option>
-                </select>
-            </div>
-            
-            <!-- 📸 CNI RECTO -->
-            <div class="form-group">
-                <label>📄 Pièce d'identité nationale (RECTO)</label>
-                <input type="file" name="cni_recto" accept="image/*" required>
-                <div class="info-file">Photo nette de l'avant de votre carte nationale d'identité ou permis.</div>
-            </div>
-
-            <!-- 📸 CNI VERSO -->
-            <div class="form-group">
-                <label>📄 Pièce d'identité nationale (VERSO)</label>
-                <input type="file" name="cni_verso" accept="image/*" required>
-                <div class="info-file">Photo nette de l'arrière de votre carte nationale d'identité.</div>
-            </div>
-
-            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE -->
-            <div class="form-group">
-                <label>🏍️ Photo de votre Moto ou Véhicule</label>
-                <input type="file" name="photo_vehicule" accept="image/*" required>
-                <div class="info-file">Prenez une photo claire de votre engin où la plaque d'immatriculation est bien lisible.</div>
-            </div>
-
-            <button type="submit" class="btn-submit">Valider mon inscription de coursier Jula</button>
-        </form>
+        <div class="grille-missions">
+            <% if (orders.length === 0) { %>
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; border: 1px dashed var(--border-color);">
+                    <span class="material-icons-round" style="font-size: 48px; display: block; margin-bottom: 10px;">sports_motorsports</span>
+                    Aucune livraison disponible dans votre secteur pour le moment.
+                </div>
+            <% } else { %>
+                <% orders.forEach(function(order) { %>
+                    <div class="card-mission">
+                        <h3 style="margin: 5px 0; color: #fff;"><%= order.product_title %></h3>
+                        <p style="margin: 5px 0; font-size: 14px;">📍 <b>Adresse :</b> <%= order.buyer_address %></p>
+                        <p style="margin: 5px 0; font-size: 15px; font-weight: bold; color: #81c784;">💰 Encaisser : <%= order.total_price %> FCFA</p>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
     </div>
 
+    <!-- ⚙️ LE MOTEUR DE SÉCURITÉ DU PROFIL -->
+    <script>
+        // 1. VOIR ET MASQUER LE MOT DE PASSE EN 1 CLIC
+        function basculerAffichageMotDePasse() {
+            const champ = document.getElementById('champMotDePasse');
+            const icone = document.getElementById('iconeOeil');
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                icone.innerText = 'visibility_off';
+                icone.style.color = 'var(--jula-orange)';
+            } else {
+                champ.type = 'password';
+                icone.innerText = 'visibility';
+                icone.style.color = '#7f8c8d';
+            }
+        }
+
+        // 2. CHANGER LA PHOTO DE PROFIL ET APERCEVOIR LE RÉSULTAT
+        function changerPhotoEnDirect(evenement) {
+            const fichier = evenement.target.files[0];
+            if (fichier) {
+                const lecteur = new FileReader();
+                lecteur.onload = function(e) {
+                    document.getElementById('avatarLivreur').src = e.target.result;
+                    alert('📸 Nouvelle photo chargée dans l’application !');
+                };
+                lecteur.readAsDataURL(fichier);
+            }
+        }
+    </script>
 </body>
 </html>
