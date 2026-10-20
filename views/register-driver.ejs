@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -46,7 +46,7 @@
         </a>
 
 
-        <h2> Devenir Livreur Jula</h2>
+        <h2>🇲🇱 Devenir Livreur Jula</h2>
         <p class="subtitle">Rejoignez la flotte Jula Network, contrôlez vos justificatifs et maximisez vos gains logistiques en zone CFA</p>
         
         <form action="/submit-partner" method="POST" enctype="multipart/form-data">
@@ -71,7 +71,7 @@
                 <input type="email" name="email" placeholder="Ex: sekou@jula-livraison.com" required autocomplete="email">
             </div>
 
-          <div class="form-group">
+                        <div class="form-group">
                 <label>Mot de passe secret</label>
                 <div style="position: relative; display: flex; align-items: center;">
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
@@ -79,7 +79,7 @@
                         <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
                     </button>
                 </div>
-            </div>   
+            </div>
 
 
             <div class="form-group">
@@ -99,7 +99,7 @@
             <div class="form-group" style="text-align: center;">
                 <label style="text-align: left;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto"></span>
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
                     <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
@@ -121,9 +121,9 @@
 
             <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE -->
             <div class="form-group" style="text-align: center;">
-                <label style="text-align: left;">🏍️ Photo de votre Moto ou Véhicule</label>
+                <label style="text-align: left;"> Photo de votre Moto ou Véhicule</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichVehicule')">
-                    <span class="material-icons-round icone-cam" id="ic-fichVehicule"></span>
+                    <span class="material-icons-round icone-cam" id="ic-fichVehicule">motorcycle</span>
                     <p id="txt-fichVehicule">Prenez une photo claire de votre engin avec plaque visible</p>
                     <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule">
                     <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
@@ -133,14 +133,36 @@
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
+                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
                 </a>
                 <button type="submit" class="btn-submit" style="width: 65%;">Valider mon inscription de coursier Jula</button>
             </div>
         </form>
     </div>
- 
-// 3. AFFICHAGE ET MODIFICATION EN DIRECT SI LE COURSIER SE TROMPE
+
+    <!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
+    <script>
+        // 1. GESTION DE L'ŒIL MAGIQUE DU MOT DE PASSE
+        function basculerOeilInscription() {
+            const champ = document.getElementById('champMotDePasse');
+            const icone = document.getElementById('iconeOeil');
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                icone.innerText = 'visibility_off';
+                icone.style.color = 'var(--jula-orange)';
+            } else {
+                champ.type = 'password';
+                icone.innerText = 'visibility';
+                icone.style.color = '#7f8c8d';
+            }
+        }
+
+        // 2. DECLENCHEUR DU CLIC SUR LE MOBILE DE CAPTURE PHOTO
+        function declencherApercuPhoto(inputId) {
+            document.getElementById(inputId).click();
+        }
+
+        // 3. AFFICHAGE ET MODIFICATION EN DIRECT SI LE COURSIER SE TROMPE
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
             
@@ -164,8 +186,6 @@
                 lecteur.readAsDataURL(elementsFichiers);
             }
         }
-    </script>     
-</body>
-</html>
+    </script>
 </body>
 </html>
