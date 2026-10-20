@@ -177,7 +177,66 @@
 
         </div>
     </div>
+    <!-- 🪐 GRILLE DES 4 PANNEAUX STRATÉGIQUES COMPLÉMENTAIRES (FINANCE, LOGISTIQUE, CATALOGUE, LITIGES) -->
+    <div class="container" style="max-width: 1000px; margin: 20px auto 0 auto;">
+        <div class="grille-admin-sections" style="grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
+            
+            <!-- 💰 PANNEAU 1 : CAISSE FINANCIÈRE & DEMANDES DE RETRAIT -->
+            <div class="carte-panneau-admin" style="border-top: 5px solid var(--success);">
+                <h2><span class="material-icons-round" style="color: var(--success);">account_balance_wallet</span> Caisse Financière & Retraits</h2>
+                <form id="formFinances" onsubmit="executerRetraitMobileMoney(event)">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Partenaire (ID Supabase)</label>
+                    <input type="text" id="finance_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du livreur ou relais" required>
+                    
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Montant à reverser (FCFA)</label>
+                    <input type="number" id="finance_amount" class="champ-admin-qg" placeholder="Ex: 25000" required>
+                    
+                    <button type="submit" class="btn-admin-publier" style="background: var(--success);">
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">payments</span> Validé le virement Mobile Money
+                    </button>
+                </form>
+            </div>
 
+            <!-- 🏍️ PANNEAU 2 : RADAR LOGISTIQUE & SUIVI DES COLIS -->
+            <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-blue);">
+                <h2><span class="material-icons-round" style="color: var(--jula-blue);">local_shipping</span> Radar Logistique & Colis</h2>
+                <div style="background: var(--dark-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 13px;">
+                    <p style="margin: 0 0 10px 0; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">📡 Statut général de la flotte :</p>
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>🏍️ Coursiers connectés :</span> <b style="color: #81c784;">En direct</b></div>
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>📦 Colis en transit :</span> <b style="color: var(--jula-orange);">Analyse Supabase active</b></div>
+                    <div style="display:flex; justify-content: space-between;"><span>⏱️ Temps de livraison moyen :</span> <b style="color: #fff;">Optimisé zone CFA</b></div>
+                </div>
+            </div>
+
+            <!-- 📱 PANNEAU 3 : MODÉRATEUR DU CATALOGUE SMARTPHONES -->
+            <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-orange);">
+                <h2><span class="material-icons-round" style="color: var(--jula-orange);">phone_android</span> Modérateur du Catalogue</h2>
+                <form id="formCatalogue" onsubmit="supprimerArticleControle(event)">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Produit à détruire</label>
+                    <input type="text" id="catalogue_product_id" class="champ-admin-qg" placeholder="Coller l'ID du smartphone" required>
+                    
+                    <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);">
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">no_cell</span> Supprimer brute du catalogue
+                    </button>
+                </form>
+            </div>
+
+            <!-- 🚫 PANNEAU 4 : TRIBUNAL DES LITIGES & BANNING -->
+            <div class="carte-panneau-admin" style="border-top: 5px solid var(--danger);">
+                <h2><span class="material-icons-round" style="color: var(--danger);">gavel</span> Tribunal des Litiges & Bannissement</h2>
+                <form id="formLitiges" onsubmit="bannirCompteTricheur(event)">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du compte à bannir (ID)</label>
+                    <input type="text" id="litige_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du tricheur ou faux compte" required>
+                    
+                    <button type="submit" class="btn-admin-publier" style="background: var(--danger);" onclick="return confirm('⚠️ Êtes-vous sûr de vouloir bannir définitivement et supprimer ce compte de Supabase ?');">
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">block</span> Exclure et Bloquer le profil
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+         
     <!-- 🪐 SCRIPT INTELLIGENT ANTI-ÉCRAN BLANC (FETCH API ACCÉLÉRÉ CORRIGÉ) -->
     <script>
         async function gererPartenaire(id, action) {
@@ -257,6 +316,69 @@
                 }
             } catch (err) { alert("Échec de téléversement de l'image publicitaire."); }
         });
+        // 3. SECRÉTARIAT FINANCIER : EXPÉDITION ET VALIDATION DES RETRAITS CASH
+        async function executerRetraitMobileMoney(evenement) {
+            evenement.preventDefault();
+            const idPartenaire = document.getElementById('finance_partner_id').value;
+            const montant = document.getElementById('finance_amount').value;
+            
+            try {
+                const reponse = await fetch('/admin/validate-payout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profile_id: idPartenaire, amount: montant })
+                });
+                const net = await reponse.json();
+                if (net.success) {
+                    alert(`💵 Succès ! Le virement Mobile Money de ${montant} FCFA a été validé et archivé.`);
+                    document.getElementById('formFinances').reset();
+                }
+            } catch (err) { alert("📡 Échec de liaison avec le centre financier."); }
+        }
+
+        // 4. NETTOYAGE CHIRURGICAL : DESTRUCTION D'UN SMARTPHONE DU CATALOGUE
+        async function supprimerArticleControle(evenement) {
+            evenement.preventDefault();
+            const idProduit = document.getElementById('catalogue_product_id').value;
+            
+            try {
+                const reponse = await fetch('/admin/delete-catalog-product', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: idProduit })
+                });
+                const net = await reponse.json();
+                if (net.success) {
+                    alert("📱 Rayon nettoyé ! L'article a été effacé en direct du catalogue Jula Express.");
+                    document.getElementById('formCatalogue').reset();
+                }
+            } catch (err) { alert("📡 Échec d'interconnexion réseau."); }
+        }
+
+        // 5. LE TRIBUNAL : BANNING DIRECT ET BRUT À LA SOURCE DE SUPABASE
+        async function bannirCompteTricheur(evenement) {
+            evenement.preventDefault();
+            const idTricheur = document.getElementById('litige_partner_id').value;
+            
+            try {
+                const reponse = await fetch('/admin/ban-partner', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: idTricheur })
+                });
+                const net = await reponse.json();
+                if (net.success) {
+                    alert("🚫 Justice rendue ! Le compte a été banni et effacé de la base de données.");
+                    
+                    // Si la carte de ce tricheur est actuellement affichée en haut, on l'efface instantanément
+                    const carteExistante = document.getElementById('card-' + idTricheur);
+                    if (carteExistante) carteExistante.remove();
+                    
+                    document.getElementById('formLitiges').reset();
+                }
+            } catch (err) { alert("📡 Erreur lors de l'envoi de l'ordre d'exclusion."); }
+        }
+
     </script>
 </body>
 </html>
