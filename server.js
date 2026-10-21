@@ -1,4 +1,4 @@
- require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -59,8 +59,14 @@ app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
 
+// 👥 ✨ ICI LA ROUTE SECRÈTE DE L'ÉQUIPE : Ouvre ton fichier views/register-team.ejs
+app.get('/register-jula-team', (req, res) => { 
+    res.render('register-team'); 
+});
+
 // 🔒 ROUTE INTERNATIONALE POUR LA POLITIQUE DE CONFIDENTIALITÉ JULA
 app.get('/politique-confidentialite', (req, res) => { res.render('politique-confidentialite'); });
+
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
 async function uploadToSupabase(file, folder) {
     if (!file) return null;
@@ -76,7 +82,6 @@ async function uploadToSupabase(file, folder) {
     const { data: publicUrlData } = supabase.storage.from('product-image').getPublicUrl(fileName);
     return publicUrlData.publicUrl;
 }
-
 // 💾 1. MOTEUR D'INSCRIPTION INTERCONNECTÉ (MULTI-PHOTOS)
 app.post('/submit-partner', upload.fields([
     { name: 'cni_recto', maxCount: 1 },
@@ -100,7 +105,7 @@ app.post('/submit-partner', upload.fields([
             const urlBoutique = await uploadToSupabase(shopFile, 'boutiques');
             const urlVehicule = await uploadToSupabase(vehicleFile, 'vehicules');
 
-            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
+            // Insertion du profil complet avec formatage PostgreSQL
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
@@ -129,8 +134,7 @@ app.post('/submit-partner', upload.fields([
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
-
- // 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES SÉCURISÉE ET DYNAMIQUE
+// 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES SÉCURISÉE ET DYNAMIQUE (AVEC INTERCEPTION ÉQUIPE)
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -151,14 +155,13 @@ app.post('/login-partner', async (req, res) => {
             return res.redirect('/vendedor/dashboard');
         }
 
-        // 🏪 Si c'est un Vendeur / Grossiste
+        // 🏪 A. Si c'est un Vendeur / Grossiste
         if (userRole === 'boutique' || userRole === 'vendedor') {
             return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
         }
         
-        // 🏍️ Si c'est un Livreur / Coursier Réel
+        // 🏍️ B. Si c'est un Livreur / Coursier Réel
         if (userRole === 'livreur' || userRole === 'driver') {
-            // Le serveur extrait les colis en attente pour le livreur
             const { data: activeOrders } = await supabase
                 .from('orders')
                 .select('*')
@@ -168,13 +171,12 @@ app.post('/login-partner', async (req, res) => {
                 email: profile.email, 
                 userId: profileId,
                 user: { id: profileId, email: profile.email },
-                orders: activeOrders || [] // Transmet les vrais colis sans planter !
+                orders: activeOrders || [] 
             });
         }
         
-        // 🏪 Si c'est un Point Relais Hub Réel
+        // 🏪 C. Si c'est un Point Relais Hub Réel
         if (userRole === 'relais' || userRole === 'station') {
-            // Le serveur extrait les colis stockés dans le secteur
             const { data: stationOrders } = await supabase
                 .from('orders')
                 .select('*')
@@ -184,50 +186,90 @@ app.post('/login-partner', async (req, res) => {
                 email: profile.email, 
                 userId: profileId,
                 user: { id: profileId, email: profile.email },
-                orders: stationOrders || [] // Transmet les vrais colis sans planter !
+                orders: stationOrders || [] 
             });
         }
+
+        // 📞 D. L'AIGUILLAGE POUR L'ASSISTANT SUPPORT
+        if (userRole === 'support' || userRole === 'assistance') {
+            const { data: issueOrders } = await supabase.from('orders').select('*').not('status', 'eq', 'Livré');
+            return res.render('dashboard-support', { 
+                email: profile.email, 
+                userId: profileId,
+                user: { id: profileId, email: profile.email },
+                orders: issueOrders || []
+            });
+        }
+
+        // 💰 E. L'AIGUILLAGE POUR LE COMPTABLE
+        if (userRole === 'comptable' || userRole === 'finance') {
+            const { data: allOrders } = await supabase.from('orders').select('*');
+            let chiffreAffairesGlobal = 0;
+            if (allOrders && allOrders.length > 0) {
+                allOrders.forEach(order => {
+                    if (order.status === 'Livré' || order.status === 'En cours de livraison') {
+                        chiffreAffairesGlobal += Number(order.total_price || order.price_fcfa || 0);
+                    }
+                });
+            }
+            return res.render('dashboard-finance', { 
+                email: profile.email, 
+                userId: profileId,
+                user: { id: profileId, email: profile.email },
+                orders: allOrders || [],
+                caGlobal: chiffreAffairesGlobal
+            });
+        }
+
+        // 📢 F. L'AIGUILLAGE POUR LE CHARGÉ DE MÉDIA
+        if (userRole === 'media' || userRole === 'com' || userRole === 'communication') {
+            return res.render('dashboard-media', { 
+                email: profile.email, 
+                userId: profileId,
+                user: { id: profileId, email: profile.email }
+            });
+        }
+
     } catch (err) {
         res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
     }
 });
 
-// 🪐 3. BRANCHEMENT DES ACTIONS DU QG JACKY (ANTI-ÉCRAN BLANC ET DEPLOIEMENT AUTORISÉ)
-app.post('/verify-partner', async (req, res) => {
-    const { id } = req.body;
+// 📥 16. RÉCEPTION ET INSCRIPTION SÉCURISÉE DU PERSONNEL DE L'ÉQUIPE (MÉTHODE 2 D'AUTONOMIE)
+app.post('/submit-team-member', async (req, res) => {
+    const { full_name, phone, email, password, team_role, country } = req.body;
     try {
         const { data, error } = await supabase
             .from('profiles')
-            .update({ is_verified: true })
-            .eq('id', id);
+            .insert([
+                {
+                    full_name: full_name,
+                    phone: phone,
+                    email: email.toLowerCase().trim(),
+                    password: password,
+                    role: team_role, // support, finance, ou media
+                    country: country || 'CI',
+                    is_verified: true, // Le personnel interne de confiance est validé d'office
+                    created_at: new Date().toISOString()
+                }
+            ]);
 
         if (error) throw error;
-        return res.status(200).json({ success: true, message: "Partenaire activé avec succès !" });
+
+        return res.send(`
+            <div style="font-family:sans-serif; text-align:center; padding:50px; background:#111417; color:#fff; height:100vh; box-sizing:border-box;">
+                <h2 style="color:#81c784;">🎉 Inscription Équipe Validée !</h2>
+                <p>Bienvenue dans l'administration Jula Express, ${full_name}.</p>
+                <a href="/login" style="display:inline-block; background:#1072ba; color:#fff; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; margin-top:15px;">Se connecter à mon espace d'équipe</a>
+            </div>
+        `);
     } catch (err) {
-        return res.status(500).json({ error: err.message });
+        return res.status(500).send(`❌ Échec de l'insertion du membre de l'équipe : ${err.message}`);
     }
 });
-
-app.post('/reject-partner', async (req, res) => {
-    const { id } = req.body;
-    try {
-        // Suppression brute et sécurisée via ta clé maîtresse d'infrastructure
-        const { data, error } = await supabase
-            .from('profiles')
-            .delete()
-            .eq('id', id);
-
-        if (error) throw error;
-        return res.status(200).json({ success: true, message: "Profil de test nettoyé de Supabase !" });
-    } catch (err) {
-        return res.status(500).json({ error: err.message });
-    }
-});
-   
-  // 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
+// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
 app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     const { vendedor_id } = req.params;
-    
     try {
         if (!vendedor_id || vendedor_id === 'undefined' || vendedor_id.trim() === '') {
             console.log("⚠️ Identifiant de grossiste manquant dans l'URL. Redirection vers le login.");
@@ -269,13 +311,12 @@ app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
     }
 });
 
-// 📥 3B. PORTAIL DE PUBLICATION (LA ROUTE MANQUANTE QUI CORRIGE L'ERREUR CANNOT GET)
+// 📥 3B. PORTAIL DE PUBLICATION (LA ROUTE QUI CORRIGE L'ERREUR CANNOT GET)
 app.get('/vendedor/dashboard', async (req, res) => {
     try {
         let userEmail = req.query.email || 'vendeur@jula.com';
         let userId = req.query.userId || '';
 
-        // Ouvre exactement ton fichier views/dashboard.ejs
         res.render('dashboard', { 
             email: userEmail, 
             userId: userId,
@@ -286,10 +327,7 @@ app.get('/vendedor/dashboard', async (req, res) => {
     }
 });
 
- 
-
-
-// 🔄 4. MISE À JULA DU STATUT DES LIVRAISONS ET PANIER
+// 🔄 4. MISE À JOUR DU STATUT DES LIVRAISONS ET PANIER
 app.post('/vendedor/update-order-status', async (req, res) => {
     const { order_id, new_status, vendedor_id } = req.body;
     try {
@@ -313,15 +351,14 @@ app.post('/publish-product', upload.any(), async (req, res) => {
 
         if (req.files && req.files.length > 0) {
             try {
-                const targetFile = req.files;
+                const targetFile = req.files[0];
                 const uploadedUrl = await uploadToSupabase(targetFile, 'produits');
                 if (uploadedUrl) finalImageUrl = uploadedUrl;
             } catch (storageErr) {
-                console.error("Problème d'upload d'image");
+                console.error("Problème d'upload d'image :", storageErr.message);
             }
         }
 
-        // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
         const { error: productError } = await supabase.from('products').insert([
             {
                 title: title || 'Nouvel Article Jula',
@@ -354,8 +391,6 @@ app.post('/delete-product/:id', async (req, res) => {
     const { id } = req.params;
     const { vendedor_id } = req.body; 
     try {
-        console.log(`🗑️ Destruction demandée pour le produit ID: ${id}`);
-
         const { error } = await supabase
             .from('products')
             .delete()
@@ -363,20 +398,14 @@ app.post('/delete-product/:id', async (req, res) => {
 
         if (error) throw error;
         
-        console.log(`✅ Produit supprimé. Redirection vers le tableau de bord du vendeur.`);
-
-        if (!vendedor_id) {
-            return res.redirect('/vendedor/dashboard');
-        }
-
+        if (!vendedor_id) return res.redirect('/vendedor/dashboard');
         return res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
     } catch (err) {
-        console.error(`❌ Échec de la suppression : ${err.message}`);
         res.status(500).send(`❌ Impossible de supprimer l'article : ${err.message}`);
     }
 });
 
-// 💳 6. CONFIGURATION OFFICIELLE DU PASSAGE EN CAISSE PAYDUNYA ZONES CFA
+// 💳 6. CONFIGURATION OFFICIELLE DU PASSAGE EN CAISSE PAYDUNYA ZONES CFA (LIENS SÉCURISÉS)
 app.post('/create-order', async (req, res) => {
     const { vendedor_id, product_id, product_title, price, quantity, delivery_mode, buyer_email, buyer_address, buyer_phone } = req.body;
     try {
@@ -394,18 +423,9 @@ app.post('/create-order', async (req, res) => {
                 "PAYDUNYA-TOKEN": process.env.PAYDUNYA_TOKEN
             },
             body: JSON.stringify({
-                invoice: {
-                    total_amount: totalFacture,
-                    description: `Achat Jula - Article : ${product_title || 'Produit Jula'}`
-                },
-                store: {
-                    name: "Jula E-Commerce Network",
-                    tagline: "Le carrefour des grossistes de l'Afrique de l'Ouest",
-                    postal_address: buyer_address || "Abidjan, Adjame",
-                    phone: buyer_phone || "0700000000"
-                },
+                invoice: { total_amount: totalFacture, description: `Achat Jula - Article : ${product_title || 'Produit Jula'}` },
+                store: { name: "Jula E-Commerce Network", tagline: "Le carrefour des grossistes", postal_address: buyer_address || "Abidjan", phone: buyer_phone || "0700000000" },
                 actions: {
-                    // ✨ CORRIGÉ : Redirection sécurisée vers jula-web sur Render
                     cancel_url: `https://onrender.com{vendedor_id}`,
                     return_url: `https://onrender.com{vendedor_id}`
                 }
@@ -415,7 +435,6 @@ app.post('/create-order', async (req, res) => {
         const data = await response.json();
 
         if (data.response_code === "00") {
-            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity) || 1,
                 total_price: totalFacture, price_fcfa: parseFloat(price), delivery_fee: fraisLivraison,
@@ -427,10 +446,8 @@ app.post('/create-order', async (req, res) => {
         } else {
             throw new Error(data.response_text || "Erreur PayDunya");
         }
-
     } catch (err) {
         try {
-            // 🟢 CORRIGÉ : Utilisation de toISOString() pour le format de date PostgreSQL
             await supabase.from('orders').insert([{
                 vendedor_id, product_id, product_title, product_quantity: parseInt(quantity || 1),
                 total_price: (parseFloat(price) * parseInt(quantity || 1)) + 1500, price_fcfa: parseFloat(price),
@@ -439,7 +456,6 @@ app.post('/create-order', async (req, res) => {
             }]);
         } catch (dbErr) { console.error(dbErr); }
 
-        // ✨ CORRIGÉ : Redirection de secours sécurisée vers ton vrai site de recrutement jula-web
         return res.status(200).json({ 
             success: true, 
             redirect_url: `https://onrender.com{vendedor_id || ''}` 
@@ -447,26 +463,27 @@ app.post('/create-order', async (req, res) => {
     }
 });
 
-// ⚡ 7. FEUILLE DE ROUTE LOGISTIQUE INTERNATIONALE POUR LES LIVREURS
-app.get('/livreur/dashboard', async (req, res) => {
+// 🪐 3. BRANCHEMENT DES ACTIONS DU QG JACKY
+app.post('/verify-partner', async (req, res) => {
+    const { id } = req.body;
     try {
-        const { data: activeOrders, error: ordersError } = await supabase
-            .from('orders')
-            .select('*')
-            .eq('status', 'En attente de préparation');
+        const { error } = await supabase.from('profiles').update({ is_verified: true }).eq('id', id);
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Partenaire activé !" });
+    } catch (err) { return res.status(500).json({ error: err.message }); }
+});
 
-        if (ordersError) throw ordersError;
-
-        res.render('dashboard-driver', { 
-            orders: activeOrders || [],
-            message: activeOrders.length === 0 ? "Aucune course disponible sur votre secteur actuellement." : null
-        });
-    } catch (err) {
-        res.status(500).send(`❌ Erreur logistique : ${err.message}`);
-    }
+app.post('/reject-partner', async (req, res) => {
+    const { id } = req.body;
+    try {
+        const { error } = await supabase.from('profiles').delete().eq('id', id);
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Profil nettoyé !" });
+    } catch (err) { return res.status(500).json({ error: err.message }); }
 });
 
 // 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER AVEC IP UNIVERSELLE
 app.listen(PORT, '0.0.0.0', () => { 
     console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
+
