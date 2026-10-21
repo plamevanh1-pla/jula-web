@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portail Jula — Réseau Commercial et Logistique Interconnecté</title>
+    <!-- Icônes Modernes Google Material Sécurisées -->
+    <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
             --jula-blue: #1072ba; 
             --jula-vert: #2e7d32; 
+            --team-purple: #6a1b9a;
             --fond-carte: #ffffff; 
             --couleur-bordure: #dee2e6; 
             --fond-sombre: #f8f9fa; 
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--fond-sombre); margin: 0; padding: 0; color: #212529; line-height: 1.6; overflow-x: hidden; }
         
-        /* 🪐 CONFIGURATION DE LA BARRE SUPÉRIEURE VISIBLE SUR TA PHOTO */
+        /* 🪐 CONFIGURATION DE LA BARRE SUPÉRIEURE */
         .barre-navigation { background-color: #ffffff !important; border-bottom: 1px solid var(--couleur-bordure); padding: 10px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1100; height: 65px; box-sizing: border-box; }
         
-        /* 🟢 LE BOUTON COMMANDE DES 3 TRAITS MAISON (SANS LIEN EXTERNE) */
+        /* 🟢 LE BOUTON COMMANDE DES 3 TRAITS MAISON */
         .declencheur-menu { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 30px; height: 30px; padding: 0; outline: none; }
         .barre-interne { width: 100%; height: 4px; background-color: #212529 !important; border-radius: 2px; transition: 0.2s; }
         .declencheur-menu:hover .barre-interne { background-color: var(--jula-orange) !important; }
@@ -59,15 +62,17 @@
         .titre-section { text-align: center; margin-top: 10px; margin-bottom: 35px; }
         .titre-section h2 { font-size: 26px; color: #212529; margin: 0 0 10px 0; font-weight: 700; }
         .titre-section p { color: #495057; font-size: 15px; margin: 0; }
-        .grille-etapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        
+        .grille-etapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 50px; }
         .carte-etape { background: var(--fond-carte); padding: 30px; border-radius: 12px; border: 1px solid var(--couleur-bordure); border-bottom: 4px solid var(--jula-blue); position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .carte-team { background: #1a1d21; border-color: #2d3139; border-bottom-color: var(--team-purple); color: #fff; }
         .numero-etape { font-size: 44px; font-weight: 900; color: rgba(16,114,186,0.08); position: absolute; top: 15px; right: 25px; }
         .carte-etape h3 { font-size: 18px; margin: 0 0 10px 0; color: var(--jula-blue); font-weight: 700; }
         .carte-etape p { margin: 0; color: #212529; font-size: 14px; }
     </style>
 </head>
 <body>
-    <!-- 🪐 INTERFACE DU MENU COULISSANT GAUCHE -->
+<!-- 🪐 INTERFACE DU MENU COULISSANT GAUCHE -->
     <div class="panneau-navigation" id="panneauJula">
         <div style="display: flex; flex-direction: column; flex: 1;">
             <div class="entete-panneau">
@@ -82,6 +87,10 @@
                 <a href="/login" class="lien-navigation"> Connexion Compte Pro</a>
                 <a href="/jacky-superadmin-control" class="lien-navigation" style="border: 1px dashed rgba(245,124,0,0.4); border-radius: 6px;"> Espace Secret Jacky</a>
                 
+                <!-- Accès d'inscription pour ton équipe d'administration -->
+                <span class="label-section-menu">👥 Personnel Jula</span>
+                <a href="/register-jula-team" class="lien-navigation" style="color: #ba68c8;"><span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 4px;">badge</span> Inscription Équipe Jula</a>
+
                 <span class="label-section-menu">📞 Besoin d'aide ?</span>
                 <div style="padding: 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid #2d3139; gap: 6px; display: flex; flex-direction: column;">
                     <p style="font-size: 12.5px; color: #95a5a6; margin: 0;">Pour contacter l'équipe d'assistance officielle Jula :</p>
@@ -122,7 +131,7 @@
     <div class="conteneur" id="fonctionnement">
         <div class="titre-section">
             <h2>Comment ça fonctionne ?</h2>
-            <p>Trois étapes simples pour lancer votre activité indépendante sur Jula</p>
+            <p>Simplicité et efficacité pour lancer votre activité indépendante sur Jula</p>
         </div>
         <div class="grille-etapes">
             <div class="carte-etape">
@@ -140,36 +149,49 @@
                 <h3>3. Touchez vos Gains</h3>
                 <p>Encaissez vos bénéfices directement en mains propres à la livraison ou par virement Mobile Money instantané sur votre téléphone.</p>
             </div>
+            <!-- Quatrième étape ajoutée pour la visibilité de l'équipe -->
+            <div class="carte-etape carte-team">
+                <div class="numero-etape" style="color: rgba(186,104,200,0.06);">04</div>
+                <h3 style="color: #ba68c8;">4. Suivi & Support</h3>
+                <p style="color: #ecf0f1;">Bénéficiez du contrôle permanent de nos administrateurs logistiques, comptables et assistants de zone.</p>
+            </div>
         </div>
-
-        <!-- 🏪 SÉLECTION DES ACTIVITÉS ALIGNÉE SUR TON ÉCRAN -->
+        <!-- 🏪 SÉLECTION DES ACTIVITÉS ALIGNÉE SUR TON ÉCRAN (AVEC BLOC ÉQUIPE) -->
         <div class="titre-section" id="recrutement">
             <h2>Sélectionnez votre activité régionale</h2>
-            <p>Des solutions sur mesure pour les commerçants et les professionnels de la route</p>
+            <p>Des solutions sur mesure pour les commerçants, les professionnels de la route et les agents</p>
         </div>
-        <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px;">
+        <div class="portal-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 50px;">
             <!-- MAGASIN / GROSSISTE -->
-            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Magasin / Grossiste</h3>
-                <div style="font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--jula-blue);">0 FCFA <span style="font-size:13px; color:#6c757d; font-weight:normal;">de frais d'affichage</span></div>
-                <p style="color: #212529; font-size: 14px; margin: 0 0 20px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
-                <a href="/register-seller" style="display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14px; background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 25px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-blue); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3 style="font-size: 18px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏬 Magasin / Grossiste</h3>
+                <div style="font-size: 20px; font-weight: 800; margin: 10px 0; color: var(--jula-blue);">0 FCFA <span style="font-size:12px; color:#6c757d; font-weight:normal;">de frais d'affichage</span></div>
+                <p style="color: #212529; font-size: 13.5px; margin: 0 0 20px 0; flex-grow: 1;">Exposez vos téléphones sur notre catalogue. Vos stocks deviennent instantanément visibles et commandables par des milliers d'acheteurs sur l'application mobile Jula.</p>
+                <a href="/register-seller" style="display: block; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 13.5px; background-color: var(--jula-blue);">Ouvrir mon Magasin</a>
             </div>
 
             <!-- COURSIER LIVREUR -->
-            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-vert); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🛵 Livreur à Moto</h3>
-                <div style="font-size: 22px; font-weight: 800; margin: 10px 0; color: var(--jula-vert);">Jusqu'à 75.000 FCFA <span style="font-size:13px; color:#6c757d; font-weight:normal;">/semaine</span></div>
-                <p style="color: #212529; font-size: 14px; margin: 0 0 20px 0; flex-grow: 1;">Soyez votre propre patron ! Engin décent et permis requis. Recevez les fiches de livraison directement sur votre smartphone et maximisez vos gains logistiques.</p>
-                <a href="/register-driver" style="display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14px; background-color: var(--jula-vert);">Devenir Coursier Officiel</a>
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 25px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-vert); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3 style="font-size: 18px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🛵 Livreur à Moto</h3>
+                <div style="font-size: 20px; font-weight: 800; margin: 10px 0; color: var(--jula-vert);">Jusqu'à 75.000 FCFA <span style="font-size:12px; color:#6c757d; font-weight:normal;">/semaine</span></div>
+                <p style="color: #212529; font-size: 13.5px; margin: 0 0 20px 0; flex-grow: 1;">Soyez votre propre patron ! Engin décent et permis requis. Recevez les fiches de livraison directement sur votre smartphone et maximisez vos gains logistiques.</p>
+                <a href="/register-driver" style="display: block; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 13.5px; background-color: var(--jula-vert);">Devenir Coursier Officiel</a>
             </div>
 
             <!-- POINT RELAIS AGRÉÉ -->
-            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 30px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 20px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏪 Point Relais Agréé</h3>
-                <div style="font-size: 24px; font-weight: 800; margin: 10px 0; color: var(--jula-orange);">Commissions <span style="font-size:14px; color:#6c757d; font-weight:normal;">/colis géré</span></div>
-                <p style="color: #212529; font-size: 14px; margin: 0 0 20px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique. Devenez un guichet de dépôt officiel Jula pour la garde sécurisée des colis de smartphones de votre quartier.</p>
-                <a href="/register-station" style="display: block; padding: 12px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 14px; background-color: var(--jula-orange);">Inscrire mon Espace Physique</a>
+            <div class="portal-card" style="background: var(--fond-carte); border-radius: 12px; padding: 25px; border: 1px solid var(--couleur-bordure); border-top: 6px solid var(--jula-orange); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                <h3 style="font-size: 18px; margin: 0 0 10px 0; color: #212529; font-weight: 700;">🏪 Point Relais Agréé</h3>
+                <div style="font-size: 20px; font-weight: 800; margin: 10px 0; color: var(--jula-orange);">Commissions <span style="font-size:12px; color:#6c757d; font-weight:normal;">/colis géré</span></div>
+                <p style="color: #212529; font-size: 13.5px; margin: 0 0 20px 0; flex-grow: 1;">Rentabilisez votre espace de commerce physique. Devenez un guichet de dépôt officiel Jula pour la garde sécurisée des colis de smartphones de votre quartier.</p>
+                <a href="/register-station" style="display: block; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 13.5px; background-color: var(--jula-orange);">Inscrire mon Espace</a>
+            </div>
+
+            <!-- 👥 LA QUATRIÈME CARTE EMBARQUÉE POUR TON ÉQUIPE INTERNE -->
+            <div class="portal-card" style="background: #1a1d21; border-radius: 12px; padding: 25px; border: 1px solid #2d3139; border-top: 6px solid var(--team-purple); display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">
+                <h3 style="font-size: 18px; margin: 0 0 10px 0; color: #ffffff; font-weight: 700;">👥 Équipe Interne Jula</h3>
+                <div style="font-size: 20px; font-weight: 800; margin: 10px 0; color: #ba68c8;">Accès Limité <span style="font-size:12px; color:#7f8c8d; font-weight:normal;">/agents autorisés</span></div>
+                <p style="color: #ecf0f1; font-size: 13.5px; margin: 0 0 20px 0; flex-grow: 1;">Espace de création de comptes réservé exclusivement au personnel interne Jula Express (agents de support, comptables et chargés de communication).</p>
+                <a href="/register-jula-team" style="display: block; padding: 11px; border-radius: 6px; font-weight: bold; text-decoration: none; text-align: center; color: white; font-size: 13.5px; background: linear-gradient(135deg, var(--team-purple), #4a148c);">Rejoindre l'Équipe</a>
             </div>
         </div>
 
@@ -204,7 +226,6 @@
                 </tbody>
             </table>
         </div>
-
         <!-- FOIRE AUX QUESTIONS (QUESTIONS FRÉQUENTES) -->
         <div class="titre-section">
             <h2 style="color: #212529 !important;">Questions Fréquentes</h2>
@@ -253,6 +274,3 @@
     </script>
 </body>
 </html>
-
-                
- 
