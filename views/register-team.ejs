@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jula Express — Recrutement du Personnel Interne</title>
+    <!-- Icônes Modernes Google Material Sécurisées -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --team-purple: #6a1b9a;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .form-container { max-width: 500px; background: var(--card-bg); margin: 30px auto; padding: 40px 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-top: 5px solid var(--team-purple); position: relative; }
+        
+        .btn-back { position: absolute; top: 20px; left: 20px; color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; transition: color 0.2s; }
+        .btn-back:hover { color: var(--team-purple); }
+        
+        h2 { text-align: center; color: #fff; margin-bottom: 8px; font-weight: 800; font-size: 24px; margin-top: 15px; }
+        .subtitle { text-align: center; font-size: 13px; color: #7f8c8d; margin-bottom: 25px; line-height: 18px; }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13.5px; letter-spacing: 0.3px; color: #ecf0f1; }
+        input, select { width: 100%; padding: 12px 14px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14.5px; color: #fff; outline: none; transition: border-color 0.2s; }
+        input:focus, select:focus { border-color: var(--team-purple); }
+        
+        .btn-submit { width: 100%; background: linear-gradient(135deg, var(--team-purple), #4a148c); color: white; padding: 14px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(106,27,154,0.2); transition: all 0.2s; margin-top: 15px; }
+        .btn-submit:hover { opacity: 0.95; }
+    </style>
+</head>
+<body>
+
+   <div class="form-container">
+        <!-- Bouton retour universel avec la flèche physique exigée -->
+        <a href="/" class="btn-back">
+            ← Accueil
+        </a>
+
+        <h2>👥 Enregistrement Personnel</h2>
+        <p class="subtitle">Portail d'activation secret pour l'équipe d'administration, d'assistance et de comptabilité Jula Express</p>
+        
+        <form action="/submit-team-member" method="POST">
+            <div class="form-group">
+                <label>Nom complet de l'agent</label>
+                <input type="text" name="full_name" placeholder="Ex: Bakary Diallo" required>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de Téléphone Professionnel</label>
+                <input type="tel" name="phone" placeholder="Ex: +225 0505..." required>
+            </div>
+
+            <div class="form-group">
+                <label>Adresse Électronique (Email)</label>
+                <input type="email" name="email" placeholder="Ex: bakary@julaexpress.com" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label>Mot de passe d'accès</label>
+                <div style="position: relative; display: flex; align-items: center;">
+                    <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
+                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
+                        <!-- ✨ L'œil est masqué par défaut -->
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Affectation du Rôle Interne</label>
+                <select name="team_role" required>
+                    <option value="support">📞 Assistant Support & Réclamations</option>
+                    <option value="finance">💰 Gestionnaire Financier / Comptable</option>
+                    <option value="media">📢 Chargé de Communication & Publicité</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Pays de Bureau principal</label>
+                <select name="country" required>
+                    <option value="CI">🇨🇮 Côte d'Ivoire</option>
+                    <option value="SN">🇸🇳 Sénégal</option>
+                    <option value="ML">🇲🇱 Mali</option>
+                    <option value="BF">🇧🇫 Burkina Faso</option>
+                    <option value="TG">🇹🇬 Togo</option>
+                    <option value="BJ">🇧🇯 Bénin</option>
+                    <option value="NE">🇳🇪 Niger</option>
+                </select>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 25px;">
+                <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
+                </a>
+                <button type="submit" class="btn-submit" style="width: 65%;">Créer le compte équipe</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ⚙️ LE MOTEUR JAVASCRIPT DE L'ŒIL MAGIQUE SÉCURISÉ -->
+    <script>
+        function basculerOeilInscription() {
+            const champ = document.getElementById('champMotDePasse');
+            const icone = document.getElementById('iconeOeil');
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                icone.innerText = 'visibility'; // Œil ouvert au clic
+                icone.style.color = 'var(--jula-orange)';
+            } else {
+                champ.type = 'password';
+                icone.innerText = 'visibility_off'; // Redevient masqué
+                icone.style.color = '#7f8c8d';
+            }
+        }
+    </script>
+</body>
+</html>
