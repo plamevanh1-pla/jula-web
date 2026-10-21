@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jula Express — Console d'Assistance Support</title>
+    <!-- Icônes Modernes Google Material Sécurisées -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --support-blue: #0288d1;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .content-container { max-width: 900px; margin: 0 auto; }
+        
+        .header-support { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--support-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header-support h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
+        
+        .status-badge-support { background: rgba(2, 136, 209, 0.1); color: #29b6f6; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(2, 136, 209, 0.2); }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
+        .btn-logout:hover { color: #fff; border-color: #fff; }
+        
+        .card-ticket { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border-color); border-left: 5px solid var(--support-blue); }
+        .btn-aide { background: var(--support-blue); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    </style>
+</head>
+<body>
+
+    <div class="content-container">
+        <!-- 🪐 EN-TÊTE DE LA CONSOLE ASSISTANCE -->
+        <div class="header-support">
+            <h1><span class="material-icons-round" style="color: var(--support-blue);">contact_support</span> Console d'Assistance Jula</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="status-badge-support">● Opérateur En Ligne</span>
+                <a href="/login" class="btn-logout">Déconnexion</a>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 20px;"><b style="color: var(--support-blue);">👤 Agent Support :</b> <%= email %></div>
+
+        <h2>📞 Flux des Colis à Secourir (Zone CFA)</h2>
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <% if (orders.length === 0) { %>
+                <div style="text-align: center; padding: 40px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; border: 1px dashed var(--border-color);">
+                    <span class="material-icons-round" style="font-size: 48px; display: block; margin-bottom: 10px;">check_circle_outline</span>
+                    Félicitations ! Aucun colis n'est actuellement en détresse ou en retard sur le réseau Jula Express.
+                </div>
+            <% } else { %>
+                <% orders.forEach(function(order) { %>
+                    <div class="card-ticket">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 10px;">
+                            <div>
+                                <span style="font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">COLIS LOGISTIQUE : #<%= order.id %></span>
+                                <h3 style="margin: 5px 0; color: #fff;"><%= order.product_title %></h3>
+                            </div>
+                            <span class="status-badge-support" style="background: rgba(245,124,0,0.1); color: var(--jula-orange); border-color: rgba(245,124,0,0.2);"><%= order.status %></span>
+                        </div>
+                        <p style="margin: 5px 0; font-size: 14px;">🏪 <b>Identifiant Grossiste :</b> <%= order.vendedor_id %></p>
+                        <p style="margin: 5px 0; font-size: 14px;">📍 <b>Destination :</b> <%= order.buyer_address || 'Retrait en Point Relais' %></p>
+                        <p style="margin: 5px 0; font-size: 14px; color: #81c784;">📞 <b>Contact Client :</b> <%= order.buyer_phone %></p>
+                        
+                        <div style="text-align: right; margin-top: 15px;">
+                            <a href="mailto:support@://julaexpress.com Colis %23<%= order.id %>" class="btn-aide">
+                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle;">mail</span> Contacter l'utilisateur
+                            </a>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div> <!-- Fin du conteneur .content-container principal -->
+
+</body>
+</html>
