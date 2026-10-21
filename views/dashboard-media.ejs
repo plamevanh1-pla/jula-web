@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jula Express — Espace Média & Communication</title>
+    <!-- Icônes Modernes Google Material Sécurisées -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root { 
+            --jula-orange: #f57c00; 
+            --jula-blue: #1072ba; 
+            --dark-bg: #111417; 
+            --card-bg: #1a1d21;
+            --border-color: #2d3139;
+            --media-purple: #6a1b9a;
+        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
+        .content-container { max-width: 900px; margin: 0 auto; }
+        
+        .header-media { background: var(--card-bg); padding: 20px 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--media-purple); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .header-media h1 { margin: 0; font-size: 20px; display: flex; align-items: center; gap: 8px; font-weight: 800; }
+        
+        .status-badge-media { background: rgba(106, 27, 154, 0.1); color: #ba68c8; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(106, 27, 154, 0.2); }
+        .btn-logout { background: transparent; border: 1px solid var(--border-color); color: #7f8c8d; padding: 8px 16px; border-radius: 6px; cursor: pointer; text-decoration: none; font-size: 13px; font-weight: 600; }
+        .btn-logout:hover { color: #fff; border-color: #fff; }
+        
+        .grille-media-outils { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 15px; }
+        .carte-media-form { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .carte-media-form h2 { margin-top: 0; font-size: 16px; font-weight: 800; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; color: #fff; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+        
+        .champ-media-input { width: 100%; padding: 12px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14px; color: #fff; outline: none; margin-bottom: 15px; }
+        .champ-media-input:focus { border-color: var(--media-purple); }
+        .btn-media-envoyer { width: 100%; background: linear-gradient(135deg, var(--media-purple), #4a148c); color: white; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-media-envoyer:hover { opacity: 0.95; }
+    </style>
+</head>
+<body>
+
+    <div class="content-container">
+        <!-- 🪐 EN-TÊTE DE LA CONSOLE MÉDIA -->
+        <div class="header-media">
+            <h1><span class="material-icons-round" style="color: var(--media-purple);">campaign</span> Régie Média & Communication Jula</h1>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <span class="status-badge-media">● Console Média Active</span>
+                <a href="/login" class="btn-logout">Déconnexion</a>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 25px;"><b style="color: var(--media-purple);">👤 Agent Média :</b> <%= email %></div>
+
+        <div class="grille-media-outils">
+            
+            <!-- FORMULAIRE 1 : NOTIFICATIONS DE MASSE PUSH -->
+            <div class="carte-media-form" style="border-top: 4px solid var(--jula-orange);">
+                <h2><span class="material-icons-round" style="color: var(--jula-orange);">notification_important</span> Alertes Push de Masse</h2>
+                <form id="formPushMedia">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre du message Push</label>
+                    <input type="text" name="title" class="champ-media-input" placeholder="Ex: Flash Info Bouaké ⚡" required>
+                    
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Cible de diffusion</label>
+                    <select name="target_role" class="champ-media-input">
+                        <option value="tous">🌍 Diffuser à tout le réseau</option>
+                        <option value="livreur">🏍️ Uniquement les Livreurs</option>
+                        <option value="boutique">🏪 Uniquement les Grossistes</option>
+                    </select>
+
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Contenu de la notification</label>
+                    <textarea name="message" class="champ-media-input" rows="3" placeholder="Tapez votre message ici..." required></textarea>
+                    
+                    <button type="submit" class="btn-media-envoyer" style="background: var(--jula-orange);"><span class="material-icons-round" style="font-size:16px;">send</span>Propulser l'alerte</button>
+                </form>
+            </div>
+            <!-- FORMULAIRE 2 : PUBLICITÉ BANNIÈRE -->
+            <div class="carte-media-form" style="border-top: 4px solid var(--media-purple);">
+                <h2><span class="material-icons-round" style="color: var(--media-purple);">add_photo_alternate</span> Bannière Publicitaire</h2>
+                <form id="formPubMedia" enctype="multipart/form-data">
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre de la Campagne</label>
+                    <input type="text" name="title" class="champ-media-input" placeholder="Ex: Grand Arrivage Tecno Pop 9" required>
+                    
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant Grossiste rattaché (Optionnel)</label>
+                    <input type="text" name="vendedor_id" class="champ-media-input" placeholder="Coller l'ID du vendeur">
+                    
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Fichier de l'affiche publicitaire</label>
+                    <input type="file" name="image" class="champ-media-input" accept="image/*" required>
+                    
+                    <button type="submit" class="btn-media-envoyer"><span class="material-icons-round" style="font-size:16px;">cloud_upload</span>Mettre en ligne la bannière</button>
+                </form>
+            </div>
+
+        </div>
+    </div> <!-- Fin du conteneur .content-container principal -->
+
+    <!-- 🪐 SCRIPT DE PROPULSION DE CAMPAGNES EN TEMPS RÉEL (SANS ÉCRAN BLANC) -->
+    <script>
+        // 1. EXPÉDITION ASYNCHRONE DES NOTIFICATIONS PUSH
+        document.getElementById('formPushMedia').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const formulaire = e.target;
+                const reponse = await fetch('/admin/send-notification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title: formulaire.title.value,
+                        target_role: formulaire.target_role.value,
+                        message: formulaire.message.value
+                    })
+                });
+                if (reponse.ok) {
+                    alert("📢 Notification de masse enregistrée et propulsée sur le réseau Jula !");
+                    formulaire.reset();
+                }
+            } catch (err) { alert("Échec de transmission de l'alerte."); }
+        });
+
+        // 2. ENVOI ASYNCHRONE DE LA BANNIÈRE PUBLICITAIRE
+        document.getElementById('formPubMedia').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const corpsForm = new FormData(e.target);
+            try {
+                const reponse = await fetch('/admin/create-ad', {
+                    method: 'POST',
+                    body: corpsForm
+                });
+                if (reponse.ok) {
+                    alert("🎨 Image publicitaire envoyée et configurée sur l'application Jula !");
+                    e.target.reset();
+                }
+            } catch (err) { alert("Échec de téléversement de l'image publicitaire."); }
+        });
+    </script>
+</body>
+</html>
