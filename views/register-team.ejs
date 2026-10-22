@@ -60,7 +60,7 @@
                 <div style="position: relative; display: flex; align-items: center;">
                     <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
                     <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">Filled.VisibilityOff</span>
                     </button>
                 </div>
             </div>
@@ -89,7 +89,7 @@
 
             <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;">close</span> Quitter
+                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
                 </a>
                 <button type="submit" class="btn-submit" style="width: 65%;">Créer le compte équipe</button>
             </div>
@@ -102,11 +102,11 @@
             const icone = document.getElementById('iconeOeil');
             if (champ.type === 'password') {
                 champ.type = 'text';
-                icone.innerText = 'visibility';
+                icone.innerText = 'Filled.Visibility';
                 icone.style.color = 'var(--jula-orange)';
             } else {
                 champ.type = 'password';
-                icone.innerText = 'visibility_off';
+                icone.innerText = 'Filled.VisibilityOff';
                 icone.style.color = '#7f8c8d';
             }
         }
