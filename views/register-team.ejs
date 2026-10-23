@@ -55,14 +55,17 @@
                 <input type="email" name="email" placeholder="Ex: bakary@julaexpress.com" required autocomplete="email">
             </div>
 
-            <div class="form-group">
-                <label>Mot de passe d'accès</label>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
-                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">Filled.VisibilityOff</span>
-                    </button>
-                </div>
+             <div class="form-group">
+    <label>Mot de passe d'accès</label>
+    <div style="position: relative; display: flex; align-items: center;">
+        <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
+        <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
+            <!-- ✨ CORRIGÉ : "visibility_off" tout en minuscules pour dessiner l'œil barré de ta photo -->
+            <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+        </button>
+    </div>
+</div>
+
             </div>
 
             <div class="form-group">
@@ -96,20 +99,24 @@
         </form>
     </div>
 
-    <script>
-        function basculerOeilInscription() {
-            const champ = document.getElementById('champMotDePasse');
-            const icone = document.getElementById('iconeOeil');
-            if (champ.type === 'password') {
-                champ.type = 'text';
-                icone.innerText = 'Filled.Visibility';
-                icone.style.color = 'var(--jula-orange)';
-            } else {
-                champ.type = 'password';
-                icone.innerText = 'Filled.VisibilityOff';
-                icone.style.color = '#7f8c8d';
-            }
+     <script>
+    function basculerOeilInscription() {
+        const champ = document.getElementById('champMotDePasse');
+        const icone = document.getElementById('iconeOeil');
+        
+        if (champ.type === 'password') {
+            champ.type = 'text';
+            // ✨ CORRIGÉ : "visibility" tout en minuscules pour ouvrir l'œil
+            icone.innerText = 'visibility';
+            icone.style.color = 'var(--jula-orange)';
+        } else {
+            champ.type = 'password';
+            // ✨ CORRIGÉ : "visibility_off" tout en minuscules pour barrer l'œil (comme sur ta photo)
+            icone.innerText = 'visibility_off';
+            icone.style.color = '#7f8c8d';
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
