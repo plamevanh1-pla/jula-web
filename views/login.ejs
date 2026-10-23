@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Partenaires Jula</title>
     <!-- Icônes Modernes Google Material -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
@@ -44,9 +44,15 @@
         <form action="/login-partner" method="POST">
             <label>Votre Adresse E-mail Professionnelle :</label>
             <input type="email" name="email" required placeholder="Ex: grossiste@jula.com" autocomplete="email">
-
-            <label>Votre Mot de passe Sécurisé :</label>
-            <input type="password" name="password" required placeholder="Saisissez votre mot de passe" autocomplete="current-password">
+ <div class="form-group">
+    <label>Mot de passe d'accès</label>
+    <div style="position: relative; display: flex; align-items: center;">
+        <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required>
+        <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
+            <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+        </button>
+    </div>
+</div>
 
             <button type="submit" class="btn-submit">Se connecter en toute sécurité</button>
         </form>
