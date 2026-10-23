@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jula - Inscription Point Relais</title>
     <!-- Icônes Modernes Google Material Sécurisées -->
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
         :root { 
             --jula-orange: #f57c00; 
@@ -70,15 +70,16 @@
                 <input type="email" name="email" placeholder="Ex: diallo@jula-relais.com" required autocomplete="email">
             </div>
 
-                         <div class="form-group">
-                <label>Mot de passe secret</label>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required autocomplete="new-password">
-                    <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
-                        <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;"></span>
-                    </button>
-                </div>
-            </div>
+                          <div class="form-group">
+    <label>Mot de passe d'accès</label>
+    <div style="position: relative; display: flex; align-items: center;">
+        <input type="password" id="champMotDePasse" name="password" placeholder="Minimum 6 caractères" style="padding-right: 45px;" required>
+        <button type="button" onclick="basculerOeilInscription()" style="position: absolute; right: 10px; background: none; border: none; color: #7f8c8d; cursor: pointer; outline: none; padding: 0;">
+            <span class="material-icons-round" id="iconeOeil" style="font-size: 22px; vertical-align: middle;">visibility_off</span>
+        </button>
+    </div>
+</div>
+
 
 
             <div class="form-group">
@@ -141,19 +142,21 @@
 
     <!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
     <script>
-                 function basculerOeilInscription() {
-            const champ = document.getElementById('champMotDePasse');
-            const icone = document.getElementById('iconeOeil');
-            if (champ.type === 'password') {
-                champ.type = 'text';
-                icone.innerText = 'visibility'; // Devient un œil ouvert quand on voit le texte
-                icone.style.color = 'var(--jula-orange)';
-            } else {
-                champ.type = 'password';
-                icone.innerText = 'visibility_off'; // Revent un œil barré quand c'est caché
-                icone.style.color = '#7f8c8d';
-            }
+    function basculerOeilInscription() {
+        const champ = document.getElementById('champMotDePasse');
+        const icone = document.getElementById('iconeOeil');
+        if (champ.type === 'password') {
+            champ.type = 'text';
+            icone.innerText = 'visibility';
+            icone.style.color = 'var(--jula-orange)';
+        } else {
+            champ.type = 'password';
+            icone.innerText = 'visibility_off';
+            icone.style.color = '#7f8c8d';
         }
+    }
+
+
 
 
         // 2. DECLENCHEUR DU CLIC SUR LE MOBILE DE CAPTURE PHOTO
