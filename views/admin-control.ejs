@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jula - Centre de Contrôle Secret Jacky</title>
+    <title>Jula - Centre de Contrôle Secret Vanh Plame</title>
     <!-- Chargement sécurisé de la vraie police Google Icons pour dessiner les dessins -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
@@ -64,8 +64,8 @@
 <body>
 
     <div class="admin-header">
-        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;">security</span> Centre de Validation des Partenaires Jula</h1>
-        <div class="badge-admin">🎛️ Jacky SuperAdmin</div>
+        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
+        <div class="badge-admin">🎛️ Vanh Plame SuperAdmin</div>
     </div>
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
         <% if (profiles.length === 0) { %>
@@ -112,13 +112,13 @@
                             <div class="admin-actions" style="display: inline-flex; gap: 12px; justify-content: flex-end; width: 100%;">
                                 <!-- 🔴 Bouton Rejeter Épuré -->
                                 <button type="button" class="btn-reject" onclick="gererPartenaire('<%= profile.id %>', 'reject')">
-                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">delete_forever</span>
+                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
                                     Rejeter le profil
                                 </button>
 
                                 <!-- 🟢 Bouton Valider Épuré Connecté -->
                                 <button type="button" class="btn-verify" onclick="gererPartenaire('<%= profile.id %>', 'verify')">
-                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;">check_circle</span>
+                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
                                     Valider et Activer le partenaire
                             </button>
                         </div>
@@ -139,7 +139,7 @@
             
             <!-- MODULE DE NOTIFICATION DE MASSE PUSH -->
             <div class="carte-panneau-admin">
-                <h2><span class="material-icons-round" style="color: var(--jula-orange);">campaign</span> Notifications de Masse Jula</h2>
+                <h2><span class="material-icons-round" style="color: var(--jula-orange);"></span> Notifications de Masse Jula</h2>
                 <form id="formNotification">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre du message Push</label>
                     <input type="text" name="title" class="champ-admin-qg" placeholder="Ex: Flash Info Bouaké ⚡" required>
@@ -154,13 +154,13 @@
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Contenu de la notification</label>
                     <textarea name="message" class="champ-admin-qg" rows="3" placeholder="Tapez votre message ici..." required></textarea>
                     
-                    <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">send</span>Propulser la notification</button>
+                    <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></send>Propulser la notification</button>
                 </form>
             </div>
 
             <!-- MODULE DE PUBLICITÉ BANNIÈRE -->
             <div class="carte-panneau-admin">
-                <h2><span class="material-icons-round" style="color: var(--jula-blue);">add_photo_alternate</span> Bannière Publicitaire</h2>
+                <h2><span class="material-icons-round" style="color: var(--jula-blue);"></span> Bannière Publicitaire</h2>
                 <form id="formPublicite" enctype="multipart/form-data">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre ou Slogan de la Campagne</label>
                     <input type="text" name="title" class="champ-admin-qg" placeholder="Ex: Grand Arrivage Tecno Pop 9" required>
@@ -171,7 +171,7 @@
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Fichier de l'affiche publicitaire</label>
                     <input type="file" name="image" class="champ-admin-qg" accept="image/*" required>
                     
-                    <button type="submit" class="btn-admin-publier"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">cloud_upload</span>Mettre en ligne l'affiche</button>
+                    <button type="submit" class="btn-admin-publier"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span>Mettre en ligne l'affiche</button>
                 </form>
             </div>
 
@@ -183,7 +183,7 @@
             
             <!-- 💰 PANNEAU 1 : CAISSE FINANCIÈRE & DEMANDES DE RETRAIT -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--success);">
-                <h2><span class="material-icons-round" style="color: var(--success);">account_balance_wallet</span> Caisse Financière & Retraits</h2>
+                <h2><span class="material-icons-round" style="color: var(--success);"></span> Caisse Financière & Retraits</h2>
                 <form id="formFinances" onsubmit="executerRetraitMobileMoney(event)">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Partenaire (ID Supabase)</label>
                     <input type="text" id="finance_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du livreur ou relais" required>
@@ -192,14 +192,14 @@
                     <input type="number" id="finance_amount" class="champ-admin-qg" placeholder="Ex: 25000" required>
                     
                     <button type="submit" class="btn-admin-publier" style="background: var(--success);">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">payments</span> Validé le virement Mobile Money
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Validé le virement Mobile Money
                     </button>
                 </form>
             </div>
 
             <!-- 🏍️ PANNEAU 2 : RADAR LOGISTIQUE & SUIVI DES COLIS -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-blue);">
-                <h2><span class="material-icons-round" style="color: var(--jula-blue);">local_shipping</span> Radar Logistique & Colis</h2>
+                <h2><span class="material-icons-round" style="color: var(--jula-blue);"></span> Radar Logistique & Colis</h2>
                 <div style="background: var(--dark-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 13px;">
                     <p style="margin: 0 0 10px 0; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">📡 Statut général de la flotte :</p>
                     <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>🏍️ Coursiers connectés :</span> <b style="color: #81c784;">En direct</b></div>
@@ -210,26 +210,26 @@
 
             <!-- 📱 PANNEAU 3 : MODÉRATEUR DU CATALOGUE SMARTPHONES -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-orange);">
-                <h2><span class="material-icons-round" style="color: var(--jula-orange);">phone_android</span> Modérateur du Catalogue</h2>
+                <h2><span class="material-icons-round" style="color: var(--jula-orange);"></span> Modérateur du Catalogue</h2>
                 <form id="formCatalogue" onsubmit="supprimerArticleControle(event)">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Produit à détruire</label>
                     <input type="text" id="catalogue_product_id" class="champ-admin-qg" placeholder="Coller l'ID du smartphone" required>
                     
                     <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">no_cell</span> Supprimer brute du catalogue
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Supprimer brute du catalogue
                     </button>
                 </form>
             </div>
 
             <!-- 🚫 PANNEAU 4 : TRIBUNAL DES LITIGES & BANNING -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--danger);">
-                <h2><span class="material-icons-round" style="color: var(--danger);">gavel</span> Tribunal des Litiges & Bannissement</h2>
+                <h2><span class="material-icons-round" style="color: var(--danger);"></span> Tribunal des Litiges & Bannissement</h2>
                 <form id="formLitiges" onsubmit="bannirCompteTricheur(event)">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du compte à bannir (ID)</label>
                     <input type="text" id="litige_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du tricheur ou faux compte" required>
                     
                     <button type="submit" class="btn-admin-publier" style="background: var(--danger);" onclick="return confirm('⚠️ Êtes-vous sûr de vouloir bannir définitivement et supprimer ce compte de Supabase ?');">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;">block</span> Exclure et Bloquer le profil
+                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Exclure et Bloquer le profil
                     </button>
                 </form>
             </div>
