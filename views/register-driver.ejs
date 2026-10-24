@@ -26,7 +26,7 @@
         input, select { width: 100%; padding: 12px 14px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14.5px; color: #fff; outline: none; transition: border-color 0.2s; }
         input:focus, select:focus { border-color: var(--jula-blue); }
         
-        /* 📸 STYLE DE LA ZONE DE CAPTURE PHOTO INTERACTIVE AVEC APERÇU ET REMPLACEMENT */
+         /* 📸 STYLE DE LA ZONE DE CAPTURE PHOTO INTERACTIVE AVEC APERÇU ET REMPLACEMENT */
         .zone-apercu-photo { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.02); border: 2px dashed var(--border-color); border-radius: 8px; padding: 15px; text-align: center; position: relative; cursor: pointer; transition: 0.2s; }
         .zone-apercu-photo:hover { border-color: var(--jula-blue); background: rgba(16, 114, 186, 0.02); }
         .zone-apercu-photo span.icone-cam { font-size: 32px; color: #7f8c8d; margin-bottom: 5px; }
@@ -34,11 +34,35 @@
         .image-rendu { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; display: none; margin-top: 10px; border: 1px solid var(--border-color); }
         .btn-modifier-photo { display: none; margin-top: 8px; background: rgba(16, 114, 186, 0.2); color: #29b6f6; border: 1px solid rgba(16, 114, 186, 0.3); padding: 6px 12px; border-radius: 4px; font-size: 11.5px; font-weight: bold; cursor: pointer; }
         
+        /* ❌ LA CROIX ROUGE DE SUPPRESSION AJOUTÉE AU PIXEL PRÈS */
+        .croix-supprimer {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: #e53935;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none; /* Masqué tant qu'il n'y a pas de photo */
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 5;
+            outline: none;
+        }
+        .croix-supprimer:hover { background-color: #b71c1c; }
+
         .btn-submit { width: 100%; background: linear-gradient(135deg, var(--jula-blue), #0d5c97); color: white; padding: 14px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(16,114,186,0.2); transition: all 0.2s; margin-top: 15px; }
         .btn-submit:hover { opacity: 0.95; }
     </style>
 </head>
 <body>
+
 
              <!-- Bouton retour universel en français Jula -->
         <a href="/" class="btn-back">
@@ -96,11 +120,15 @@
                 </select>
             </div>
             
-            <!-- 📸 CNI RECTO INTERACTIF -->
-            <div class="form-group" style="text-align: center;">
-                <label style="text-align: left;">📄 Pièce d'identité nationale (RECTO)</label>
+                         <!-- 📸 CNI RECTO INTERACTIF -->
+            <div class="form-group" style="text-align: center; position: relative;">
+                <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto"></span>
+                    
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <button type="button" class="croix-supprimer" id="croix-fichCniRecto" onclick="effacerPhotoSelectionnee(event, 'fichCniRecto')">×</button>
+
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
                     <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
@@ -109,10 +137,14 @@
             </div>
 
             <!-- 📸 CNI VERSO INTERACTIF -->
-            <div class="form-group" style="text-align: center;">
-                <label style="text-align: left;">📄 Pièce d'identité nationale (VERSO)</label>
+            <div class="form-group" style="text-align: center; position: relative;">
+                <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (VERSO)</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniVerso')">
-                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso"></span>
+                    
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <button type="button" class="croix-supprimer" id="croix-fichCniVerso" onclick="effacerPhotoSelectionnee(event, 'fichCniVerso')">×</button>
+
+                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso">photo_camera</span>
                     <p id="txt-fichCniVerso">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
@@ -121,10 +153,14 @@
             </div>
 
             <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE -->
-            <div class="form-group" style="text-align: center;">
-                <label style="text-align: left;"> Photo de votre Moto ou Véhicule</label>
+            <div class="form-group" style="text-align: center; position: relative;">
+                <label style="text-align: left; display: block;">🏍️ Photo de votre Moto ou Véhicule</label>
                 <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichVehicule')">
-                    <span class="material-icons-round icone-cam" id="ic-fichVehicule"></span>
+                    
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <button type="button" class="croix-supprimer" id="croix-fichVehicule" onclick="effacerPhotoSelectionnee(event, 'fichVehicule')">×</button>
+
+                    <span class="material-icons-round icone-cam" id="ic-fichVehicule">photo_camera</span>
                     <p id="txt-fichVehicule">Prenez une photo claire de votre engin avec plaque visible</p>
                     <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule">
                     <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
@@ -132,39 +168,29 @@
                 <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto('fichVehicule')">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <div style="display: flex; gap: 12px; margin-top: 25px;">
-                <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                    <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
-                </a>
-                <button type="submit" class="btn-submit" style="width: 65%;">Valider mon inscription de coursier Jula</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- ⚙️ LE MOTEUR JAVASCRIPT REVOIR / MODIFIER LES PHOTOS ET MOT DE PASSE -->
-     <script>
-    function basculerOeilInscription() {
-        const champ = document.getElementById('champMotDePasse');
-        const icone = document.getElementById('iconeOeil');
-        if (champ.type === 'password') {
-            champ.type = 'text';
-            icone.innerText = 'visibility';
-            icone.style.color = 'var(--jula-orange)';
-        } else {
-            champ.type = 'password';
-            icone.innerText = 'visibility_off';
-            icone.style.color = '#7f8c8d';
+         <!-- ⚙️ LE MOTEUR JAVASCRIPT UNIQUE : ŒIL SÉCURISÉ, APPAREIL PHOTO & CROIX DE SUPPRESSION -->
+    <script>
+        // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
+        function basculerOeilInscription() {
+            const champ = document.getElementById('champMotDePasse');
+            const icone = document.getElementById('iconeOeil');
+            if (champ.type === 'password') {
+                champ.type = 'text';
+                icone.innerText = 'visibility';
+                icone.style.color = 'var(--jula-orange)';
+            } else {
+                champ.type = 'password';
+                icone.innerText = 'visibility_off';
+                icone.style.color = '#7f8c8d';
+            }
         }
-    }
 
-
-
-        // 2. DECLENCHEUR DU CLIC SUR LE MOBILE DE CAPTURE PHOTO
+        // 2. DÉCLENCHEUR DU CLIC SUR LA ZONE DE CAPTURE PHOTO (CAMÉRA OU GALERIE)
         function declencherApercuPhoto(inputId) {
             document.getElementById(inputId).click();
         }
 
-        // 3. AFFICHAGE ET MODIFICATION EN DIRECT SI LE COURSIER SE TROMPE
+        // 3. LOGIQUE D'AFFICHAGE ET D'APPARITION DE LA CROIX ROUGE (×)
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
             
@@ -172,21 +198,44 @@
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer l'icône et le texte par défaut
+                    // Masquer proprement l'icône caméra et le texte explicatif initial
                     document.getElementById('ic-' + inputId).style.display = 'none';
                     document.getElementById('txt-' + inputId).style.display = 'none';
                     
-                    // Rendre l'image visible et injecter la photo prise
+                    // Rendre visible la balise image et injecter le rendu de la capture
                     const baliseImg = document.getElementById('img-' + inputId);
                     baliseImg.src = e.target.result;
                     baliseImg.style.display = 'block';
                     
-                    // Allumer le bouton de modification si on s'est trompé
+                    // Faire apparaître la croix rouge (×) de suppression rapide au sommet
+                    document.getElementById('croix-' + inputId).style.display = 'flex';
+                    
+                    // Rendre visible le bouton secondaire de remplacement d'origine
                     document.getElementById('btn-' + inputId).style.display = 'inline-block';
                 };
                 
                 lecteur.readAsDataURL(elementsFichiers);
             }
+        }
+
+        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO SANS REOUVRIR L'APPAREIL PHOTO
+        function effacerPhotoSelectionnee(evenement, inputId) {
+            // Empêche l'événement de remonter (Stoppe le déclenchement de la caméra au clic de la croix)
+            evenement.stopPropagation();
+            
+            // Cible l'input fichier caché et vide sa valeur brute
+            const inputElement = document.getElementById(inputId);
+            inputElement.value = ""; 
+
+            // Réinitialiser complètement l'interface graphique de la zone
+            document.getElementById('img-' + inputId).style.display = 'none';
+            document.getElementById('img-' + inputId).src = "#";
+            document.getElementById('croix-' + inputId).style.display = 'none';
+            document.getElementById('btn-' + inputId).style.display = 'none';
+            
+            // Faire réapparaître fièrement l'icône caméra et le texte d'aide d'origine
+            document.getElementById('ic-' + inputId).style.display = 'inline-block';
+            document.getElementById('txt-' + inputId).style.display = 'block';
         }
     </script>
 </body>
