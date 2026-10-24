@@ -51,7 +51,7 @@
         .status-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 193, 7, 0.1); color: var(--warning); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 193, 7, 0.2); }
         .status-badge.ok { background: rgba(46, 125, 50, 0.1); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.2); }
         
-        /* ⚙️ EXTRAS POUR LES FORMULAIRES DE NOTIFICATION ET PUB */
+                 /* ⚙️ EXTRAS POUR LES FORMULAIRES DE NOTIFICATION ET PUB */
         .grille-admin-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 30px; margin-bottom: 30px; }
         .carte-panneau-admin { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
         .carte-panneau-admin h2 { margin-top: 0; font-size: 16px; font-weight: 800; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; color: #fff; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
@@ -61,7 +61,18 @@
         .btn-admin-publier:hover { opacity: 0.95; }
     </style>
 </head>
-<body>
+<body style="margin: 0; padding: 0; background-color: var(--dark-bg);">
+
+    <!-- 🌍 BOUTON SÉCURISÉ DE RETOUR ACCUEIL POUR LE PATRON (JACKY) -->
+    <div style="padding: 15px 24px; background: #1a1d21; border-bottom: 1px solid #2d3139; display: flex; align-items: center; box-sizing: border-box;">
+        <a href="https://onrender.com" style="color: #7f8c8d; text-decoration: none; display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: bold; transition: color 0.2s; outline: none;">
+            <span class="material-icons-round" style="font-size: 18px; vertical-align: middle;">arrow_back</span> ← Quitter le QG et Retourner à l'Accueil
+        </a>
+    </div>
+
+    <!-- Le reste de ton conteneur d'administration d'origine commence juste ici en dessous -->
+    <div class="conteneur" style="padding: 20px;">
+
 
     <div class="admin-header">
         <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
