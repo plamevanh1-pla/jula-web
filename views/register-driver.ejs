@@ -187,8 +187,9 @@
         </form>
     </div>
 
-                     <!-- ⚙️ LOGIQUE FLUIDE SANS BLOCAGE APPAREIL PHOTO ET GALERIE -->
+                        <!-- ⚙️ LOGIQUE DE FIXATION FINALE ET SÉCURISATION ANDROID -->
     <script>
+        // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
         function basculerOeilInscription() {
             const champ = document.getElementById('champMotDePasse');
             const icone = document.getElementById('iconeOeil');
@@ -203,24 +204,32 @@
             }
         }
 
-        // Lit le fichier sélectionné et le fige à l'écran de manière stable
+        // 2. ✨ ANCRAGE ET AFFICHAGE : Fige l'image au retour de la galerie sans rafraîchir
         function gererChangementPhoto(evenement, inputId) {
+            // Empêche Android de recharger l'application ou d'annuler la RAM
+            if (evenement) {
+                evenement.preventDefault();
+                evenement.stopPropagation();
+            }
+
             const fichiers = evenement.target.files;
             
             if (fichiers && fichiers.length > 0) {
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer l'icône et le texte d'aide initiaux
-                    document.getElementById('ic-' + inputId).style.display = 'none';
-                    document.getElementById('txt-' + inputId).style.display = 'none';
+                    // Masquer l'icône de caméra et le texte d'aide d'origine
+                    const iconeCam = document.getElementById('ic-' + inputId);
+                    const texteCam = document.getElementById('txt-' + inputId);
+                    if (iconeCam) iconeCam.style.display = 'none';
+                    if (texteCam) texteCam.style.display = 'none';
                     
-                    // Injecter l'image et l'afficher de façon figée
+                    // Injecter et figer le rendu visuel de la photo
                     const baliseImg = document.getElementById('img-' + inputId);
                     baliseImg.src = e.target.result;
                     baliseImg.style.display = 'block';
                     
-                    // Allumer la croix rouge de suppression (×) et le bouton remplacer
+                    // Allumer proprement la croix rouge (×) et le bouton secondaire
                     document.getElementById('croix-' + inputId).style.display = 'flex';
                     const btnModif = document.getElementById('btn-' + inputId);
                     if (btnModif) btnModif.style.display = 'inline-block';
@@ -230,18 +239,18 @@
             }
         }
 
-        // Action de la Croix (X) : nettoie la zone sans jamais perturber la page web
+        // 3. ACTION DE LA CROIX (X) : Vide l'élément graphique et remet la caméra à zéro
         function effacerPhotoSelectionnee(evenement, inputId) {
             if (evenement) {
                 evenement.preventDefault();
-                evenement.stopPropagation(); // Indispensable : stoppe le clic ici pour ne pas relancer la caméra
+                evenement.stopPropagation(); // Stoppe le clic ici pour ne pas réactiver la galerie
             }
             
-            // Vide la valeur de la case fichier
+            // Cible l'input fichier caché et vide sa valeur brute
             const inputElement = document.getElementById(inputId);
             inputElement.value = ""; 
 
-            // Cacher l'image rendered et la croix rouge
+            // Faire disparaître l'image et la croix rouge de l'écran
             document.getElementById('img-' + inputId).style.display = 'none';
             document.getElementById('img-' + inputId).src = "#";
             document.getElementById('croix-' + inputId).style.display = 'none';
@@ -249,8 +258,12 @@
             const btnModif = document.getElementById('btn-' + inputId);
             if (btnModif) btnModif.style.display = 'none';
             
-            // Réafficher l'état de capture d'origine (Appareil photo gris)
-            document.getElementById('ic-' + inputId).style.display = 'inline-block';
-            document.getElementById('txt-' + inputId).style.display = 'block';
+            // Faire réapparaître l'état initial (Appareil photo gris + Aide)
+            const iconeCam = document.getElementById('ic-' + inputId);
+            const texteCam = document.getElementById('txt-' + inputId);
+            if (iconeCam) iconeCam.style.display = 'inline-block';
+            if (texteCam) texteCam.style.display = 'block';
         }
     </script>
+</body>
+</html>
