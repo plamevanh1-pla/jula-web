@@ -120,63 +120,59 @@
                 </select>
             </div>
             
-                     <!-- 📸 CNI RECTO INTERACTIF (CORRIGÉ VISIBLE) -->
+                    <!-- 📸 CNI RECTO INTERACTIF (SÉCURISÉ CAMÉRA + GALERIE) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (RECTO)</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniRecto')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniRecto')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniRecto" onclick="effacerPhotoSelectionnee(event, 'fichCniRecto')">×</button>
 
-                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
                     <span class="material-icons-round icone-cam" id="ic-fichCniRecto" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
-                    <p id="txt-fichCniRecto" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
+                    <p id="txt-fichCniRecto" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour ouvrir l'appareil photo ou la galerie</p>
                     
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
-                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
-                    <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
+                    <!-- ✨ FIXÉ : capture="environment" est supprimé pour donner le choix natif Caméra / Galerie sur Android -->
+                    <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="declencherApercuPhoto(event, 'fichCniRecto')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 CNI VERSO INTERACTIF (CORRIGÉ VISIBLE) -->
+            <!-- 📸 CNI VERSO INTERACTIF (SÉCURISÉ CAMÉRA + GALERIE) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (VERSO)</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniVerso')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniVerso')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniVerso" onclick="effacerPhotoSelectionnee(event, 'fichCniVerso')">×</button>
 
-                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
                     <span class="material-icons-round icone-cam" id="ic-fichCniVerso" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
-                    <p id="txt-fichCniVerso" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
+                    <p id="txt-fichCniVerso" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour ouvrir l'appareil photo ou la galerie</p>
                     
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
-                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
-                    <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
+                    <!-- ✨ FIXÉ : capture="environment" est supprimé pour donner le choix natif Caméra / Galerie sur Android -->
+                    <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="declencherApercuPhoto(event, 'fichCniVerso')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE (CORRIGÉE VISIBLE) -->
+            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE (SÉCURISÉ CAMÉRA + GALERIE) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">🏍️ Photo de votre Moto ou Véhicule</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichVehicule')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichVehicule')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichVehicule" onclick="effacerPhotoSelectionnee(event, 'fichVehicule')">×</button>
 
-                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
                     <span class="material-icons-round icone-cam" id="ic-fichVehicule" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
                     <p id="txt-fichVehicule" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Prenez une photo claire de votre engin avec plaque visible</p>
                     
                     <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
-                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
-                    <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
+                    <!-- ✨ FIXÉ : capture="environment" est supprimé pour donner le choix natif Caméra / Galerie sur Android -->
+                    <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto(event, 'fichVehicule')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
-
 
  <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
@@ -187,9 +183,8 @@
         </form>
     </div>
 
-               <!-- ⚙️ LOGIQUE DE DÉBLOCAGE : CAMÉRA, GALERIE ET CROIX INTERACTIVE -->
+                 <!-- ⚙️ LOGIQUE UNIQUE : CHOIX MULTIPLE ET PERSISTANCE GRAPHIQUE -->
     <script>
-        // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
         function basculerOeilInscription() {
             const champ = document.getElementById('champMotDePasse');
             const icone = document.getElementById('iconeOeil');
@@ -204,59 +199,54 @@
             }
         }
 
-        // 2. ✨ FIXÉ ET DÉBLOQUÉ : Lance la capture sur Android sans figer le navigateur
+        // Déclenche l'input sans recharger le composant
         function declencherApercuPhoto(evenement, inputId) {
             if (evenement) {
-                // On stoppe uniquement la propagation pour ne pas perturber les autres éléments
+                evenement.preventDefault();
                 evenement.stopPropagation();
             }
-            // Force l'ouverture de la caméra ou de la galerie
             document.getElementById(inputId).click();
         }
 
-        // 3. LOGIQUE D'AFFICHAGE DU RENDU IMAGE ET APPARITION DE LA CROIX (X)
+        // Lit la photo choisie (galerie ou caméra) et la fige dans l'affichage
         function gererChangementPhoto(evenement, inputId) {
-            const elementsFichiers = evenement.target.files;
+            const fichiers = evenement.target.files;
             
-            if (elementsFichiers && elementsFichiers.length > 0) {
+            if (fichiers && fichiers.length > 0) {
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer l'icône de la caméra brute et le texte initial
-                    const iconeCam = document.getElementById('ic-' + inputId);
-                    const texteCam = document.getElementById('txt-' + inputId);
-                    if (iconeCam) iconeCam.style.display = 'none';
-                    if (texteCam) texteCam.style.display = 'none';
+                    // Masque l'icône de base
+                    document.getElementById('ic-' + inputId).style.display = 'none';
+                    document.getElementById('txt-' + inputId).style.display = 'none';
                     
-                    // Rendre visible la balise image et injecter la photo prise
+                    // Injecte et affiche la photo de manière figée
                     const baliseImg = document.getElementById('img-' + inputId);
                     baliseImg.src = e.target.result;
                     baliseImg.style.display = 'block';
                     
-                    // Faire apparaître la croix rouge (×) de suppression rapide au sommet
+                    // Fait apparaître la croix rouge (×) et le bouton de remplacement
                     document.getElementById('croix-' + inputId).style.display = 'flex';
-                    
-                    // Afficher le bouton de remplacement d'origine
                     const btnModif = document.getElementById('btn-' + inputId);
                     if (btnModif) btnModif.style.display = 'inline-block';
                 };
                 
-                lecteur.readAsDataURL(elementsFichiers);
+                lecteur.readAsDataURL(fichiers);
             }
         }
 
-        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO ET REOUVERTURE DE LA ZONE
+        // Action de la Croix (X) : vide la case et réinitialise le cadre pour une autre photo
         function effacerPhotoSelectionnee(evenement, inputId) {
             if (evenement) {
                 evenement.preventDefault();
-                evenement.stopPropagation(); // Évite de relancer l'appareil photo au clic sur le X
+                evenement.stopPropagation(); // Stoppe la remontée du clic pour ne pas réouvrir la galerie
             }
             
-            // Vide la case d'importation pour annuler le fichier
+            // Vide l'input fichier
             const inputElement = document.getElementById(inputId);
             inputElement.value = ""; 
 
-            // Masquer l'image et la croix rouge
+            // Nettoie l'image
             document.getElementById('img-' + inputId).style.display = 'none';
             document.getElementById('img-' + inputId).src = "#";
             document.getElementById('croix-' + inputId).style.display = 'none';
@@ -264,12 +254,8 @@
             const btnModif = document.getElementById('btn-' + inputId);
             if (btnModif) btnModif.style.display = 'none';
             
-            // Faire réapparaître l'icône caméra et le texte d'aide d'origine
-            const iconeCam = document.getElementById('ic-' + inputId);
-            const texteCam = document.getElementById('txt-' + inputId);
-            if (iconeCam) iconeCam.style.display = 'inline-block';
-            if (texteCam) texteCam.style.display = 'block';
+            // Réaffiche l'icône de caméra par défaut
+            document.getElementById('ic-' + inputId).style.display = 'inline-block';
+            document.getElementById('txt-' + inputId).style.display = 'block';
         }
     </script>
-</body>
-</html>
