@@ -187,7 +187,7 @@
         </form>
     </div>
 
-             <!-- ⚙️ LE MOTEUR JAVASCRIPT UNIQUE : ŒIL SÉCURISÉ, APPAREIL PHOTO ANTI-EFFACEMENT & CROIX (X) -->
+           <!-- ⚙️ LE MOTEUR JAVASCRIPT UNIQUE : ŒIL SÉCURISÉ, CAPTURE PERSISTANTE ET CROIX (X) -->
     <script>
         // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
         function basculerOeilInscription() {
@@ -204,17 +204,17 @@
             }
         }
 
-        // 2. ✨ FIXÉ : LE DÉCLENCHEUR SÉCURISÉ QUI EMPÊCHE ANDROID DE RAFRAÎCHIR LA PAGE
+        // 2. ⚡ DÉCLENCHEUR SÉCURISÉ : EMPÊCHE LE NAVIGATEUR DE RÉINITIALISER LA PAGE SUR ANDROID
         function declencherApercuPhoto(evenement, inputId) {
             if (evenement) {
-                // 🚫 Bloque la réinitialisation du formulaire et le rechargement intempestif
+                // 🚫 Bloque l'envoi intempestif et stabilise la RAM du smartphone
                 evenement.preventDefault();
                 evenement.stopPropagation();
             }
             document.getElementById(inputId).click();
         }
 
-        // 3. LOGIQUE D'AFFICHAGE DU RENDU IMAGE ET DE LA CROIX ROUGE (×)
+        // 3. LOGIQUE D'AFFICHAGE DU RENDU IMAGE ET APPARITION DE LA CROIX (X)
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
             
@@ -222,46 +222,49 @@
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer proprement l'icône caméra et le texte explicatif d'origine
+                    // Masquer l'icône de caméra brute et le texte explicatif initial
                     const iconeCam = document.getElementById('ic-' + inputId);
                     const texteCam = document.getElementById('txt-' + inputId);
                     if (iconeCam) iconeCam.style.display = 'none';
                     if (texteCam) texteCam.style.display = 'none';
                     
-                    // Rendre visible la balise image et injecter la photo
+                    // Injecter la photo et la rendre visible à l'écran
                     const baliseImg = document.getElementById('img-' + inputId);
                     baliseImg.src = e.target.result;
                     baliseImg.style.display = 'block';
                     
-                    // Faire apparaître la croix rouge (×) de suppression rapide au sommet
+                    // Afficher la croix rouge (×) de suppression rapide au sommet
                     document.getElementById('croix-' + inputId).style.display = 'flex';
                     
-                    // Rendre visible le bouton secondaire de remplacement d'origine
-                    document.getElementById('btn-' + inputId).style.display = 'inline-block';
+                    // Afficher le bouton secondaire d'origine pour remplacer la photo
+                    const btnModif = document.getElementById('btn-' + inputId);
+                    if (btnModif) btnModif.style.display = 'inline-block';
                 };
                 
                 lecteur.readAsDataURL(elementsFichiers);
             }
         }
 
-        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO NETTE
+        // 4. ACTION NETTE DE LA CROIX (X) : REMISE À ZÉRO SANS RELANCER LA CAMÉRA
         function effacerPhotoSelectionnee(evenement, inputId) {
             if (evenement) {
                 evenement.preventDefault();
                 evenement.stopPropagation();
             }
             
-            // Cible l'input fichier caché et vide sa valeur brute pour Supabase
+            // Vide la mémoire brute de la case d'importation pour Supabase
             const inputElement = document.getElementById(inputId);
             inputElement.value = ""; 
 
-            // Réinitialiser complètement l'interface graphique de la zone
+            // Réinitialiser complètement l'affichage graphique de la zone
             document.getElementById('img-' + inputId).style.display = 'none';
             document.getElementById('img-' + inputId).src = "#";
             document.getElementById('croix-' + inputId).style.display = 'none';
-            document.getElementById('btn-' + inputId).style.display = 'none';
             
-            // Faire réapparaître l'icône caméra et le texte d'aide initial
+            const btnModif = document.getElementById('btn-' + inputId);
+            if (btnModif) btnModif.style.display = 'none';
+            
+            // Refaire réapparaître l'icône de la caméra et le texte d'aide initial
             const iconeCam = document.getElementById('ic-' + inputId);
             const texteCam = document.getElementById('txt-' + inputId);
             if (iconeCam) iconeCam.style.display = 'inline-block';
@@ -270,4 +273,3 @@
     </script>
 </body>
 </html>
-
