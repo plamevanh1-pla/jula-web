@@ -120,57 +120,63 @@
                 </select>
             </div>
             
-                                 <!-- 📸 CNI RECTO INTERACTIF (100% DÉBLOQUÉ) -->
+                   <!-- ✨ FIXÉ : enctype ajouté pour stabiliser la RAM du Tecno Pop 9 et autoriser l'envoi d'images -->
+        <form action="/submit-partner" method="POST" enctype="multipart/form-data">
+            
+            <!-- (Garde tes cases de texte au-dessus : Nom, Téléphone, Email, Mot de passe...) -->
+
+            <!-- 📸 CNI RECTO INTERACTIF (100% PERSISTANT) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (RECTO)</label>
                 <div class="zone-apercu-photo" onclick="document.getElementById('fichCniRecto').click()" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
-                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite (type="button" obligatoire) -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniRecto" onclick="effacerPhotoSelectionnee(event, 'fichCniRecto')">×</button>
 
                     <span class="material-icons-round icone-cam" id="ic-fichCniRecto" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
                     <p id="txt-fichCniRecto" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour ouvrir l'appareil photo ou la galerie</p>
                     
-                    <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto" style="width: 100%; height: 140px; object-fit: cover; display: none;">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="document.getElementById('fichCniRecto').click()" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 CNI VERSO INTERACTIF (100% DÉBLOQUÉ) -->
+            <!-- 📸 CNI VERSO INTERACTIF (100% PERSISTANT) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (VERSO)</label>
                 <div class="zone-apercu-photo" onclick="document.getElementById('fichCniVerso').click()" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
-                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite (type="button" obligatoire) -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniVerso" onclick="effacerPhotoSelectionnee(event, 'fichCniVerso')">×</button>
 
                     <span class="material-icons-round icone-cam" id="ic-fichCniVerso" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
                     <p id="txt-fichCniVerso" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour ouvrir l'appareil photo ou la galerie</p>
                     
-                    <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso" style="width: 100%; height: 140px; object-fit: cover; display: none;">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="document.getElementById('fichCniVerso').click()" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE (100% DÉBLOQUÉ) -->
+            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE (100% PERSISTANTE) -->
             <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
                 <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">🏍️ Photo de votre Moto ou Véhicule</label>
                 <div class="zone-apercu-photo" onclick="document.getElementById('fichVehicule').click()" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
                     
-                    <!-- ❌ La Croix Rouge de suppression en haut à droite -->
+                    <!-- ❌ La Croix Rouge de suppression en haut à droite (type="button" obligatoire) -->
                     <button type="button" class="croix-supprimer" id="croix-fichVehicule" onclick="effacerPhotoSelectionnee(event, 'fichVehicule')">×</button>
 
                     <span class="material-icons-round icone-cam" id="ic-fichVehicule" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
                     <p id="txt-fichVehicule" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Prenez une photo claire de votre engin avec plaque visible</p>
                     
-                    <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule" style="width: 100%; height: 140px; object-fit: cover; display: none;">
                     <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
                 </div>
                 <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="document.getElementById('fichVehicule').click()" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
+           
 
  <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
