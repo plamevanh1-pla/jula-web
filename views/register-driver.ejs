@@ -120,59 +120,63 @@
                 </select>
             </div>
             
-                                      <!-- 📸 CNI RECTO INTERACTIF -->
-            <div class="form-group" style="text-align: center; position: relative;">
-                <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (RECTO)</label>
-                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniRecto')">
+                     <!-- 📸 CNI RECTO INTERACTIF (CORRIGÉ VISIBLE) -->
+            <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
+                <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (RECTO)</label>
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniRecto')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniRecto" onclick="effacerPhotoSelectionnee(event, 'fichCniRecto')">×</button>
 
-                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto">photo_camera</span>
-                    <p id="txt-fichCniRecto">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
-                    <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
-                    <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
+                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
+                    <span class="material-icons-round icone-cam" id="ic-fichCniRecto" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
+                    <p id="txt-fichCniRecto" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour prendre le RECTO ou ouvrir la galerie</p>
+                    
+                    <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
+                    <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
                 </div>
-                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
-                <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="declencherApercuPhoto(event, 'fichCniRecto')">📝 Remplacer / Modifier la photo</button>
+                <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="declencherApercuPhoto(event, 'fichCniRecto')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 CNI VERSO INTERACTIF -->
-            <div class="form-group" style="text-align: center; position: relative;">
-                <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (VERSO)</label>
-                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniVerso')">
+            <!-- 📸 CNI VERSO INTERACTIF (CORRIGÉ VISIBLE) -->
+            <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
+                <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">📄 Pièce d'identité nationale (VERSO)</label>
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniVerso')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniVerso" onclick="effacerPhotoSelectionnee(event, 'fichCniVerso')">×</button>
 
-                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso">photo_camera</span>
-                    <p id="txt-fichCniVerso">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
-                    <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
-                    <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
+                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
+                    <span class="material-icons-round icone-cam" id="ic-fichCniVerso" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
+                    <p id="txt-fichCniVerso" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Cliquez pour prendre le VERSO ou ouvrir la galerie</p>
+                    
+                    <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
+                    <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
                 </div>
-                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
-                <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="declencherApercuPhoto(event, 'fichCniVerso')">📝 Remplacer / Modifier la photo</button>
+                <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="declencherApercuPhoto(event, 'fichCniVerso')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
 
-            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE -->
-            <div class="form-group" style="text-align: center; position: relative;">
-                <label style="text-align: left; display: block;">🏍️ Photo de votre Moto ou Véhicule</label>
-                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichVehicule')">
+            <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE (CORRIGÉE VISIBLE) -->
+            <div class="form-group" style="text-align: center; position: relative; margin-bottom: 25px;">
+                <label style="text-align: left; display: block; font-weight: 600; margin-bottom: 8px;">🏍️ Photo de votre Moto ou Véhicule</label>
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichVehicule')" style="min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichVehicule" onclick="effacerPhotoSelectionnee(event, 'fichVehicule')">×</button>
 
-                    <span class="material-icons-round icone-cam" id="ic-fichVehicule">photo_camera</span>
-                    <p id="txt-fichVehicule">Prenez une photo claire de votre engin avec plaque visible</p>
-                    <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule">
-                    <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
+                    <!-- ✨ FIXÉ : Le mot 'photo_camera' est écrit à l'intérieur pour afficher l'icône -->
+                    <span class="material-icons-round icone-cam" id="ic-fichVehicule" style="font-size: 40px; color: #7f8c8d; display: inline-block;">photo_camera</span>
+                    <p id="txt-fichVehicule" style="margin: 8px 0 0 0; font-size: 13px; color: #7f8c8d;">Prenez une photo claire de votre engin avec plaque visible</p>
+                    
+                    <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule" style="width: 100%; max-height: 140px; object-fit: cover; display: none;">
+                    <!-- ✨ FIXÉ : accept et capture ajoutés pour forcer l'appareil photo du Tecno -->
+                    <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" capture="environment" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
                 </div>
-                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
-                <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto(event, 'fichVehicule')">📝 Remplacer / Modifier la photo</button>
+                <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto(event, 'fichVehicule')" style="display: none;">📝 Remplacer / Modifier la photo</button>
             </div>
+
 
  <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
