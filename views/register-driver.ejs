@@ -120,10 +120,11 @@
                 </select>
             </div>
             
-                         <!-- 📸 CNI RECTO INTERACTIF -->
+                                      <!-- 📸 CNI RECTO INTERACTIF -->
             <div class="form-group" style="text-align: center; position: relative;">
                 <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (RECTO)</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniRecto')">
+                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniRecto')">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniRecto" onclick="effacerPhotoSelectionnee(event, 'fichCniRecto')">×</button>
@@ -133,13 +134,15 @@
                     <img id="img-fichCniRecto" class="image-rendu" alt="Aperçu Recto">
                     <input type="file" id="fichCniRecto" name="cni_recto" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniRecto')" required>
                 </div>
-                <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="declencherApercuPhoto('fichCniRecto')">📝 Remplacer / Modifier la photo</button>
+                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
+                <button type="button" class="btn-modifier-photo" id="btn-fichCniRecto" onclick="declencherApercuPhoto(event, 'fichCniRecto')">📝 Remplacer / Modifier la photo</button>
             </div>
 
             <!-- 📸 CNI VERSO INTERACTIF -->
             <div class="form-group" style="text-align: center; position: relative;">
                 <label style="text-align: left; display: block;">📄 Pièce d'identité nationale (VERSO)</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichCniVerso')">
+                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichCniVerso')">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichCniVerso" onclick="effacerPhotoSelectionnee(event, 'fichCniVerso')">×</button>
@@ -149,13 +152,15 @@
                     <img id="img-fichCniVerso" class="image-rendu" alt="Aperçu Verso">
                     <input type="file" id="fichCniVerso" name="cni_verso" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichCniVerso')" required>
                 </div>
-                <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="declencherApercuPhoto('fichCniVerso')">📝 Remplacer / Modifier la photo</button>
+                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
+                <button type="button" class="btn-modifier-photo" id="btn-fichCniVerso" onclick="declencherApercuPhoto(event, 'fichCniVerso')">📝 Remplacer / Modifier la photo</button>
             </div>
 
             <!-- 📸 PHOTO DE LA MOTO / VÉHICULE INTERACTIVE -->
             <div class="form-group" style="text-align: center; position: relative;">
                 <label style="text-align: left; display: block;">🏍️ Photo de votre Moto ou Véhicule</label>
-                <div class="zone-apercu-photo" onclick="declencherApercuPhoto('fichVehicule')">
+                <!-- ✨ CORRIGÉ : Ajout de (event, ...) pour figer la photo à l'écran -->
+                <div class="zone-apercu-photo" onclick="declencherApercuPhoto(event, 'fichVehicule')">
                     
                     <!-- ❌ La Croix Rouge de suppression en haut à droite -->
                     <button type="button" class="croix-supprimer" id="croix-fichVehicule" onclick="effacerPhotoSelectionnee(event, 'fichVehicule')">×</button>
@@ -165,8 +170,10 @@
                     <img id="img-fichVehicule" class="image-rendu" alt="Aperçu Véhicule">
                     <input type="file" id="fichVehicule" name="photo_vehicule" accept="image/*" style="display: none;" onchange="gererChangementPhoto(event, 'fichVehicule')" required>
                 </div>
-                <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto('fichVehicule')">📝 Remplacer / Modifier la photo</button>
+                <!-- ✨ CORRIGÉ : Idem sur le bouton de remplacement -->
+                <button type="button" class="btn-modifier-photo" id="btn-fichVehicule" onclick="declencherApercuPhoto(event, 'fichVehicule')">📝 Remplacer / Modifier la photo</button>
             </div>
+
  <div style="display: flex; gap: 12px; margin-top: 25px;">
                 <a href="/" class="btn-submit" style="background: #c62828; text-decoration: none; text-align: center; width: 35%; display: flex; align-items: center; justify-content: center; gap: 4px;">
                     <span class="material-icons-round" style="font-size: 16px;"></span> Quitter
@@ -176,7 +183,7 @@
         </form>
     </div>
 
-         <!-- ⚙️ LE MOTEUR JAVASCRIPT UNIQUE : ŒIL SÉCURISÉ, APPAREIL PHOTO & CROIX DE SUPPRESSION -->
+             <!-- ⚙️ LE MOTEUR JAVASCRIPT UNIQUE : ŒIL SÉCURISÉ, APPAREIL PHOTO ANTI-EFFACEMENT & CROIX (X) -->
     <script>
         // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
         function basculerOeilInscription() {
@@ -193,12 +200,17 @@
             }
         }
 
-        // 2. DÉCLENCHEUR DU CLIC SUR LA ZONE DE CAPTURE PHOTO (CAMÉRA OU GALERIE)
-        function declencherApercuPhoto(inputId) {
+        // 2. ✨ FIXÉ : LE DÉCLENCHEUR SÉCURISÉ QUI EMPÊCHE ANDROID DE RAFRAÎCHIR LA PAGE
+        function declencherApercuPhoto(evenement, inputId) {
+            if (evenement) {
+                // 🚫 Bloque la réinitialisation du formulaire et le rechargement intempestif
+                evenement.preventDefault();
+                evenement.stopPropagation();
+            }
             document.getElementById(inputId).click();
         }
 
-        // 3. LOGIQUE D'AFFICHAGE ET D'APPARITION DE LA CROIX ROUGE (×)
+        // 3. LOGIQUE D'AFFICHAGE DU RENDU IMAGE ET DE LA CROIX ROUGE (×)
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
             
@@ -206,11 +218,13 @@
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer proprement l'icône caméra et le texte explicatif initial
-                    document.getElementById('ic-' + inputId).style.display = 'none';
-                    document.getElementById('txt-' + inputId).style.display = 'none';
+                    // Masquer proprement l'icône caméra et le texte explicatif d'origine
+                    const iconeCam = document.getElementById('ic-' + inputId);
+                    const texteCam = document.getElementById('txt-' + inputId);
+                    if (iconeCam) iconeCam.style.display = 'none';
+                    if (texteCam) texteCam.style.display = 'none';
                     
-                    // Rendre visible la balise image et injecter le rendu de la capture
+                    // Rendre visible la balise image et injecter la photo
                     const baliseImg = document.getElementById('img-' + inputId);
                     baliseImg.src = e.target.result;
                     baliseImg.style.display = 'block';
@@ -226,12 +240,14 @@
             }
         }
 
-        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO SANS REOUVRIR L'APPAREIL PHOTO
+        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO NETTE
         function effacerPhotoSelectionnee(evenement, inputId) {
-            // Empêche l'événement de remonter (Stoppe le déclenchement de la caméra au clic de la croix)
-            evenement.stopPropagation();
+            if (evenement) {
+                evenement.preventDefault();
+                evenement.stopPropagation();
+            }
             
-            // Cible l'input fichier caché et vide sa valeur brute
+            // Cible l'input fichier caché et vide sa valeur brute pour Supabase
             const inputElement = document.getElementById(inputId);
             inputElement.value = ""; 
 
@@ -241,10 +257,13 @@
             document.getElementById('croix-' + inputId).style.display = 'none';
             document.getElementById('btn-' + inputId).style.display = 'none';
             
-            // Faire réapparaître fièrement l'icône caméra et le texte d'aide d'origine
-            document.getElementById('ic-' + inputId).style.display = 'inline-block';
-            document.getElementById('txt-' + inputId).style.display = 'block';
+            // Faire réapparaître l'icône caméra et le texte d'aide initial
+            const iconeCam = document.getElementById('ic-' + inputId);
+            const texteCam = document.getElementById('txt-' + inputId);
+            if (iconeCam) iconeCam.style.display = 'inline-block';
+            if (texteCam) texteCam.style.display = 'block';
         }
     </script>
 </body>
 </html>
+
