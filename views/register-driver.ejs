@@ -187,9 +187,8 @@
         </form>
     </div>
 
-                        <!-- ⚙️ LOGIQUE DE FIXATION FINALE ET SÉCURISATION ANDROID -->
+         <!-- ⚙️ SCRIPT DE SECOURS ULTRA-LÉGER ANTI-EFFACEMENT -->
     <script>
-        // 1. COMMANDE DE L'ŒIL MAGIQUE (MOT DE PASSE INVISIBLE PAR DÉFAUT)
         function basculerOeilInscription() {
             const champ = document.getElementById('champMotDePasse');
             const icone = document.getElementById('iconeOeil');
@@ -204,65 +203,77 @@
             }
         }
 
-        // 2. ✨ ANCRAGE ET AFFICHAGE : Fige l'image au retour de la galerie sans rafraîchir
+        // Gestion de l'affichage sécurisé
         function gererChangementPhoto(evenement, inputId) {
-            // Empêche Android de recharger l'application ou d'annuler la RAM
-            if (evenement) {
-                evenement.preventDefault();
-                evenement.stopPropagation();
-            }
-
             const fichiers = evenement.target.files;
             
             if (fichiers && fichiers.length > 0) {
+                const nomFichier = fichiers[0].name; // Récupère le vrai nom de la photo
                 const lecteur = new FileReader();
                 
                 lecteur.onload = function(e) {
-                    // Masquer l'icône de caméra et le texte d'aide d'origine
-                    const iconeCam = document.getElementById('ic-' + inputId);
-                    const texteCam = document.getElementById('txt-' + inputId);
-                    if (iconeCam) iconeCam.style.display = 'none';
-                    if (texteCam) texteCam.style.display = 'none';
+                    // 1. Masquer l'icône de la caméra
+                    if (document.getElementById('ic-' + inputId)) {
+                        document.getElementById('ic-' + inputId).style.display = 'none';
+                    }
                     
-                    // Injecter et figer le rendu visuel de la photo
+                    // 2. Écrire le nom du fichier en gros et en vert pour rassurer l'utilisateur
+                    const texteAide = document.getElementById('txt-' + inputId);
+                    if (texteAide) {
+                        texteAide.innerHTML = "✅ Fichier sélectionné : <br><strong style='color:#81c784; font-size:14px;'>" + nomFichier + "</strong>";
+                        texteAide.style.display = 'block';
+                    }
+                    
+                    // 3. Afficher l'image en tâche de fond si la RAM le permet
                     const baliseImg = document.getElementById('img-' + inputId);
-                    baliseImg.src = e.target.result;
-                    baliseImg.style.display = 'block';
+                    if (baliseImg) {
+                        baliseImg.src = e.target.result;
+                        baliseImg.style.display = 'block';
+                    }
                     
-                    // Allumer proprement la croix rouge (×) et le bouton secondaire
-                    document.getElementById('croix-' + inputId).style.display = 'flex';
-                    const btnModif = document.getElementById('btn-' + inputId);
-                    if (btnModif) btnModif.style.display = 'inline-block';
+                    // 4. Allumer la croix rouge de suppression (×)
+                    if (document.getElementById('croix-' + inputId)) {
+                        document.getElementById('croix-' + inputId).style.display = 'flex';
+                    }
                 };
                 
                 lecteur.readAsDataURL(fichiers);
             }
         }
 
-        // 3. ACTION DE LA CROIX (X) : Vide l'élément graphique et remet la caméra à zéro
+        // Action de la Croix (X) : Nettoyage complet
         function effacerPhotoSelectionnee(evenement, inputId) {
             if (evenement) {
                 evenement.preventDefault();
-                evenement.stopPropagation(); // Stoppe le clic ici pour ne pas réactiver la galerie
+                evenement.stopPropagation();
             }
             
-            // Cible l'input fichier caché et vide sa valeur brute
             const inputElement = document.getElementById(inputId);
-            inputElement.value = ""; 
+            inputElement.value = ""; // Vide le fichier
 
-            // Faire disparaître l'image et la croix rouge de l'écran
-            document.getElementById('img-' + inputId).style.display = 'none';
-            document.getElementById('img-' + inputId).src = "#";
-            document.getElementById('croix-' + inputId).style.display = 'none';
+            // Réinitialisation complète des textes et images
+            if (document.getElementById('img-' + inputId)) {
+                document.getElementById('img-' + inputId).style.display = 'none';
+                document.getElementById('img-' + inputId).src = "#";
+            }
+            if (document.getElementById('croix-' + inputId)) {
+                document.getElementById('croix-' + inputId).style.display = 'none';
+            }
             
-            const btnModif = document.getElementById('btn-' + inputId);
-            if (btnModif) btnModif.style.display = 'none';
-            
-            // Faire réapparaître l'état initial (Appareil photo gris + Aide)
-            const iconeCam = document.getElementById('ic-' + inputId);
-            const texteCam = document.getElementById('txt-' + inputId);
-            if (iconeCam) iconeCam.style.display = 'inline-block';
-            if (texteCam) texteCam.style.display = 'block';
+            // Retour à l'état initial
+            if (document.getElementById('ic-' + inputId)) {
+                document.getElementById('ic-' + inputId).style.display = 'inline-block';
+            }
+            const texteAide = document.getElementById('txt-' + inputId);
+            if (texteAide) {
+                if (inputId === 'fichVehicule') {
+                    texteAide.innerText = "Prenez une photo claire de votre engin avec plaque visible";
+                } else if (inputId === 'fichCniVerso') {
+                    texteAide.innerText = "Cliquez pour prendre le VERSO ou ouvrir la galerie";
+                } else {
+                    texteAide.innerText = "Cliquez pour prendre le RECTO ou ouvrir la galerie";
+                }
+            }
         }
     </script>
 </body>
