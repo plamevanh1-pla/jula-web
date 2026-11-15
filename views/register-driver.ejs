@@ -226,39 +226,24 @@
             }
         }
 
-        // Action de la Croix (X) : Nettoyage complet
+        // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO SANS REOUVRIR L'APPAREIL PHOTO
         function effacerPhotoSelectionnee(evenement, inputId) {
-            if (evenement) {
-                evenement.preventDefault();
-                evenement.stopPropagation();
-            }
+            // Empêche l'événement de remonter (Stoppe le déclenchement de la caméra au clic de la croix)
+            evenement.stopPropagation();
             
+            // Cible l'input fichier caché et vide sa valeur brute
             const inputElement = document.getElementById(inputId);
-            inputElement.value = ""; // Vide le fichier
+            inputElement.value = ""; 
 
-            // Réinitialisation complète des textes et images
-            if (document.getElementById('img-' + inputId)) {
-                document.getElementById('img-' + inputId).style.display = 'none';
-                document.getElementById('img-' + inputId).src = "#";
-            }
-            if (document.getElementById('croix-' + inputId)) {
-                document.getElementById('croix-' + inputId).style.display = 'none';
-            }
+            // Réinitialiser complètement l'interface graphique de la zone
+            document.getElementById('img-' + inputId).style.display = 'none';
+            document.getElementById('img-' + inputId).src = "#";
+            document.getElementById('croix-' + inputId).style.display = 'none';
+            document.getElementById('btn-' + inputId).style.display = 'none';
             
-            // Retour à l'état initial
-            if (document.getElementById('ic-' + inputId)) {
-                document.getElementById('ic-' + inputId).style.display = 'inline-block';
-            }
-            const texteAide = document.getElementById('txt-' + inputId);
-            if (texteAide) {
-                if (inputId === 'fichVehicule') {
-                    texteAide.innerText = "Prenez une photo claire de votre engin avec plaque visible";
-                } else if (inputId === 'fichCniVerso') {
-                    texteAide.innerText = "Cliquez pour prendre le VERSO ou ouvrir la galerie";
-                } else {
-                    texteAide.innerText = "Cliquez pour prendre le RECTO ou ouvrir la galerie";
-                }
-            }
+            // Faire réapparaître fièrement l'icône caméra et le texte d'aide d'origine
+            document.getElementById('ic-' + inputId).style.display = 'inline-block';
+            document.getElementById('txt-' + inputId).style.display = 'block';
         }
     </script>
 </body>
