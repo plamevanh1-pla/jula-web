@@ -199,33 +199,29 @@
             document.getElementById(inputId).click();
         }
 
-        // 3. LOGIQUE D'AFFICHAGE ET D'APPARITION DE LA CROIX ROUGE (×)
+                 // 3. LOGIQUE D'AFFICHAGE RAPIDE ET FIABLE SUR MOBILE
         function gererChangementPhoto(evenement, inputId) {
             const elementsFichiers = evenement.target.files;
             
             if (elementsFichiers && elementsFichiers.length > 0) {
-                const lecteur = new FileReader();
+                const fichierUnique = elementsFichiers[0];
+                const urlApercu = URL.createObjectURL(fichierUnique);
                 
-                lecteur.onload = function(e) {
-                    // Masquer proprement l'icône caméra et le texte explicatif initial
-                    document.getElementById('ic-' + inputId).style.display = 'none';
-                    document.getElementById('txt-' + inputId).style.display = 'none';
-                    
-                    // Rendre visible la balise image et injecter le rendu de la capture
-                    const baliseImg = document.getElementById('img-' + inputId);
-                    baliseImg.src = e.target.result;
-                    baliseImg.style.display = 'block';
-                    
-                    // Faire apparaître la croix rouge (×) de suppression rapide au sommet
-                    document.getElementById('croix-' + inputId).style.display = 'flex';
-                    
-                    // Rendre visible le bouton secondaire de remplacement d'origine
-                    document.getElementById('btn-' + inputId).style.display = 'inline-block';
-                };
+                // Masquer l'icône caméra et le texte initial
+                document.getElementById('ic-' + inputId).style.display = 'none';
+                document.getElementById('txt-' + inputId).style.display = 'none';
                 
-                lecteur.readAsDataURL(elementsFichiers);
+                // Afficher immédiatement l'image choisie dans la case
+                const baliseImg = document.getElementById('img-' + inputId);
+                baliseImg.src = urlApercu;
+                baliseImg.style.display = 'block';
+                
+                // Faire apparaître la croix rouge (×) et le bouton modifier
+                document.getElementById('croix-' + inputId).style.display = 'flex';
+                document.getElementById('btn-' + inputId).style.display = 'inline-block';
             }
         }
+
 
         // 4. ACTION INTERACTIVE DE LA CROIX (X) : REMISE À ZÉRO SANS REOUVRIR L'APPAREIL PHOTO
         function effacerPhotoSelectionnee(evenement, inputId) {
