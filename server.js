@@ -359,6 +359,76 @@ app.post('/reject-partner', async (req, res) => {
         return res.status(200).json({ success: true, message: "Profil nettoyé !" });
     } catch (err) { return res.status(500).json({ error: err.message }); }
 });
+// 📢 7. ENVOI DES NOTIFICATIONS DE MASSE DEPUIS LE QG ADMIN
+app.post('/admin/send-notification', async (req, res) => {
+    const { title, target_role, message } = req.body;
+    try {
+        const { error } = await supabase.from('notifications').insert([
+            {
+                title: title,
+                target_role: target_role || 'tous',
+                message: message,
+                created_at: new Date().toISOString()
+            }
+        ]);
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Notification envoyée !" });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 🎨 8. PUBLICATION D'UNE BANNIÈRE PUBLICITAIRE VERS L'APPLICATION MOBILE
+app.post('/admin/create-ad', upload.single('image'), async (req, res) => {
+    const { title, vendedor_id } = req.body;
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, error: "Aucune image sélectionnée." });
+        }
+
+        // Envoi de l'affiche vers Supabase Storage (dossier 'publicites')
+        const imageUrl = await uploadToSupabase(req.file, 'publicites');
+
+        const { error } = await supabase.from('ads').insert([
+            {
+                title: title || 'Offre Spéciale Jula',
+                image_url: imageUrl,
+                vendedor_id: vendedor_id || null,
+                is_active: true,
+                created_at: new Date().toISOString()
+            }
+        ]);
+
+        if (error) throw error;
+        return res.status(200).json({ success: true, message: "Bannière publiée en direct !" });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 🗑️ 9. SUPPRESSION D'UN ARTICLE DU CATALOGUE DEPUIS LE QG ADMIN
+app.post('/admin/delete-catalog-product', async (req, res) => {
+    const { product_id } = req.body;
+    try {
+        const { error } = await supabase.from('products').delete().eq('id', product_id);
+        if (error) throw error;
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 🚫 10. BANNISSEMENT D'UN COMPTE DEPUIS LE QG ADMIN
+app.post('/admin/ban-partner', async (req, res) => {
+    const { id } = req.body;
+    try {
+        const { error } = await supabase.from('profiles').delete().eq('id', id);
+        if (error) throw error;
+        return res.status(200).json({ success: true });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
 
 // 🔌 ALLUMAGE CLOUD RENDER
 app.listen(PORT, '0.0.0.0', () => { 
