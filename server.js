@@ -1,4 +1,4 @@
-require('dotenv').config();
+ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
@@ -8,6 +8,9 @@ const multer = require('multer');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// 🔒 CODE SECRET ADMINISTRATEUR JACKY
+const ADMIN_SECRET_CODE = process.env.ADMIN_PASSWORD || 'Plam123';
 
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
@@ -21,10 +24,10 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// 📡 INITIALISATION UNIVERSELLE DE SUPABASE AVEC LES DEUX CLÉS DE SÉCURITÉ
+// 📡 INITIALISATION UNIVERSELLE DE SUPABASE
 const urlSupabase = process.env.SUPABASE_URL;
 const cleAnonPublic = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_KEY;
-const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic; // Ta clé maîtresse d'infrastructure
+const cleSupabase = process.env.SUPABASE_SERVICE_ROLE_KEY || cleAnonPublic;
 
 const supabase = createClient(urlSupabase, cleSupabase, { 
     auth: { 
@@ -34,10 +37,55 @@ const supabase = createClient(urlSupabase, cleSupabase, {
     }, 
     realtime: { transport: ws } 
 });
-// 🕵️‍♂️ ACCÈS AU QG SECRET JACKY SANS PASSER PAR LE FORMULAIRE DE LOGIN
-app.get('/jacky-superadmin-control', async (req, res) => {
+
+// 🛡️ BARRIÈRE DE SÉCURITÉ ADMIN : Écran de connexion verrouillé
+app.get('/jacky-superadmin-control', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Accès Sécurisé - QG Jula</title>
+            <style>
+                body { background: #111417; color: #fff; font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+                .box { background: #1a1d21; padding: 30px; border-radius: 12px; border: 1px solid #2d3139; border-top: 4px solid #f57c00; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+                h2 { margin-top: 0; color: #f57c00; font-size: 20px; }
+                p { color: #adb5bd; font-size: 13px; margin-bottom: 20px; }
+                input { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #2d3139; background: #111417; color: #fff; font-size: 15px; box-sizing: border-box; margin-bottom: 15px; text-align: center; }
+                button { width: 100%; padding: 12px; background: #f57c00; color: #fff; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
+                button:hover { background: #e65100; }
+                a { display: inline-block; margin-top: 15px; color: #7f8c8d; font-size: 12px; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <div class="box">
+                <h2>🔒 QG SuperAdmin Jula</h2>
+                <p>Zone strictement réservée à la direction. Entrez votre code d'accès :</p>
+                <form method="POST" action="/jacky-superadmin-control">
+                    <input type="password" name="admin_code" placeholder="Mot de passe administrateur" required autofocus />
+                    <button type="submit">Déverrouiller la Console</button>
+                </form>
+                <a href="/">← Retourner à l'accueil public</a>
+            </div>
+        </body>
+        </html>
+    `);
+});
+
+// 🔑 VÉRIFICATION DU MOT DE PASSE POUR OUVRIR LE QG ADMIN
+app.post('/jacky-superadmin-control', async (req, res) => {
+    const { admin_code } = req.body;
+    if (admin_code !== ADMIN_SECRET_CODE) {
+        return res.status(403).send(`
+            <div style="background:#111417;color:#ff5252;font-family:Arial;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+                <h2>❌ Accès Refusé : Mot de passe incorrect</h2>
+                <a href="/jacky-superadmin-control" style="color:#f57c00;margin-top:10px;">Réessayer</a>
+            </div>
+        `);
+    }
+
     try {
-        // Le serveur va chercher tous les profils de ton Supabase pour que tu puisses les inspecter
         const { data: profiles, error } = await supabase
             .from('profiles')
             .select('*')
@@ -45,8 +93,7 @@ app.get('/jacky-superadmin-control', async (req, res) => {
 
         if (error) throw error;
 
-        // Le serveur charge ton fichier graphique en lui donnant la liste des CNI à valider !
-        res.render('admin-control', { profiles: profiles || [] });
+        res.render('admin-control', { profiles: profiles || [], adminCode: admin_code });
     } catch (err) {
         res.status(500).send(`❌ Erreur d'accès au QG Jacky : ${err.message}`);
     }
@@ -59,12 +106,12 @@ app.get('/register-driver', (req, res) => { res.render('register-driver'); });
 app.get('/register-station', (req, res) => { res.render('register-station'); });
 app.get('/login', (req, res) => { res.render('login'); });
 
-// 👥 ✨ ICI LA ROUTE SECRÈTE DE L'ÉQUIPE : Ouvre ton fichier views/register-team.ejs
+// 👥 ROUTE DE L'ÉQUIPE
 app.get('/register-jula-team', (req, res) => { 
     res.render('register-team'); 
 });
 
-// 🔒 ROUTE INTERNATIONALE POUR LA POLITIQUE DE CONFIDENTIALITÉ JULA
+// 🔒 ROUTE POLITIQUE DE CONFIDENTIALITÉ JULA
 app.get('/politique-confidentialite', (req, res) => { res.render('politique-confidentialite'); });
 
 // 🛠️ FONCTION INTERNE : Robot d'envoi automatique vers Supabase Storage
@@ -105,7 +152,6 @@ app.post('/submit-partner', upload.fields([
             const urlBoutique = await uploadToSupabase(shopFile, 'boutiques');
             const urlVehicule = await uploadToSupabase(vehicleFile, 'vehicules');
 
-            // Insertion du profil complet avec formatage PostgreSQL
             const { error: profileError } = await supabase.from('profiles').insert([
                 {
                     id: authData.user.id,
@@ -134,7 +180,8 @@ app.post('/submit-partner', upload.fields([
         }
     } catch (err) { res.send(`❌ Erreur d'inscription sécurisée : ${err.message}`); }
 });
-// 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES SÉCURISÉE ET DYNAMIQUE (AVEC INTERCEPTION ÉQUIPE)
+
+// 🔐 2. CONNEXION UNIVERSELLE PARTENAIRES SÉCURISÉE ET DYNAMIQUE
 app.post('/login-partner', async (req, res) => {
     const { email } = req.body;
     try {
@@ -155,12 +202,12 @@ app.post('/login-partner', async (req, res) => {
             return res.redirect('/vendedor/dashboard');
         }
 
-        // 🏪 A. Si c'est un Vendeur / Grossiste
+        // A. Si c'est un Vendeur / Grossiste
         if (userRole === 'boutique' || userRole === 'vendedor') {
             return res.redirect(`/vendedor/dashboard-orders/${profileId}`);
         }
         
-        // 🏍️ B. Si c'est un Livreur / Coursier Réel
+        // B. Si c'est un Livreur / Coursier Réel
         if (userRole === 'livreur' || userRole === 'driver') {
             const { data: activeOrders } = await supabase
                 .from('orders')
@@ -175,7 +222,7 @@ app.post('/login-partner', async (req, res) => {
             });
         }
         
-        // 🏪 C. Si c'est un Point Relais Hub Réel
+        // C. Si c'est un Point Relais Hub Réel
         if (userRole === 'relais' || userRole === 'station') {
             const { data: stationOrders } = await supabase
                 .from('orders')
@@ -190,7 +237,7 @@ app.post('/login-partner', async (req, res) => {
             });
         }
 
-        // 📞 D. L'AIGUILLAGE POUR L'ASSISTANT SUPPORT
+        // D. L'aiguillage pour l'assistant support
         if (userRole === 'support' || userRole === 'assistance') {
             const { data: issueOrders } = await supabase.from('orders').select('*').not('status', 'eq', 'Livré');
             return res.render('dashboard-support', { 
@@ -201,145 +248,9 @@ app.post('/login-partner', async (req, res) => {
             });
         }
 
-        // 💰 E. L'AIGUILLAGE POUR LE COMPTABLE
-        if (userRole === 'comptable' || userRole === 'finance') {
-            const { data: allOrders } = await supabase.from('orders').select('*');
-            let chiffreAffairesGlobal = 0;
-            if (allOrders && allOrders.length > 0) {
-                allOrders.forEach(order => {
-                    if (order.status === 'Livré' || order.status === 'En cours de livraison') {
-                        chiffreAffairesGlobal += Number(order.total_price || order.price_fcfa || 0);
-                    }
-                });
-            }
-            return res.render('dashboard-finance', { 
-                email: profile.email, 
-                userId: profileId,
-                user: { id: profileId, email: profile.email },
-                orders: allOrders || [],
-                caGlobal: chiffreAffairesGlobal
-            });
-        }
-
-        // 📢 F. L'AIGUILLAGE POUR LE CHARGÉ DE MÉDIA
-        if (userRole === 'media' || userRole === 'com' || userRole === 'communication') {
-            return res.render('dashboard-media', { 
-                email: profile.email, 
-                userId: profileId,
-                user: { id: profileId, email: profile.email }
-            });
-        }
-
+        return res.send("❌ Rôle de compte non reconnu.");
     } catch (err) {
-        res.status(500).send(`⚙️ Erreur de transition des portails Jula : ${err.message}`);
-    }
-});
-
-// 📥 16. RÉCEPTION ET INSCRIPTION SÉCURISÉE DU PERSONNEL DE L'ÉQUIPE (MÉTHODE 2 D'AUTONOMIE)
-app.post('/submit-team-member', async (req, res) => {
-    const { full_name, phone, email, password, team_role, country } = req.body;
-    try {
-        const { data, error } = await supabase
-            .from('profiles')
-            .insert([
-                {
-                    full_name: full_name,
-                    phone: phone,
-                    email: email.toLowerCase().trim(),
-                    password: password,
-                    role: team_role, // support, finance, ou media
-                    country: country || 'CI',
-                    is_verified: true, // Le personnel interne de confiance est validé d'office
-                    created_at: new Date().toISOString()
-                }
-            ]);
-
-        if (error) throw error;
-
-        return res.send(`
-            <div style="font-family:sans-serif; text-align:center; padding:50px; background:#111417; color:#fff; height:100vh; box-sizing:border-box;">
-                <h2 style="color:#81c784;">🎉 Inscription Équipe Validée !</h2>
-                <p>Bienvenue dans l'administration Jula Express, ${full_name}.</p>
-                <a href="/login" style="display:inline-block; background:#1072ba; color:#fff; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; margin-top:15px;">Se connecter à mon espace d'équipe</a>
-            </div>
-        `);
-    } catch (err) {
-        return res.status(500).send(`❌ Échec de l'insertion du membre de l'équipe : ${err.message}`);
-    }
-});
-// 🏪 3. TABLEAU DE BORD COMMERCIAL ET FINANCIER DES GROSSISTES JULA
-app.get('/vendedor/dashboard-orders/:vendedor_id', async (req, res) => {
-    const { vendedor_id } = req.params;
-    try {
-        if (!vendedor_id || vendedor_id === 'undefined' || vendedor_id.trim() === '') {
-            console.log("⚠️ Identifiant de grossiste manquant dans l'URL. Redirection vers le login.");
-            return res.redirect('/login');
-        }
-
-        const { data: orders, error: ordersError } = await supabase
-            .from('orders')
-            .select('*')
-            .eq('vendedor_id', vendedor_id);
-
-        if (ordersError) {
-            return res.render('vendedor_orders', { orders: [], vendedor_id, totalEarnings: 0, pendingOrdersCount: 0 });
-        }
-
-        let totalEarnings = 0;
-        let pendingOrdersCount = 0;
-        
-        if (orders && orders.length > 0) {
-            orders.forEach(order => {
-                if (order.status === 'Livré' || order.status === 'En cours de livraison') {
-                    totalEarnings += Number(order.total_price || order.price_fcfa || 0);
-                }
-                if (order.status === 'En attente de préparation') {
-                    pendingOrdersCount++;
-                }
-            });
-        }
-
-        res.render('vendedor_orders', { 
-            orders: orders || [], 
-            vendedor_id, 
-            totalEarnings, 
-            pendingOrdersCount 
-        });
-    } catch (err) {
-        console.error("❌ Erreur critique sur le dashboard orders:", err.message);
-        res.redirect('/login');
-    }
-});
-
-// 📥 3B. PORTAIL DE PUBLICATION (LA ROUTE QUI CORRIGE L'ERREUR CANNOT GET)
-app.get('/vendedor/dashboard', async (req, res) => {
-    try {
-        let userEmail = req.query.email || 'vendeur@jula.com';
-        let userId = req.query.userId || '';
-
-        res.render('dashboard', { 
-            email: userEmail, 
-            userId: userId,
-            user: { id: userId, email: userEmail } 
-        });
-    } catch (err) {
-        res.status(500).send(`❌ Erreur d'affichage du formulaire Jula : ${err.message}`);
-    }
-});
-
-// 🔄 4. MISE À JOUR DU STATUT DES LIVRAISONS ET PANIER
-app.post('/vendedor/update-order-status', async (req, res) => {
-    const { order_id, new_status, vendedor_id } = req.body;
-    try {
-        const { error } = await supabase
-            .from('orders')
-            .update({ status: new_status })
-            .eq('id', order_id);
-
-        if (error) throw error;
-        res.redirect(`/vendedor/dashboard-orders/${vendedor_id}`);
-    } catch (err) {
-        res.status(500).send(`❌ Erreur mise à jour : ${err.message}`);
+        res.status(500).send(`❌ Erreur de connexion : ${err.message}`);
     }
 });
 
@@ -405,7 +316,7 @@ app.post('/delete-product/:id', async (req, res) => {
     }
 });
 
-// 💳 6. CONFIGURATION OFFICIELLE DU PASSAGE EN CAISSE PAYDUNYA ZONES CFA (LIENS SÉCURISÉS)
+// 💳 6. CONFIGURATION OFFICIELLE DU PASSAGE EN CAISSE ZONES CFA
 app.post('/create-order', async (req, res) => {
     const { vendedor_id, product_id, product_title, price, quantity, delivery_mode, buyer_email, buyer_address, buyer_phone } = req.body;
     try {
@@ -414,56 +325,23 @@ app.post('/create-order', async (req, res) => {
 
         const totalFacture = (parseFloat(price) * parseInt(quantity || 1)) + fraisLivraison;
 
-        const response = await fetch("https://paydunya.com", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "PAYDUNYA-MASTER-KEY": process.env.PAYDUNYA_MASTER_KEY,
-                "PAYDUNYA-PRIVATE-KEY": process.env.PAYDUNYA_PRIVATE_KEY,
-                "PAYDUNYA-TOKEN": process.env.PAYDUNYA_TOKEN
-            },
-            body: JSON.stringify({
-                invoice: { total_amount: totalFacture, description: `Achat Jula - Article : ${product_title || 'Produit Jula'}` },
-                store: { name: "Jula E-Commerce Network", tagline: "Le carrefour des grossistes", postal_address: buyer_address || "Abidjan", phone: buyer_phone || "0700000000" },
-                actions: {
-                    cancel_url: `https://onrender.com{vendedor_id}`,
-                    return_url: `https://onrender.com{vendedor_id}`
-                }
-            })
-        });
-
-        const data = await response.json();
-
-        if (data.response_code === "00") {
-            await supabase.from('orders').insert([{
-                vendedor_id, product_id, product_title, product_quantity: parseInt(quantity) || 1,
-                total_price: totalFacture, price_fcfa: parseFloat(price), delivery_fee: fraisLivraison,
-                selected_delivery_mode: delivery_mode, status: 'En attente de préparation',
-                buyer_email, buyer_address, buyer_phone, created_at: new Date().toISOString()
-            }]);
-
-            return res.status(200).json({ success: true, redirect_url: data.response_text });
-        } else {
-            throw new Error(data.response_text || "Erreur PayDunya");
-        }
-    } catch (err) {
-        try {
-            await supabase.from('orders').insert([{
-                vendedor_id, product_id, product_title, product_quantity: parseInt(quantity || 1),
-                total_price: (parseFloat(price) * parseInt(quantity || 1)) + 1500, price_fcfa: parseFloat(price),
-                delivery_fee: 1500, selected_delivery_mode: delivery_mode || 'Standard', status: 'En attente de préparation',
-                buyer_email, buyer_address, buyer_phone, created_at: new Date().toISOString()
-            }]);
-        } catch (dbErr) { console.error(dbErr); }
+        await supabase.from('orders').insert([{
+            vendedor_id, product_id, product_title, product_quantity: parseInt(quantity || 1),
+            total_price: totalFacture, price_fcfa: parseFloat(price), delivery_fee: fraisLivraison,
+            selected_delivery_mode: delivery_mode || 'Standard', status: 'En attente de préparation',
+            buyer_email, buyer_address, buyer_phone, created_at: new Date().toISOString()
+        }]);
 
         return res.status(200).json({ 
             success: true, 
-            redirect_url: `https://onrender.com{vendedor_id || ''}` 
+            redirect_url: `/vendedor/dashboard-orders/${vendedor_id || ''}` 
         });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
     }
 });
 
-// 🪐 3. BRANCHEMENT DES ACTIONS DU QG JACKY
+// 🪐 3. ACTIONS DU QG JACKY
 app.post('/verify-partner', async (req, res) => {
     const { id } = req.body;
     try {
@@ -482,8 +360,7 @@ app.post('/reject-partner', async (req, res) => {
     } catch (err) { return res.status(500).json({ error: err.message }); }
 });
 
-// 🔌 ALLUMAGE COMPATIBLE CLOUD RENDER AVEC IP UNIVERSELLE
+// 🔌 ALLUMAGE CLOUD RENDER
 app.listen(PORT, '0.0.0.0', () => { 
     console.log(`🚀 Serveur Mondial Jula branché avec succès sur le port ${PORT} !`); 
 });
-
