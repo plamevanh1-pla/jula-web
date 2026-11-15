@@ -203,41 +203,26 @@
             }
         }
 
-        // Gestion de l'affichage sécurisé
+               // 3. LOGIQUE D'AFFICHAGE RAPIDE ET FIABLE SUR MOBILE
         function gererChangementPhoto(evenement, inputId) {
-            const fichiers = evenement.target.files;
+            const elementsFichiers = evenement.target.files;
             
-            if (fichiers && fichiers.length > 0) {
-                const nomFichier = fichiers[0].name; // Récupère le vrai nom de la photo
-                const lecteur = new FileReader();
+            if (elementsFichiers && elementsFichiers.length > 0) {
+                const fichierUnique = elementsFichiers[0];
+                const urlApercu = URL.createObjectURL(fichierUnique);
                 
-                lecteur.onload = function(e) {
-                    // 1. Masquer l'icône de la caméra
-                    if (document.getElementById('ic-' + inputId)) {
-                        document.getElementById('ic-' + inputId).style.display = 'none';
-                    }
-                    
-                    // 2. Écrire le nom du fichier en gros et en vert pour rassurer l'utilisateur
-                    const texteAide = document.getElementById('txt-' + inputId);
-                    if (texteAide) {
-                        texteAide.innerHTML = "✅ Fichier sélectionné : <br><strong style='color:#81c784; font-size:14px;'>" + nomFichier + "</strong>";
-                        texteAide.style.display = 'block';
-                    }
-                    
-                    // 3. Afficher l'image en tâche de fond si la RAM le permet
-                    const baliseImg = document.getElementById('img-' + inputId);
-                    if (baliseImg) {
-                        baliseImg.src = e.target.result;
-                        baliseImg.style.display = 'block';
-                    }
-                    
-                    // 4. Allumer la croix rouge de suppression (×)
-                    if (document.getElementById('croix-' + inputId)) {
-                        document.getElementById('croix-' + inputId).style.display = 'flex';
-                    }
-                };
+                // Masquer l'icône caméra et le texte initial
+                document.getElementById('ic-' + inputId).style.display = 'none';
+                document.getElementById('txt-' + inputId).style.display = 'none';
                 
-                lecteur.readAsDataURL(fichiers);
+                // Afficher immédiatement l'image choisie dans la case
+                const baliseImg = document.getElementById('img-' + inputId);
+                baliseImg.src = urlApercu;
+                baliseImg.style.display = 'block';
+                
+                // Faire apparaître la croix rouge (×) et le bouton modifier
+                document.getElementById('croix-' + inputId).style.display = 'flex';
+                document.getElementById('btn-' + inputId).style.display = 'inline-block';
             }
         }
 
