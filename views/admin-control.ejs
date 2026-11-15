@@ -1,10 +1,9 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jula - Centre de Contrôle Secret Vanh Plame</title>
-    <!-- Chargement sécurisé de la vraie police Google Icons pour dessiner les dessins -->
+    <title>Jula - Centre de Contrôle Secret Jacky</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
         :root { 
@@ -16,65 +15,59 @@
             --success: #2e7d32;
             --warning: #ffc107;
             --danger: #c62828;
-            --jula-vert: #2e7d32;
         }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--dark-bg); margin: 0; padding: 20px; color: #ecf0f1; }
         
-        /* 🪐 PANNEAU EN-TÊTE SUPERADMIN */
+        /* PANNEAU EN-TÊTE SUPERADMIN */
         .admin-header { background: var(--card-bg); color: white; padding: 25px 30px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color); border-bottom: 4px solid var(--jula-orange); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .admin-header h1 { margin: 0; font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
-        .badge-admin { background: var(--jula-orange); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(245,124,0,0.2); }
+        .badge-admin { background: var(--jula-orange); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase; }
         
-        /* 🗂️ CARTES DE SÉCURITÉ PARTENAIRES */
+        /* CARTES DE SÉCURITÉ PARTENAIRES */
         .partner-card { background: var(--card-bg); border-radius: 12px; padding: 30px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid var(--border-color); border-left: 6px solid var(--jula-blue); transition: transform 0.2s; }
-        .partner-card:hover { transform: translateY(-2px); }
         .partner-card.verified { border-left-color: var(--success); }
         
         .partner-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px; }
         .info-block span { display: block; font-size: 11px; color: #7f8c8d; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
         .info-block p { margin: 5px 0 0 0; font-size: 15.5px; font-weight: 600; color: #fff; }
         
-        /* 📸 COMPARTIMENT DES DOCUMENTS NUMÉRIQUES CNI */
+        /* COMPARTIMENT DES DOCUMENTS NUMÉRIQUES CNI */
         .photo-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 20px; }
         .photo-box { background: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; text-align: center; }
         .photo-box span { display: block; font-size: 11px; font-weight: bold; margin-bottom: 8px; color: #95a5a6; text-transform: uppercase; }
         .photo-box img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; border: 1px solid var(--border-color); }
-        .photo-box img:hover { transform: scale(1.02); border-color: var(--jula-orange); }
         
-        /* 🟢 ACTIONS DE CONFIGURATION DU DOSSIER */
-        .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
-        .btn-verify { background: var(--success); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(46,125,50,0.2); }
-        .btn-reject { background: var(--danger); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; transition: opacity 0.2s; box-shadow: 0 4px 10px rgba(198,40,40,0.2); }
+        /* ACTIONS DE CONFIGURATION DU DOSSIER */
+        .admin-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; justify-content: flex-end; align-items: center; }
+        .btn-verify { background: var(--success); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; }
+        .btn-reject { background: var(--danger); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13.5px; }
         .btn-verify:hover, .btn-reject:hover { opacity: 0.9; }
         
-        /* ⚠️ BADGES DE STATUT D'INSPECTION */
-        .status-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(255, 193, 7, 0.1); color: var(--warning); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(255, 193, 7, 0.2); }
-        .status-badge.ok { background: rgba(46, 125, 50, 0.1); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.2); }
+        /* BADGES DE STATUT */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(46, 125, 50, 0.15); color: #81c784; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; border: 1px solid rgba(46, 125, 50, 0.3); }
         
-        /* ⚙️ EXTRAS POUR LES FORMULAIRES DE NOTIFICATION ET PUB */
+        /* FORMULAIRES STRATÉGIQUES */
         .grille-admin-sections { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-top: 30px; margin-bottom: 30px; }
-        .carte-panneau-admin { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-        .carte-panneau-admin h2 { margin-top: 0; font-size: 16px; font-weight: 800; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; color: #fff; display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .carte-panneau-admin { background: var(--card-bg); border-radius: 12px; padding: 25px; border: 1px solid var(--border-color); }
+        .carte-panneau-admin h2 { margin-top: 0; font-size: 16px; font-weight: 800; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; color: #fff; text-transform: uppercase; }
         .champ-admin-qg { width: 100%; padding: 12px; background-color: var(--dark-bg); border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; font-size: 14px; color: #fff; outline: none; margin-bottom: 15px; }
-        .champ-admin-qg:focus { border-color: var(--jula-orange); }
-        .btn-admin-publier { width: 100%; background: linear-gradient(135deg, var(--jula-blue), #0d5c97); color: white; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-admin-publier:hover { opacity: 0.95; }
+        .btn-admin-publier { width: 100%; background: linear-gradient(135deg, var(--jula-blue), #0d5c97); color: white; padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-     
 
     <div class="admin-header">
-        <h1><span class="material-icons-round" style="color: var(--jula-orange); font-size: 26px;"></span> Centre de Validation des Partenaires Jula</h1>
-        <div class="badge-admin">🎛️ Vanh Plame SuperAdmin</div>
+        <h1>🛡️ Centre de Validation des Partenaires Jula</h1>
+        <div class="badge-admin">🎛️ Jacky SuperAdmin</div>
     </div>
+
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
         <% if (profiles.length === 0) { %>
-            <div class="no-orders" style="text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; font-style: italic; border: 1px dashed var(--border-color); font-size: 14.5px;">
-                <span class="material-icons-round" style="font-size: 48px; color: #7f8c8d; display: block; margin-bottom: 10px;">celebration</span>
-                🎉 Aucun nouveau partenaire en attente de vérification sur la Zone CFA !
+            <div style="text-align: center; padding: 50px; background: var(--card-bg); border-radius: 12px; color: #7f8c8d; border: 1px dashed var(--border-color);">
+                🎉 Aucun partenaire enregistré pour le moment sur la Zone UEMOA !
             </div>
         <% } %>
+
         <% if (profiles && profiles.length > 0) { %>
             <% profiles.forEach(function(profile) { %>
                 <div class="partner-card <%= profile.is_verified ? 'verified' : '' %>" id="card-<%= profile.id %>">
@@ -91,8 +84,7 @@
                             <div class="info-block"><span>Immatriculation</span><p>🏍️ <%= profile.vehicle_plate %></p></div>
                         <% } %>
                     </div>
-
-                    <!-- 📸 EXPOSITION DES PIÈCES ET JUSTIFICATIFS EN HAUTE DÉFINITION -->
+                    <!-- EXPOSITION DES PIÈCES ET JUSTIFICATIFS -->
                     <div class="photo-gallery">
                         <% if (profile.cni_recto_url) { %>
                             <div class="photo-box"><span>CNI (RECTO)</span><a href="<%= profile.cni_recto_url %>" target="_blank"><img src="<%= profile.cni_recto_url %>" alt="Recto"></a></div>
@@ -108,39 +100,40 @@
                         <% } %>
                     </div>
 
+                    <!-- ZONE DES ACTIONS (SUPPRESSION DISPONIBLE SUR TOUS LES COMPTES) -->
                     <div style="margin-top: 25px; text-align: right; border-top: 1px solid var(--border-color); padding-top: 15px;" id="actions-<%= profile.id %>">
                         <% if (!profile.is_verified) { %>
-                            <div class="admin-actions" style="display: inline-flex; gap: 12px; justify-content: flex-end; width: 100%;">
-                                <!-- 🔴 Bouton Rejeter Épuré -->
+                            <div class="admin-actions">
                                 <button type="button" class="btn-reject" onclick="gererPartenaire('<%= profile.id %>', 'reject')">
-                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
-                                    Rejeter le profil
+                                    🗑️ Supprimer cet essai
                                 </button>
-
-                                <!-- 🟢 Bouton Valider Épuré Connecté -->
                                 <button type="button" class="btn-verify" onclick="gererPartenaire('<%= profile.id %>', 'verify')">
-                                    <span class="material-icons-round" style="font-size: 16px; vertical-align: middle; margin-right: 4px;"></span>
-                                    Valider et Activer le partenaire
-                            </button>
-                        </div>
+                                    ✅ Valider et Activer le partenaire
+                                </button>
+                            </div>
                         <% } else { %>
-                            <span class="status-badge ok">
-                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
-                                Compte Vérifié Officiel
-                            </span>
+                            <div class="admin-actions">
+                                <span class="status-badge">
+                                    🔒 Compte Vérifié Officiel
+                                </span>
+                                <button type="button" class="btn-reject" onclick="gererPartenaire('<%= profile.id %>', 'reject')">
+                                    🗑️ Supprimer ce compte
+                                </button>
+                            </div>
                         <% } %>
                     </div>
                 </div>
             <% }); %>
         <% } %>
-    </div> <!-- Fin du conteneur d'origine -->
-    <!-- 🪐 GRILLE DES PANNEAUX ADMIN STRATÉGIQUES (PUB ET NOTIFICATIONS DE MASSE) -->
+    </div>
+
+    <!-- GRILLE DES PANNEAUX ADMIN STRATÉGIQUES -->
     <div class="container" style="max-width: 1000px; margin: 0 auto;">
         <div class="grille-admin-sections">
             
             <!-- MODULE DE NOTIFICATION DE MASSE PUSH -->
             <div class="carte-panneau-admin">
-                <h2><span class="material-icons-round" style="color: var(--jula-orange);"></span> Notifications de Masse Jula</h2>
+                <h2>📢 Notifications de Masse Jula</h2>
                 <form id="formNotification">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre du message Push</label>
                     <input type="text" name="title" class="champ-admin-qg" placeholder="Ex: Flash Info Bouaké ⚡" required>
@@ -155,13 +148,13 @@
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Contenu de la notification</label>
                     <textarea name="message" class="champ-admin-qg" rows="3" placeholder="Tapez votre message ici..." required></textarea>
                     
-                    <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></send>Propulser la notification</button>
+                    <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);">🚀 Propulser la notification</button>
                 </form>
             </div>
 
             <!-- MODULE DE PUBLICITÉ BANNIÈRE -->
             <div class="carte-panneau-admin">
-                <h2><span class="material-icons-round" style="color: var(--jula-blue);"></span> Bannière Publicitaire</h2>
+                <h2>🎨 Bannière Publicitaire</h2>
                 <form id="formPublicite" enctype="multipart/form-data">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Titre ou Slogan de la Campagne</label>
                     <input type="text" name="title" class="champ-admin-qg" placeholder="Ex: Grand Arrivage Tecno Pop 9" required>
@@ -172,75 +165,80 @@
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Fichier de l'affiche publicitaire</label>
                     <input type="file" name="image" class="champ-admin-qg" accept="image/*" required>
                     
-                    <button type="submit" class="btn-admin-publier"><span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span>Mettre en ligne l'affiche</button>
+                    <button type="submit" class="btn-admin-publier">🖼️ Mettre en ligne l'affiche</button>
                 </form>
             </div>
 
         </div>
     </div>
-    <!-- 🪐 GRILLE DES 4 PANNEAUX STRATÉGIQUES COMPLÉMENTAIRES (FINANCE, LOGISTIQUE, CATALOGUE, LITIGES) -->
+
+    <!-- GRILLE DES 4 PANNEAUX STRATÉGIQUES COMPLÉMENTAIRES -->
     <div class="container" style="max-width: 1000px; margin: 20px auto 0 auto;">
         <div class="grille-admin-sections" style="grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));">
             
-            <!-- 💰 PANNEAU 1 : CAISSE FINANCIÈRE & DEMANDES DE RETRAIT -->
+            <!-- PANNEAU 1 : CAISSE FINANCIÈRE -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--success);">
-                <h2><span class="material-icons-round" style="color: var(--success);"></span> Caisse Financière & Retraits</h2>
+                <h2>💰 Caisse Financière & Retraits</h2>
                 <form id="formFinances" onsubmit="executerRetraitMobileMoney(event)">
-                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Partenaire (ID Supabase)</label>
+                    <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Partenaire (ID)</label>
                     <input type="text" id="finance_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du livreur ou relais" required>
                     
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Montant à reverser (FCFA)</label>
                     <input type="number" id="finance_amount" class="champ-admin-qg" placeholder="Ex: 25000" required>
                     
                     <button type="submit" class="btn-admin-publier" style="background: var(--success);">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Validé le virement Mobile Money
+                        ✅ Valider le virement Mobile Money
                     </button>
                 </form>
             </div>
-
-            <!-- 🏍️ PANNEAU 2 : RADAR LOGISTIQUE & SUIVI DES COLIS -->
+            <!-- PANNEAU 2 : RADAR LOGISTIQUE & SUIVI DES COLIS -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-blue);">
-                <h2><span class="material-icons-round" style="color: var(--jula-blue);"></span> Radar Logistique & Colis</h2>
+                <h2>🏍️ Radar Logistique & Colis</h2>
                 <div style="background: var(--dark-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 13px;">
                     <p style="margin: 0 0 10px 0; color: #7f8c8d; font-weight: bold; text-transform: uppercase;">📡 Statut général de la flotte :</p>
                     <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>🏍️ Coursiers connectés :</span> <b style="color: #81c784;">En direct</b></div>
-                    <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>📦 Colis en transit :</span> <b style="color: var(--jula-orange);">Analyse Supabase active</b></div>
-                    <div style="display:flex; justify-content: space-between;"><span>⏱️ Temps de livraison moyen :</span> <b style="color: #fff;">Optimisé zone CFA</b></div>
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 6px;"><span>📦 Colis en transit :</span> <b style="color: var(--jula-orange);">Suivi actif</b></div>
+                    <div style="display:flex; justify-content: space-between;"><span>⏱️ Temps de livraison moyen :</span> <b style="color: #fff;">Optimisé zone UEMOA</b></div>
                 </div>
             </div>
 
-            <!-- 📱 PANNEAU 3 : MODÉRATEUR DU CATALOGUE SMARTPHONES -->
+            <!-- PANNEAU 3 : MODÉRATEUR DU CATALOGUE -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--jula-orange);">
-                <h2><span class="material-icons-round" style="color: var(--jula-orange);"></span> Modérateur du Catalogue</h2>
+                <h2>📱 Modérateur du Catalogue</h2>
                 <form id="formCatalogue" onsubmit="supprimerArticleControle(event)">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du Produit à détruire</label>
-                    <input type="text" id="catalogue_product_id" class="champ-admin-qg" placeholder="Coller l'ID du smartphone" required>
+                    <input type="text" id="catalogue_product_id" class="champ-admin-qg" placeholder="Coller l'ID de l'article" required>
                     
                     <button type="submit" class="btn-admin-publier" style="background: var(--jula-orange);">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Supprimer brute du catalogue
+                        🗑️ Supprimer du catalogue
                     </button>
                 </form>
             </div>
 
-            <!-- 🚫 PANNEAU 4 : TRIBUNAL DES LITIGES & BANNING -->
+            <!-- PANNEAU 4 : TRIBUNAL DES LITIGES & BANNING -->
             <div class="carte-panneau-admin" style="border-top: 5px solid var(--danger);">
-                <h2><span class="material-icons-round" style="color: var(--danger);"></span> Tribunal des Litiges & Bannissement</h2>
+                <h2>🚫 Tribunal des Litiges & Bannissement</h2>
                 <form id="formLitiges" onsubmit="bannirCompteTricheur(event)">
                     <label style="display:block; font-size:12px; font-weight:bold; margin-bottom:6px;">Identifiant du compte à bannir (ID)</label>
-                    <input type="text" id="litige_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du tricheur ou faux compte" required>
+                    <input type="text" id="litige_partner_id" class="champ-admin-qg" placeholder="Coller l'ID du faux compte" required>
                     
-                    <button type="submit" class="btn-admin-publier" style="background: var(--danger);" onclick="return confirm('⚠️ Êtes-vous sûr de vouloir bannir définitivement et supprimer ce compte de Supabase ?');">
-                        <span class="material-icons-round" style="font-size:16px; vertical-align: middle; margin-right: 4px;"></span> Exclure et Bloquer le profil
+                    <button type="submit" class="btn-admin-publier" style="background: var(--danger);" onclick="return confirm('⚠️ Êtes-vous sûr de vouloir bannir définitivement et supprimer ce compte ?');">
+                        🚫 Exclure et Bloquer le profil
                     </button>
                 </form>
             </div>
 
         </div>
     </div>
-         
-    <!-- 🪐 SCRIPT INTELLIGENT ANTI-ÉCRAN BLANC (FETCH API ACCÉLÉRÉ CORRIGÉ) -->
+
+    <!-- SCRIPTS DE GESTION ET SUPPRESSION INSTANTANÉE -->
     <script>
         async function gererPartenaire(id, action) {
+            if (action === 'reject') {
+                const confirmer = confirm('⚠️ Voulez-vous vraiment supprimer définitivement ce compte d’essai et ses documents ?');
+                if (!confirmer) return;
+            }
+
             const url = action === 'verify' ? '/verify-partner' : '/reject-partner';
             
             try {
@@ -254,34 +252,29 @@
                     if (action === 'verify') {
                         document.getElementById('card-' + id).classList.add('verified');
                         document.getElementById('actions-' + id).innerHTML = `
-                            <span class="status-badge ok">
-                                <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
-                                Compte Vérifié Officiel
-                            </span>`;
-                        alert('🎉 Partenaire activé avec succès sur la Zone CFA !');
+                            <div class="admin-actions">
+                                <span class="status-badge">🔒 Compte Vérifié Officiel</span>
+                                <button type="button" class="btn-reject" onclick="gererPartenaire('${id}', 'reject')">
+                                    🗑️ Supprimer ce compte
+                                </button>
+                            </div>`;
+                        alert('🎉 Partenaire activé avec succès sur la Zone UEMOA !');
                     } else {
-                        document.getElementById('card-' + id).style.transition = '0.3s';
-                        document.getElementById('card-' + id).style.opacity = '0';
-                        setTimeout(() => document.getElementById('card-' + id).remove(), 300);
-                        alert('🔴 Profil de test rejeté et nettoyé.');
+                        const card = document.getElementById('card-' + id);
+                        card.style.transition = '0.3s';
+                        card.style.opacity = '0';
+                        setTimeout(() => card.remove(), 300);
+                        alert('🗑️ Compte d’essai supprimé définitivement !');
                     }
                 } else {
-                    alert('⚠️ Erreur de communication avec le serveur central Render.');
+                    alert('⚠️ Erreur de communication avec le serveur Render.');
                 }
             } catch (error) {
-                if (action === 'verify') {
-                    document.getElementById('card-' + id).classList.add('verified');
-                    document.getElementById('actions-' + id).innerHTML = `
-                        <span class="status-badge ok">
-                            <span class="material-icons-round" style="font-size: 14px; vertical-align: middle; margin-right: 6px;">verified_user</span>
-                            Compte Vérifié Officiel
-                        </span>`;
-                }
-                alert('📡 Action transmise en tâche de fond au serveur Jula !');
+                alert('⚠️ Erreur réseau : ' + error.message);
             }
         }
 
-        // ⚙️ GESTIONNAIRE D'ENVOI DES NOTIFICATIONS EN FRANÇAIS
+        // 1. ENVOI DES NOTIFICATIONS DE MASSE
         document.getElementById('formNotification').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
@@ -296,13 +289,13 @@
                     })
                 });
                 if (reponse.ok) {
-                    alert("📢 Notification de masse propulsée en direct sur la Zone CFA !");
+                    alert("📢 Notification de masse propulsée en direct sur la Zone UEMOA !");
                     formulaire.reset();
                 }
             } catch (err) { alert("Échec de transmission de l'alerte."); }
         });
 
-        // ⚙️ GESTIONNAIRE D'ENVOI DE LA PUBLICITÉ EN FRANÇAIS
+        // 2. ENVOI DE LA PUBLICITÉ BANNIÈRE
         document.getElementById('formPublicite').addEventListener('submit', async (e) => {
             e.preventDefault();
             const corpsForm = new FormData(e.target);
@@ -317,7 +310,8 @@
                 }
             } catch (err) { alert("Échec de téléversement de l'image publicitaire."); }
         });
-        // 3. SECRÉTARIAT FINANCIER : EXPÉDITION ET VALIDATION DES RETRAITS CASH
+
+        // 3. SECRÉTARIAT FINANCIER : RETRAITS CASH
         async function executerRetraitMobileMoney(evenement) {
             evenement.preventDefault();
             const idPartenaire = document.getElementById('finance_partner_id').value;
@@ -331,13 +325,13 @@
                 });
                 const net = await reponse.json();
                 if (net.success) {
-                    alert(`💵 Succès ! Le virement Mobile Money de ${montant} FCFA a été validé et archivé.`);
+                    alert(`💵 Succès ! Le virement Mobile Money de ${montant} FCFA a été validé.`);
                     document.getElementById('formFinances').reset();
                 }
             } catch (err) { alert("📡 Échec de liaison avec le centre financier."); }
         }
 
-        // 4. NETTOYAGE CHIRURGICAL : DESTRUCTION D'UN SMARTPHONE DU CATALOGUE
+        // 4. DESTRUCTION D'UN ARTICLE DU CATALOGUE
         async function supprimerArticleControle(evenement) {
             evenement.preventDefault();
             const idProduit = document.getElementById('catalogue_product_id').value;
@@ -350,13 +344,13 @@
                 });
                 const net = await reponse.json();
                 if (net.success) {
-                    alert("📱 Rayon nettoyé ! L'article a été effacé en direct du catalogue Jula Express.");
+                    alert("📱 Rayon nettoyé ! L'article a été effacé du catalogue Jula Express.");
                     document.getElementById('formCatalogue').reset();
                 }
             } catch (err) { alert("📡 Échec d'interconnexion réseau."); }
         }
 
-        // 5. LE TRIBUNAL : BANNING DIRECT ET BRUT À LA SOURCE DE SUPABASE
+        // 5. BANNISSEMENT DIRECT D'UN COMPTE
         async function bannirCompteTricheur(evenement) {
             evenement.preventDefault();
             const idTricheur = document.getElementById('litige_partner_id').value;
@@ -370,16 +364,15 @@
                 const net = await reponse.json();
                 if (net.success) {
                     alert("🚫 Justice rendue ! Le compte a été banni et effacé de la base de données.");
-                    
-                    // Si la carte de ce tricheur est actuellement affichée en haut, on l'efface instantanément
                     const carteExistante = document.getElementById('card-' + idTricheur);
                     if (carteExistante) carteExistante.remove();
-                    
                     document.getElementById('formLitiges').reset();
                 }
             } catch (err) { alert("📡 Erreur lors de l'envoi de l'ordre d'exclusion."); }
         }
-
     </script>
 </body>
 </html>
+   
+                        
+              
